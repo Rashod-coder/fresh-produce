@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* You can adjust the values as needed */
+}
