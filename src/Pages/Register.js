@@ -12,7 +12,7 @@ function register() {
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm-6 text-black" style={{background: 'white'}}>
-          <span className="h1 fw-bold">Go Green!</span>
+          <span className="h1 fw-bold">Go Green</span>
             <div className="px-5 ms-xl-4 mt-3">
             
                 <br/>
@@ -22,21 +22,15 @@ function register() {
             <div className="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
               <form style={{ width: '23rem' }} onSubmit={handleSubmit}>
                 <h3 className="fw-normal mb-3 pb-3 text-bold fw-bold" style={{ letterSpacing: '1px'  }}>Register</h3>
-                <div className="form-outline mb-4">
-                  <input type="email" id="form2Example18" className="form-control form-control-lg" />
-                  <label className="form-label" htmlFor="form2Example18">Email address</label>
+                <div className="form-outline mb-5">
+                  <input type="email" id="form2Example18" className="form-control form-control-lg" placeholder='Email' />
                 </div>
-                <div className="form-outline mb-4">
-                  <input type="fName" id="form2Example18" className="form-control form-control-lg" />
-                  <label className="form-label" htmlFor="form2Example18">First Name</label>
+                <div className="form-outline mb-5">
+                  <input type="name" id="form2Example18" className="form-control form-control-lg"placeholder='Full name (First & Last)' />
                 </div>
-                <div className="form-outline mb-4">
-                  <input type="lName" id="form2Example18" className="form-control form-control-lg" />
-                  <label className="form-label" htmlFor="form2Example18">Last Name</label>
-                </div>
-                <div className="form-outline mb-4">
-                  <input type="password" id="form2Example28" className="form-control form-control-lg" />
-                  <label className="form-label" htmlFor="form2Example28">Password</label>
+                
+                <div className="form-outline mb-5">
+                  <input type="password" id="form2Example28" className="form-control form-control-lg" placeholder='Password' />
                 </div>
                 <div className="pt-1 mb-4">
                   <button className="btn btn-info btn-lg btn-block" type="submit">Register</button>

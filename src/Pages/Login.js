@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import blub from './blub.jpg'
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -20,14 +20,27 @@ function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [user, setUser] = useState(null); // Track user authentication state
+
+  useEffect(() => {
+    // Check if user is already signed in
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        navigate('/');
+      } else {
+        setUser(null);
+      }
+    });
+
+    // Cleanup subscription
+    return () => unsubscribe();
+  }, []); // Empty dependency array ensures this effect runs only once on component mount
 
   const login = (e) => {
     e.preventDefault();
-    
+    // Your login logic here
   };
-
-
-  const users = collection(db, "users")
 
   const handleGoogle = async (e) => {
     e.preventDefault();
