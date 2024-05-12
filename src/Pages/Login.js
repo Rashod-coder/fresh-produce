@@ -109,12 +109,10 @@ function Login() {
               <form style={{ width: '23rem' }} onSubmit={login}>
                 <h3 className="fw-normal mb-3 pb-3 fw-bold" style={{ letterSpacing: '1px' }}>Login</h3>
                 <div className="form-outline mb-4">
-                  <input type="email" id="form2Example18" value={email} onChange={(e) => setEmail(e.target.value)} className="form-control form-control-lg" />
-                  <label className="form-label" htmlFor="form2Example18">Email address</label>
+                  <input type="email" id="form2Example18" value={email} onChange={(e) => setEmail(e.target.value)} className="form-control form-control-lg" required placeholder='Email' />
                 </div>
                 <div className="form-outline mb-4">
-                  <input type="password" id="form2Example28" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control form-control-lg" />
-                  <label className="form-label" htmlFor="form2Example28">Password</label>
+                  <input type="password" id="form2Example28" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control form-control-lg" required placeholder='Password' />
                 </div>
                 <div className="pt-1 mb-4">
                   <button onClick={login} className="btn btn-info btn-lg btn-block" type="submit">Login</button>

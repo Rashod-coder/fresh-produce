@@ -1,43 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { auth, db } from '../Firebase/firebase';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import video from '../Assets/video2.mp4'; // Import the video file
 
 function Home() {
-  const [userName, setUserName] = useState('');
+  // Define state for controlling video playback
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  // Function to handle video loaded event
+  const handleVideoLoad = () => {
+    setVideoLoaded(true);
+  };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async user => {
-      if (user) {
-        console.log("User:", user); 
-        if (user.displayName) {
-          setUserName(user.displayName);
-        } else {
-          try {
-            const userDoc = await getDoc(doc(collection(db, 'users'), user.uid));
-            if (userDoc.exists()) {
-              const userData = userDoc.data();
-              setUserName(userData.fullName);
-            } else {
-              console.log("User document not found in Firestore");
-            }
-          } catch (error) {
-            console.log("Error fetching user data from Firestore:", error);
-          }
-        }
-      } else {
-        setUserName('');
-      }
-    });
+    // Add event listener for video loaded metadata
+    const videoElement = document.getElementById('background-video');
+    videoElement.addEventListener('loadeddata', handleVideoLoad);
 
-    return () => unsubscribe();
+    // Clean up event listener on unmount
+    return () => {
+      videoElement.removeEventListener('loadeddata', handleVideoLoad);
+    };
   }, []);
 
   return (
-    <div style={{ backgroundColor: 'black', color: 'white', minHeight: '100vh' }}>
-      <h1>Welcome to your dashboard  {userName ? <p>{userName}!</p> : <p>Guest!</p>} </h1>
-     
-      <p>This is the content of your home page.</p>
-      {/* Add more content here */}
+    <div style={{ position: 'relative' }}>
+      {/* Render the SecondaryNavbar component */}
+
+      {/* Render the video background */}
+      <video
+        id="background-video"
+        autoPlay
+        loop
+        muted
+        style={{
+          position: 'fixed',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: -1,
+          opacity: videoLoaded ? 1 : 0, // Set opacity to 0 until video is loaded
+          transition: 'opacity 1s ease-in-out' // Add a smooth fade-in effect
+        }}
+      >
+        <source src={video} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* Add the content of your home page */}
+      <div style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', padding: '20px' }}>
+        <h1 style={{ color: 'white' }}>Welcome to the Go Green</h1>
+        {/* Add more content here */}
+      </div>
     </div>
   );
 }
