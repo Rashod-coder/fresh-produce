@@ -14,7 +14,8 @@ function Navbar() {
   
       Cookies.set('loggedIn', false);
       auth.signOut().then(() => {
-        navigate('/');
+        window.alert("You have been signed out")
+        navigate('/Login');
       }).catch((e) => {
           console.error('ERROR:', e);
       });

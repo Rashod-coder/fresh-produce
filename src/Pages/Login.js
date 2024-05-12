@@ -21,12 +21,14 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null); // Track user authentication state
+  const [eUser, setEuser] = useState(null);
 
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
+        console.log(user)
         navigate('/');
       } else {
         setUser(null);
@@ -36,7 +38,7 @@ function Login() {
     
     return () => unsubscribe();
   }, []); 
-  const login = async (e) => {
+  const login = async (e) => { // Marking login function as async
     e.preventDefault(); 
   
     try {
@@ -51,29 +53,19 @@ function Login() {
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
         querySnapshot.forEach((doc) => {
-          try {
-            const userData = doc.data();
-            const fullName = userData.fullName; // Accessing fullName field from document data
-            setUser(fullName); // Setting the user's full name
-            console.log("Name: ", fullName);
-          } catch (error) {
-            
-            console.log("Error setting user data:", error);
-          }
         });
       } else {
         console.log("User data retrieval failed: User not found in database");
       }
-  
-      // Redirect to homepage after successful login
-      console.log("Name:", user)
+      
+      
       navigate('/');
     } catch (error) {
-      // Handle Firebase authentication errors
       console.log("Firebase authentication error:", error);
       window.alert("Incorrect Email or Password")
     }
-  };
+  }
+    
   
   const handleGoogle = async (e) => {
     e.preventDefault();
