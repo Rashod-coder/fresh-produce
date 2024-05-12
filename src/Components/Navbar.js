@@ -1,6 +1,25 @@
-import React from 'react';
+import { auth } from '../Firebase/firebase';
+import { useNavigate} from 'react-router-dom';
+import Cookies from 'js-cookie';
+import React, { useState, useEffect } from 'react';
+
+
+
+
+
 
 function Navbar() {
+  const navigate = useNavigate();
+  function Logout() {
+  
+      Cookies.set('loggedIn', false);
+      auth.signOut().then(() => {
+        navigate('/');
+      }).catch((e) => {
+          console.error('ERROR:', e);
+      });
+  }
+    
   return (
     <nav className="navbar navbar-expand-lg bg-light">
       <div className="container-fluid">
@@ -18,18 +37,15 @@ function Navbar() {
             </li>
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Sign In
+                Account
               </a>
               <ul className="dropdown-menu">
                 <li><a className="dropdown-item" href="/Login">Login</a></li>
                 <li><a className="dropdown-item" href="/Register">Register</a></li>
-               
+                <li><button className="dropdown-item" onClick={Logout}>Logout</button></li>
               </ul>
             </li>
-            
-           
           </ul>
-          
         </div>
       </div>
     </nav>

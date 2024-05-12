@@ -1,4 +1,3 @@
-import './App.css';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'; 
 import Login from './Pages/Login';
 import Register from './Pages/Register';
@@ -11,8 +10,9 @@ import Navbar from './Components/Navbar'
 function App() {
   return (
     <div className="Go Green">
-      <Navbar/>
+      
       <Router>
+      <Navbar/>
      <Routes>
          
      <Route path="/Login" element={<Login />} />

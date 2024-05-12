@@ -17,13 +17,13 @@ import { collection, doc, getDocs, query, setDoc, where } from "firebase/firesto
 
 function Login() {
   const navigate = useNavigate();
-
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null); // Track user authentication state
 
+
   useEffect(() => {
-    // Check if user is already signed in
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
@@ -33,15 +33,48 @@ function Login() {
       }
     });
 
-    // Cleanup subscription
+    
     return () => unsubscribe();
-  }, []); // Empty dependency array ensures this effect runs only once on component mount
-
-  const login = (e) => {
-    e.preventDefault();
-    // Your login logic here
+  }, []); 
+  const login = async (e) => {
+    e.preventDefault(); 
+  
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+  
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach((doc) => {
+          try {
+            const userData = doc.data();
+            const fullName = userData.fullName; // Accessing fullName field from document data
+            setUser(fullName); // Setting the user's full name
+            console.log("Name: ", fullName);
+          } catch (error) {
+            
+            console.log("Error setting user data:", error);
+          }
+        });
+      } else {
+        console.log("User data retrieval failed: User not found in database");
+      }
+  
+      // Redirect to homepage after successful login
+      console.log("Name:", user)
+      navigate('/');
+    } catch (error) {
+      // Handle Firebase authentication errors
+      console.log("Firebase authentication error:", error);
+      window.alert("Incorrect Email or Password")
+    }
   };
-
+  
   const handleGoogle = async (e) => {
     e.preventDefault();
     const googleLogin = new GoogleAuthProvider();
@@ -54,7 +87,8 @@ function Login() {
 
         setDoc(doc(db, "users", result.user.uid), {
           email: result.user.email,
-          fullName: result.user.displayName
+          fullName: result.user.displayName,
+          earnings: 0
           
         }, { merge: true }).then(() => {
           console.log("Here");
