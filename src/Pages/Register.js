@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import blub from './blub.jpg'
+import blub from '../Assets/amy-shamblen-bqjyFm32HDM-unsplash.jpg'
 import { auth, db, create} from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, doc, setDoc } from "firebase/firestore"; 
@@ -48,8 +48,14 @@ function Register() {
       navigate("/Login");
       }
       catch (error) {
-      console.log(error);
-      }
+        if (error.code === "auth/weak-password") {
+            window.alert("Password must be greater than 6 characters.");
+        } else if (error.code === "auth/email-already-in-use") {
+            window.alert("Email is already in use.");
+        } else {
+            console.log(error);
+        }
+    }
   }
 
   return (

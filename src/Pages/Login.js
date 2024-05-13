@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import './login.css'
+import { useNavigate } from 'react-router-dom';
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -10,7 +9,7 @@ import {
 import { auth, db } from '../Firebase/firebase';
 import GoogleButton from 'react-google-button'
 import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
-import Nature from '../Assets/kaboompics_pineapple-in-a-swimming-pool-5614.jpg'
+import Nature from '../Assets/amy-shamblen-bqjyFm32HDM-unsplash.jpg'
 
 
 
@@ -20,9 +19,7 @@ function Login() {
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null); // Track user authentication state
-  const [eUser, setEuser] = useState(null);
-  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [user, setUser] = useState(null); 
 
 
 
@@ -40,7 +37,7 @@ function Login() {
     
     return () => unsubscribe();
   }, []); 
-  const login = async (e) => { // Marking login function as async
+  const login = async (e) => { 
     e.preventDefault(); 
   
     try {
@@ -107,7 +104,7 @@ function Login() {
       <br/> <br/> <br/> <br/> 
       <div className="container-fluid mt-5 py-5" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <div className="row">
-        <div className="col-lg-12 text-black" style={{ width: '100%', backdropFilter: 'blur(5px)', background: 'rgba(0, 0, 0, 0.5)', borderRadius: '40px' }}>
+        <div className="col-lg-12 text-black" style={{ width: '100%', backdropFilter: 'blur(5px)', background: 'rgba(0, 0, 0, 0.5)', borderRadius: '20px' }}>
             
               <form style={{ width: '23rem' }} onSubmit={login}>
                 <h3 className="fw-normal mb-3 pb-3 fw-bold text-center py-4" style={{ letterSpacing: '1px', color: 'white' }}>Login</h3>
@@ -118,11 +115,11 @@ function Login() {
                   <input type="password" id="form2Example28" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control form-control-lg" required placeholder='Password' />
                 </div>
                 <div className="pt-1 mb-4">
-                  <button style={{width: '100%', borderRadius: '50px', color: 'white'}}onClick={login} className="btn btn-info btn-lg" type="submit">Login</button>
+                  <button style={{width: '100%', borderRadius: '50px', color: 'black'}}onClick={login} className="btn btn-light btn-lg" type="submit">Login</button>
                   <h4 className='py-4 text-center' style={{color:'white'}}>OR</h4>
                   <GoogleButton style={{width: '100%', borderRadius: ''}}onClick={handleGoogle}/>
                 </div>
-                <p className='text-center text-light'>Don't have an account? <a href="/Register" className="link-info">Register here</a></p>
+                <p className='text-center text-light'>Don't have an account? <a href="/Register" className="link-info" style={{textDecorationColor:'white'}}>Register here</a></p>
               </form>
             </div>
           </div>

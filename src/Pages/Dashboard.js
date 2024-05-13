@@ -26,6 +26,7 @@ function Home() {
                 console.log("User document not found in Firestore");
               }
             } catch (error) {
+              window.alert("An error occured please try again: ", error)
               console.log("Error fetching user data from Firestore:", error);
             }
           }
@@ -46,10 +47,9 @@ function Home() {
         setGreeting('Good evening, ');
       }
 
-      // Simulate loading for 5 seconds
       setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 2500);
 
       return () => unsubscribe();
     };
@@ -57,24 +57,30 @@ function Home() {
     fetchData();
   }, [navigate]);
 
-  if (isLoading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '95vh', background: 'black'}}>
-        <div className="spinner-border" style={{ width: '3rem', height: '3rem', color:'white' }} role="status">
-          <span className="sr-only"></span>
-        </div>
-        <div></div>
-      </div>
-      
-    );
-  }
+  useEffect(() => {
+    if (!isLoading) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500); 
+    }
+  }, [isLoading]);
 
   return (
-    <div style={{ backgroundColor: 'white', color: 'white', minHeight: '100vh' }}>
-      <h1 style={{color: 'black'}}>{greeting}  {userName} welcome to your dashboard </h1>
-     
-      <p>Placeholder</p>
-      {/* Add more content here */}
+    <div style={{ backgroundColor: isLoading ? 'black' : 'white', color: 'black', minHeight: '100vh', transition: 'background-color 1s ease-in-out' }}>
+      {isLoading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <div className="spinner-border" style={{ width: '3rem', height: '3rem', color:'white' }} role="status">
+            <span className="sr-only"></span>
+          </div>
+        </div>
+      ) : 
+      (
+        <div style={{ padding: '20px' }}>
+          <h1>{greeting} {userName} welcome to your dashboard</h1>
+          <p>Placeholder</p>
+          
+        </div>
+      )}
     </div>
   );
 }
