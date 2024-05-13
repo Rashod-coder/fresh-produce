@@ -34,7 +34,7 @@ function Navbar() {
               <a style={{color: 'black'}}className="nav-link active" aria-current="page" href="#">About</a>
             </li>
             
-            <li className="nav-item dropdown">
+            <li className="nav-item btn-group dropleft">
               <a style={{color: 'black'}}className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Account
               </a>
@@ -48,6 +48,7 @@ function Navbar() {
 
                 
               </ul>
+              
               
             </li>
             <li className="nav-item dropdown">

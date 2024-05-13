@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import blub from './blub.jpg'
 import { Link, useNavigate } from 'react-router-dom';
 import './login.css'
 import {
   onAuthStateChanged,
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
