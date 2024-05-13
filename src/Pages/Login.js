@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import blub from './blub.jpg'
 import { Link, useNavigate } from 'react-router-dom';
+import './login.css'
 import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
@@ -12,6 +13,7 @@ import {
 import { auth, db } from '../Firebase/firebase';
 import GoogleButton from 'react-google-button'
 import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
+import Nature from '../Assets/kaboompics_pineapple-in-a-swimming-pool-5614.jpg'
 
 
 
@@ -29,7 +31,7 @@ function Login() {
       if (user) {
         setUser(user);
         console.log(user)
-        navigate('/');
+        navigate('/Dashboard');
       } else {
         setUser(null);
       }
@@ -59,7 +61,7 @@ function Login() {
       }
       
       
-      navigate('/');
+      navigate('/Dashboard');
     } catch (error) {
       console.log("Firebase authentication error:", error);
       window.alert("Incorrect Email or Password")
@@ -85,7 +87,7 @@ function Login() {
         }, { merge: true }).then(() => {
           console.log("Here");
           console.log(result.user.uid);
-          navigate('/');
+          navigate('/Dashboard');
         });
 
 
@@ -99,15 +101,14 @@ function Login() {
   }
 
   return (
-    <section className="vh-100">
-      <div className="container-fluid">
+    <section className="vh-100" style={{ backgroundImage: `url(${Nature})`, backgroundSize: 'cover', backgroundPosition: 'center', marginTop: '-50px'}}>
+      <br/> <br/> <br/> <br/> 
+      <div className="container-fluid mt-5 py-5" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <div className="row">
-          <div className="col-sm-6 text-black" style={{ background: 'white' }}>
-            <span className="h1 fw-bold">Go Green!</span>
-            <div className="px-5 ms-xl-4 mt-3 py-3"></div>
-            <div className="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
+        <div className="col-lg-12 text-black" style={{ width: '100%', backdropFilter: 'blur(5px)', background: 'rgba(0, 0, 0, 0.5)', borderRadius: '40px' }}>
+            
               <form style={{ width: '23rem' }} onSubmit={login}>
-                <h3 className="fw-normal mb-3 pb-3 fw-bold" style={{ letterSpacing: '1px' }}>Login</h3>
+                <h3 className="fw-normal mb-3 pb-3 fw-bold text-center py-4" style={{ letterSpacing: '1px', color: 'white' }}>Login</h3>
                 <div className="form-outline mb-4">
                   <input type="email" id="form2Example18" value={email} onChange={(e) => setEmail(e.target.value)} className="form-control form-control-lg" required placeholder='Email' />
                 </div>
@@ -115,20 +116,16 @@ function Login() {
                   <input type="password" id="form2Example28" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control form-control-lg" required placeholder='Password' />
                 </div>
                 <div className="pt-1 mb-4">
-                  <button onClick={login} className="btn btn-info btn-lg btn-block" type="submit">Login</button>
-                  <h4 className='py-1'>OR</h4>
-                  <GoogleButton onClick={handleGoogle}/>
+                  <button style={{width: '100%', borderRadius: '50px', color: 'white'}}onClick={login} className="btn btn-info btn-lg" type="submit">Login</button>
+                  <h4 className='py-4 text-center' style={{color:'white'}}>OR</h4>
+                  <GoogleButton style={{width: '100%', borderRadius: ''}}onClick={handleGoogle}/>
                 </div>
-                <p className="small mb-5 pb-lg-2"><a className="text-muted" href="#!">Forgot password?</a></p>
-                <p>Don't have an account? <a href="/Register" className="link-info">Register here</a></p>
+                <p className='text-center text-light'>Don't have an account? <a href="/Register" className="link-info">Register here</a></p>
               </form>
             </div>
           </div>
-          <div className="col-sm-6 px-0 d-none d-sm-block">
-            <img src={blub} alt="Login image" className="w-100 vh-100" style={{ objectFit: 'cover', objectPosition: 'left' }} />
-          </div>
+         
         </div>
-      </div>
     </section>
   );
 }

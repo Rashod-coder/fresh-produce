@@ -50,6 +50,9 @@ function Home() {
         <h1 style={{ color: 'white' }}>Welcome to the Go Green</h1>
         {/* Add more content here */}
       </div>
+      <div>
+        <h1></h1>
+      </div>
     </div>
   );
 }
