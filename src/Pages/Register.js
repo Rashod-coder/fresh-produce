@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import blub from '../Assets/amy-shamblen-bqjyFm32HDM-unsplash.jpg'
 import { auth, db, create} from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, doc, setDoc } from "firebase/firestore"; 
 import {createUserWithEmailAndPassword, signOut} from "firebase/auth"
+import Nature from '../Assets/amy-shamblen-bqjyFm32HDM-unsplash.jpg'
 
 
-// Define a function named login that returns JSX for the login form
 function Register() {
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
@@ -53,44 +52,38 @@ function Register() {
         } else if (error.code === "auth/email-already-in-use") {
             window.alert("Email is already in use.");
         } else {
-            console.log(error);
+            window.alert(error);
         }
     }
   }
 
   return (
-    <section className="vh-100">
-      <div className="container-fluid">
+    <section className="vh-100" style={{ backgroundImage: `url(${Nature})`, backgroundSize: 'cover', backgroundPosition: 'center', marginTop: '-50px'}}>
+      <br/><br/><br/>
+      <div className="container-fluid mt-5 py-5" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <div className="row">
-          <div className="col-sm-6 text-black" style={{background: 'white'}}>
-          <span className="h1 fw-bold">Go Green</span>
-            <div className="px-5 ms-xl-4 mt-3">
+          
+        <div className="col-lg-12 text-black" style={{ width: 'auto', backdropFilter: 'blur(5px)', background: 'rgba(0, 0, 0, 0.5)', borderRadius: '10px' }}>
             
-                <br/>
-                  
-            </div>
-            <div className="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
+            <div className="d-flex align-items-center">
               <form style={{ width: '23rem' }}>
-                <h3 className="fw-normal mb-3 pb-3 text-bold fw-bold" style={{ letterSpacing: '1px'  }}>Register</h3>
+                <h3 className="fw-normal mb-3 pb-3 text-bold fw-bold text-center mt-4 text-light" style={{ letterSpacing: '1px'  }}>Register</h3>
                 <div className="form-outline mb-5">
-                  <input type="email" id="form2Example18" className="form-control form-control-lg" placeholder='Email' onChange={(e) => setRegisterEmail(e.target.value)} />
+                  <input style={{borderRadius: '20px'}}type="email" id="form2Example18" className="form-control form-control-lg" placeholder='Email' onChange={(e) => setRegisterEmail(e.target.value)} />
                 </div>
                 <div className="form-outline mb-5">
-                  <input type="name" id="form2Example18" className="form-control form-control-lg"placeholder='Full name (First & Last)'  onChange={(e) => setName(e.target.value)} />
+                  <input style={{borderRadius: '20px'}} type="name" id="form2Example18" className="form-control form-control-lg"placeholder='Full name (First & Last)'  onChange={(e) => setName(e.target.value)} />
                 </div>
                 
                 <div className="form-outline mb-5">
-                  <input type="password" id="form2Example28" className="form-control form-control-lg" placeholder='Password'  onChange={(e) => setRegisterPassword(e.target.value)} />
+                  <input style={{borderRadius: '20px'}} type="password" id="form2Example28" className="form-control form-control-lg" placeholder='Password'  onChange={(e) => setRegisterPassword(e.target.value)} />
                 </div>
                 <div className="pt-1 mb-4">
-                  <button className="btn btn-info btn-lg btn-block" type="submit" onClick={(keepDatabase)}>Register</button>
+                  <button style={{width:'100%'}}className="btn btn-light btn-lg btn-block" type="submit" onClick={(keepDatabase)}>Register</button>
                 </div>
-                <p>Already have an account? <a href="/Login" className="link-info">Sign in</a></p>
+                <p className='text-light'>Already have an account? <a href="/Login" className="link-info">Sign in</a></p>
               </form>
             </div>
-          </div>
-          <div className="col-sm-6 px-0 d-none d-sm-block">
-            <img src={blub} alt="Login image" className="w-100 vh-100" style={{ height: '100%', objectFit: 'cover', objectPosition: 'left' }} />
           </div>
         </div>
       </div>

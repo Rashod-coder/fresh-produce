@@ -6,7 +6,13 @@ import Register from './Pages/Register';
 import Dashboard from './Pages/Dashboard';
 import Home from './Pages/Home';
 import Navbar from './Components/Navbar';
-import NavBart from './Components/logNav';
+import About from './Pages/About';
+import Store from './Pages/Store';
+import Settings from './Pages/Settings';
+import Sell from './Pages/Sell';
+
+
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -31,6 +37,10 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/Sell" element={<Sell />} />
+          <Route path="/About" element={<About />} />
+          <Route path="/Store" element={<Store />} />
+          <Route path="/Settings" element={<Settings />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </Router>

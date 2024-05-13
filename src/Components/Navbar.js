@@ -25,6 +25,9 @@ function Navbar() {
     }).catch((error) => {
       console.error('Error signing out:', error);
     });
+
+
+
   }
 
   return (
@@ -40,7 +43,7 @@ function Navbar() {
               <a style={{ color: 'black' }} className="nav-link active" aria-current="page" href="#">About</a>
             </li>
             
-            <li className="nav-item btn-group dropleft">
+            <li className="nav-item dropdown">
               <a style={{ color: 'black' }} className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Account
               </a>
@@ -68,10 +71,10 @@ function Navbar() {
                   Products
                 </a>
                 <ul className="dropdown-menu">
-                  <li><a style={{ color: 'black' }} className="dropdown-item" href="/Login">Store</a></li>
-                  <li><a style={{ color: 'black' }} className="dropdown-item" href="/Register">Sell</a></li>
-                  <div className="dropdown-divider"></div>
-                  <li><button className="dropdown-item" onClick={Logout}>Logout</button></li>
+                  <li><a style={{ color: 'black' }} className="dropdown-item" href="/Store">Store</a></li>
+                  <li><a style={{ color: 'black' }} className="dropdown-item" href="/Sell">Sell</a></li>
+                 
+                  
                 </ul>
               </li>
             )}

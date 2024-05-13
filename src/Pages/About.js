@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 
-function Sell(){
+function About(){
     return (
         <div>About Go Green</div>
     )
 }
 
-export default Sell;
+export default About;
