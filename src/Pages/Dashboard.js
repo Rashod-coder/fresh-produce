@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../Firebase/firebase';
 import { collection, doc, getDoc } from 'firebase/firestore';
-
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+  const navigate = useNavigate();
   const [userName, setUserName] = useState('');
 
   useEffect(() => {
@@ -26,12 +27,16 @@ function Home() {
           }
         }
       } else {
-        setUserName('');
+        // If user is not logged in, redirect to Home page
+        navigate('/');
+        setTimeout(() => {
+          window.alert('Must be logged in');
+        }, 500);
       }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
   return (
     <div style={{ backgroundColor: 'black', color: 'white', minHeight: '100vh' }}>

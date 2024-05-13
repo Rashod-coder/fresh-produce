@@ -17,6 +17,7 @@ import Nature from '../Assets/kaboompics_pineapple-in-a-swimming-pool-5614.jpg'
 
 
 
+
 function Login() {
   const navigate = useNavigate();
   
@@ -24,6 +25,8 @@ function Login() {
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null); // Track user authentication state
   const [eUser, setEuser] = useState(null);
+  const [loading, setLoading] = useState(false); // State for loading indicator
+
 
 
   useEffect(() => {
@@ -101,7 +104,9 @@ function Login() {
   }
 
   return (
+    
     <section className="vh-100" style={{ backgroundImage: `url(${Nature})`, backgroundSize: 'cover', backgroundPosition: 'center', marginTop: '-50px'}}>
+      
       <br/> <br/> <br/> <br/> 
       <div className="container-fluid mt-5 py-5" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <div className="row">
