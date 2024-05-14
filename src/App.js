@@ -10,6 +10,7 @@ import About from './Pages/About';
 import Store from './Pages/Store';
 import Settings from './Pages/Settings';
 import Sell from './Pages/Sell';
+import Footer from './Components/Footer';
 
 
 
@@ -43,6 +44,7 @@ function App() {
           <Route path="/Settings" element={<Settings />} />
           <Route path="/" element={<Home />} />
         </Routes>
+        <Footer/>
       </Router>
     </div>
   );
