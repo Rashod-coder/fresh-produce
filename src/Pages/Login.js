@@ -20,6 +20,7 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null); 
+  const [msg, setMsg] = useState("");
 
 
 
@@ -61,7 +62,10 @@ function Login() {
       navigate('/Dashboard');
     } catch (error) {
       console.log("Firebase authentication error:", error);
-      window.alert("Incorrect Email or Password")
+      setMsg("Incorrect login details try again")
+      setTimeout(() => {
+        setMsg("");
+      }, 5000);
     }
   }
     
@@ -79,7 +83,8 @@ function Login() {
         setDoc(doc(db, "users", result.user.uid), {
           email: result.user.email,
           fullName: result.user.displayName,
-          earnings: 0
+          earnings: 0,
+          sales: 0
           
         }, { merge: true }).then(() => {
           console.log("Here");
@@ -104,10 +109,11 @@ function Login() {
       <br/> <br/> <br/> <br/> 
       <div className="container-fluid mt-5 py-5" style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
         <div className="row">
-        <div className="col-lg-12 text-black" style={{ width: '100%', backdropFilter: 'blur(5px)', background: 'rgba(0, 0, 0, 0.5)', borderRadius: '20px' }}>
+        <div className="col-lg-12 text-black" style={{ width: '100%', backdropFilter: 'blur(10px)', background: 'rgba(0, 0, 0, 0.5)', borderRadius: '20px' }}>
             
               <form style={{ width: '23rem' }} onSubmit={login}>
                 <h3 className="fw-normal mb-3 pb-3 fw-bold text-center py-4" style={{ letterSpacing: '1px', color: 'white' }}>Login</h3>
+                <h6 className='text-center text-light fw-bold'>{msg}</h6>
                 <div className="form-outline mb-4">
                   <input type="email" id="form2Example18" value={email} onChange={(e) => setEmail(e.target.value)} className="form-control form-control-lg" required placeholder='Email' />
                 </div>

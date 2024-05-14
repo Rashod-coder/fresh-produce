@@ -10,6 +10,7 @@ function Register() {
     const [registerEmail, setRegisterEmail] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
     const [name, setName] = useState("");
+    
 
     const navigate = useNavigate();
 
@@ -37,7 +38,8 @@ function Register() {
          setDoc(doc(db, "users", user.user.uid), {
             email: registerEmail,
             fullName: name,
-            earnings: 0.0
+            earnings: 0.0,
+            sales: 0
           });
 
     } catch (e) {

@@ -30,12 +30,7 @@ function Home() {
               console.log("Error fetching user data from Firestore:", error);
             }
           }
-        } else {
-          navigate('/');
-          setTimeout(() => {
-            window.alert('Must be logged in');
-          }, 500);
-        }
+        } 
       });
 
       const currentTime = new Date().getHours();
@@ -77,16 +72,11 @@ function Home() {
       (
         <div className='container-fluid'style={{ height: '100vh', padding: '20px' }}>
           <div className='row'>
-          <div className='col-lg-12' style={{ 
-    backgroundColor: 'transparent',
-    padding: '20px',
-    borderRadius: '10px',
-    backdropFilter: 'blur(10px)',
-    boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.3)' // Adding a shadow for better visibility
-  }}>
-  <h1 className='text-center'style={{ color: 'black' }}>{greeting} {userName} welcome to your dashboard</h1>
-</div>
-</div>
+            <div className='col-sm-6'>
+              <h3 style={{ color: 'black' }}>{greeting} {userName} welcome to your dashboard</h3>
+            </div>
+            
+          </div>
           
           <p>Placeholder</p>
           
