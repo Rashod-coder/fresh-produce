@@ -74,10 +74,11 @@ function OrderForm() {
 
           <div className="row">
             <div className="col-md-4 order-md-2 mb-4">
-              <h4 className="d-flex justify-content-between align-items-center mb-3">
-                <span className="text-muted">Seller Details <br/> (these details will be displayed on your listing) </span>
-                <span className="badge badge-secondary badge-pill">3</span>
+              <h4 className="d-flex justify-content-between align-items-center mb-1">
+                <span className="text-muted">Seller Details</span>
+                                
               </h4>
+              <h5>These details will be listed on your listing</h5>
               <ul className="list-group mb-3">
                 <li className="list-group-item d-flex justify-content-between lh-condensed">
                   <div>

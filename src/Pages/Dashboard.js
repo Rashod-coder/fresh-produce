@@ -44,7 +44,7 @@ function Home() {
 
       setTimeout(() => {
         setIsLoading(false);
-      }, 2500);
+      }, 1000);
 
       return () => unsubscribe();
     };
@@ -78,7 +78,8 @@ function Home() {
             
           </div>
           
-          <p>Placeholder</p>
+          <p>You can access your produce you ordered here & access incoming orders from other users</p>
+          <h1>PAGE IS W.I.P</h1>
           
         </div>
       )}
