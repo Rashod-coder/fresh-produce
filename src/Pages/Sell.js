@@ -4,20 +4,19 @@ import { collection, doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 function OrderForm() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [sales, setSales] = useState('');
-
-
-  const [greeting, setGreeting] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [product, setProduct] = useState('');
+  const [price, setPrice] = useState();
+  const [state, setState] = useState('');
+  const [address, setAddress] = useState('');
 
-  
-  
-  
-    
-    // Fetching User Information
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       const unsubscribe = auth.onAuthStateChanged(async user => {
@@ -26,7 +25,11 @@ function OrderForm() {
           if (user.displayName) {
             setUserName(user.displayName);
             setEmail(user.email)
-            setSales(user.sales)
+            const userDoc = await getDoc(doc(collection(db, 'users'), user.uid));
+            if (userDoc.exists()) {
+                const userData = userDoc.data()
+                setSales(userData.sales)
+            }
           } else {
             try {
               const userDoc = await getDoc(doc(collection(db, 'users'), user.uid));
@@ -38,13 +41,15 @@ function OrderForm() {
                 console.log("User document not found in Firestore");
               }
             } catch (error) {
-              window.alert("An error occured please try again: ", error)
+              window.alert("An error occurred please try again: ", error)
               console.log("Error fetching user data from Firestore:", error);
             }
           }
         } 
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
       });
-
 
       return () => unsubscribe();
     };
@@ -52,64 +57,63 @@ function OrderForm() {
     fetchData();
   }, [navigate]);
 
+  return (
+    <div className="container">
+      {isLoading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
+          <div className="spinner-border" style={{ width: '3rem', height: '3rem', color: 'black' }} role="status">
+            <span className="sr-only"></span>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <div className="py-5 text-center">
+            <h2>Upload your produce</h2>
+            <p className="lead">Feel free to upload your product onto our platform, please follow community guidelines while uploading your product</p>
+          </div>
 
-
-
-
-
-    return (
-        <div className="container">
-            <div className="py-5 text-center">
-                <h2>Upload your produce</h2>
-                <p className="lead">Feel free to upload your product onto our platform, please follow community guidelines while uploading your product</p>
+          <div className="row">
+            <div className="col-md-4 order-md-2 mb-4">
+              <h4 className="d-flex justify-content-between align-items-center mb-3">
+                <span className="text-muted">Seller Details <br/> (these details will be displayed on your listing) </span>
+                <span className="badge badge-secondary badge-pill">3</span>
+              </h4>
+              <ul className="list-group mb-3">
+                <li className="list-group-item d-flex justify-content-between lh-condensed">
+                  <div>
+                    <h6 className="my-0">Seller Name</h6>
+                    <small className="text-muted">{userName}</small>
+                  </div>
+                </li>
+                <li className="list-group-item d-flex justify-content-between lh-condensed">
+                  <div>
+                    <h6 className="my-0">Seller Email</h6>
+                    <small className="text-muted">{email}</small>
+                  </div>
+                </li>
+                <li className="list-group-item d-flex justify-content-between lh-condensed">
+                  <div>
+                    <h6 className="my-0">Sales made</h6>
+                    <small className="text-muted">{sales}</small>
+                  </div>
+                 
+                </li>
+              </ul>
             </div>
 
-            <div className="row">
-                <div className="col-md-4 order-md-2 mb-4">
-                    <h4 className="d-flex justify-content-between align-items-center mb-3">
-                        <span className="text-muted">Seller Details <br/> (these details will be displayed on your listing) </span>
-                        <span className="badge badge-secondary badge-pill">3</span>
-                    </h4>
-                    <ul className="list-group mb-3">
-                        <li className="list-group-item d-flex justify-content-between lh-condensed">
-                            <div>
-                                <h6 className="my-0">Seller Name</h6>
-                                <small className="text-muted">{userName}</small>
-                            </div>
-                        </li>
-                        <li className="list-group-item d-flex justify-content-between lh-condensed">
-                            <div>
-                                <h6 className="my-0">Seller Email</h6>
-                                <small className="text-muted">{email}</small>
-                            </div>
-                        </li>
-                        <li className="list-group-item d-flex justify-content-between lh-condensed">
-                            <div>
-                                <h6 className="my-0">Sales made</h6>
-                                <small className="text-muted">{sales}</small>
-                            </div>
-                        </li>
-                        
-                    </ul>
-
-                    
+            <div style={{ borderRadius: '10px', backgroundColor: 'rgba(69, 193, 250, 0.35)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} className="col-md-8 order-md-1">
+              <h4 className="mb-3 mt-4">Details</h4>
+              <form className="needs-validation" noValidate="">
+                <div className="mb-3">
+                  <label htmlFor="username">Product name</label>
+                  <div className="input-group">
+                    <input type="text" className="form-control" id="product" placeholder="Product" required="" />
+                    <div className="invalid-feedback" style={{ width: '100%' }}>
+                      Your product name is required
+                    </div>
+                  </div>
                 </div>
-                
-                <div style={{ borderRadius: '10px', backgroundColor: 'rgba(69, 193, 250, 0.35)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} className="col-md-8 order-md-1">
-                    <h4 className="mb-3 mt-4">Details</h4>
-                    <form className="needs-validation" noValidate="">
-
-                    <div className="mb-3">
-                            <label htmlFor="username">Product name</label>
-                            <div className="input-group">
-                                
-                                <input type="text" className="form-control" id="product" placeholder="Product" required="" />
-                                <div className="invalid-feedback" style={{ width: '100%' }}>
-                                    Your product name is required
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
+                <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="firstName">Price per pound</label>
                                 <input type="text" className="form-control" id="firstName" placeholder="e.g 7" required="" />
@@ -183,25 +187,24 @@ function OrderForm() {
                                 
                             </div>
                         </div>
-                        <button style={{width:'100%'}}type="button" className="btn btn-primary btn-block mx-auto" >upload</button>
-
-                        <hr className="mb-4" />
-                    
-                        
-                    </form>
-                </div>
+                <button style={{width:'100%'}}type="button" className="btn btn-primary btn-block mx-auto" >upload</button>
+                <hr className="mb-4" />
+              </form>
             </div>
+          </div>
 
-            <footer className="my-5 pt-5 text-muted text-center text-small">
-                <p className="mb-1">© 2023-2024 Fresh Farmers</p>
-                <ul className="list-inline">
-                    <li className="list-inline-item"><a href="#">Privacy</a></li>
-                    <li className="list-inline-item"><a href="#">Terms</a></li>
-                    <li className="list-inline-item"><a href="#">Support</a></li>
-                </ul>
-            </footer>
+          <footer className="my-5 pt-5 text-muted text-center text-small">
+            <p className="mb-1">© 2023-2024 Fresh Farmers</p>
+            <ul className="list-inline">
+              <li className="list-inline-item"><a href="#">Privacy</a></li>
+              <li className="list-inline-item"><a href="#">Terms</a></li>
+              <li className="list-inline-item"><a href="#">Support</a></li>
+            </ul>
+          </footer>
         </div>
-    );
+      )}
+    </div>
+  );
 }
 
 export default OrderForm;

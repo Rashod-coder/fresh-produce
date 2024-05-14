@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 
 function Settings(){
     return (
-        <div>About Go Green</div>
+        <div>You can update your account settings here: </div>
     )
 }
 
