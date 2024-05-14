@@ -155,7 +155,7 @@ function OrderForm() {
               </ul>
             </div>
 
-            <div style={{ borderRadius: '10px', backgroundColor: 'rgba(69, 193, 250, 0.35)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} className="col-md-8 order-md-1">
+            <div  style={{borderRadius: '10px', backgroundColor: 'rgba(69, 193, 250, 0.35)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} className="col-md-8 mr-3  order-md-1">
               <h4 className="mb-3 mt-4">Details</h4>
               <form className="needs-validation"  onSubmit={keepDatabase}  noValidate="">
                 <div className="mb-3">
@@ -238,7 +238,7 @@ function OrderForm() {
                             <label htmlFor="username">Additonal Notes (optional) </label>
                             <div className="input-group">
                                 
-                                <input type="text" value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} className="form-control" id="username" placeholder="Username"/>
+                                <input type="text" value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} className="form-control" id="Notes" placeholder="Notes"/>
                                 
                             </div>
                         </div>
