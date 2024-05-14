@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../Firebase/firebase';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 function OrderForm() {
@@ -10,10 +10,48 @@ function OrderForm() {
   const [sales, setSales] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [product, setProduct] = useState('');
-  const [price, setPrice] = useState();
+  const [price, setPrice] = useState('');
   const [state, setState] = useState('');
   const [address, setAddress] = useState('');
+  const [quantity, setQuantity] = useState(''); // Declare quantity state
+  const [zip, setZip] = useState(''); // Declare quantity state
+  const [description, setDescription] = useState(''); // Declare description state
+  const [additionalNotes, setAdditionalNotes] = useState(''); // Declare additionalNotes state
+  const [image, setImage] = useState(null); // Declare image state
+  const [imageUrl, setImageUrl] = useState(''); // State to hold the URL of the uploaded image
 
+
+  const keepDatabase = async (event) => {
+    event.preventDefault(); 
+    
+    try {
+      await addDoc(collection(db, 'store'), { 
+        productName: product,
+        price: price,
+        quantity: quantity,
+        description: description,
+        name: userName,
+        email: email,
+        sales: sales,
+        address: address,
+        zip: zip,
+        state: state,
+        additionalNotes: additionalNotes,
+      });
+
+      setProduct('');
+    setPrice('');
+    setQuantity('');
+    setDescription('');
+    setAddress('');
+    setZip('');
+    setState('');
+    setAdditionalNotes('');
+      window.alert("Product added on marketplace"); // Show alert after document is successfully added
+    } catch (error) {
+      console.error('Error adding document: ', error);
+    }
+  };
 
 
 
@@ -104,11 +142,11 @@ function OrderForm() {
 
             <div style={{ borderRadius: '10px', backgroundColor: 'rgba(69, 193, 250, 0.35)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} className="col-md-8 order-md-1">
               <h4 className="mb-3 mt-4">Details</h4>
-              <form className="needs-validation" noValidate="">
+              <form className="needs-validation"  onSubmit={keepDatabase}  noValidate="">
                 <div className="mb-3">
                   <label htmlFor="username">Product name</label>
                   <div className="input-group">
-                    <input type="text" className="form-control" id="product" placeholder="Product" required="" />
+                    <input type="text" className="form-control" id="product" value={product} onChange={(e) => setProduct(e.target.value)} placeholder="Product" required="" />
                     <div className="invalid-feedback" style={{ width: '100%' }}>
                       Your product name is required
                     </div>
@@ -117,16 +155,16 @@ function OrderForm() {
                 <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="firstName">Price per pound</label>
-                                <input type="text" className="form-control" id="firstName" placeholder="e.g 7" required="" />
+                                <input type="text" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="e.g 7" required="" />
                                 <div className="invalid-feedback">
                                     
                                 </div>
                             </div>
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="lastName">Quantity in pounds</label>
-                                <input type="text" className="form-control" id="lastName" placeholder="e.g 100" required="" />
+                                <input type="text" className="form-control" id="amount" value={quantity} setQuantity={(e) => setProduct(e.target.value)} placeholder="e.g 100" required="" />
                                 <div className="invalid-feedback">
-                                    Valid last name is required.
+                                    
                                 </div>
                             </div>
                         </div>
@@ -135,7 +173,7 @@ function OrderForm() {
                             <label htmlFor="username">Description of product</label>
                             <div className="input-group">
                                 
-                                <input type="text" className="form-control" id="username" placeholder="Descrpition" required="" />
+                                <input type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} id="description" placeholder="Description" required="" />
                                 <div className="invalid-feedback" style={{ width: '100%' }}>
                                     Description is required
                                 </div>
@@ -146,7 +184,7 @@ function OrderForm() {
 
                         <div className="mb-3">
                             <label htmlFor="address">Street Address</label>
-                            <input type="text" className="form-control" id="address" placeholder="1234 Main St" required="" />
+                            <input type="text" className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} id="address" placeholder="1234 Main St" required="" />
                             <div className="invalid-feedback">
                                 
                             </div>
@@ -155,14 +193,14 @@ function OrderForm() {
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="firstName">State</label>
-                                <input type="text" className="form-control" id="firstName" placeholder="e.g CA" required="" />
+                                <input type="text" className="form-control" value={state} onChange={(e) => setState(e.target.value)} id="state" placeholder="e.g CA" required="" />
                                 <div className="invalid-feedback">
                                     
                                 </div>
                             </div>
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="lastName">Zipcode</label>
-                                <input type="text" className="form-control" id="lastName" placeholder="" required="" />
+                                <input type="text" className="form-control" value={zip} onChange={(e) => setZip(e.target.value)} id="zipcode" placeholder="" required="" />
                                 <div className="invalid-feedback">
                                 </div>
                             </div>
@@ -184,11 +222,11 @@ function OrderForm() {
                             <label htmlFor="username">Additonal Notes (optional) </label>
                             <div className="input-group">
                                 
-                                <input type="text" className="form-control" id="username" placeholder="Username" required="" />
+                                <input type="text" value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} className="form-control" id="username" placeholder="Username" required="" />
                                 
                             </div>
                         </div>
-                <button style={{width:'100%'}}type="button" className="btn btn-primary btn-block mx-auto" >upload</button>
+                <button style={{width:'100%'}} onSubmit={{keepDatabase}}type="submit" className="btn btn-dark btn-block mx-auto" >Upload</button>
                 <hr className="mb-4" />
               </form>
             </div>
