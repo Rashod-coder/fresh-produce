@@ -2,7 +2,6 @@ import React, { useState, useEffect} from 'react';
 import { auth, db } from '../Firebase/firebase';
 import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import Alert from 'react-bootstrap/Alert';
 
 
 function OrderForm() {
