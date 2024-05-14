@@ -40,7 +40,7 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a style={{ color: 'black' }} className="nav-link active" aria-current="page" href="#">About</a>
+              <a style={{ color: 'black' }} className="nav-link active" aria-current="page" href="/About">About</a>
             </li>
             
             <li className="nav-item dropdown">

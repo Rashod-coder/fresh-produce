@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { auth, db } from '../Firebase/firebase';
 import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import Alert from 'react-bootstrap/Alert';
+
 
 function OrderForm() {
   const navigate = useNavigate();
@@ -19,6 +21,10 @@ function OrderForm() {
   const [additionalNotes, setAdditionalNotes] = useState(''); // Declare additionalNotes state
   const [image, setImage] = useState(null); // Declare image state
   const [imageUrl, setImageUrl] = useState(''); // State to hold the URL of the uploaded image
+  const [show, setShow] = useState(true);
+  const [put, setPut] = useState(false);
+
+
 
 
   const keepDatabase = async (event) => {
@@ -39,7 +45,7 @@ function OrderForm() {
         additionalNotes: additionalNotes,
       });
 
-      setProduct('');
+    setProduct('');
     setPrice('');
     setQuantity('');
     setDescription('');
@@ -48,6 +54,8 @@ function OrderForm() {
     setState('');
     setAdditionalNotes('');
       window.alert("Product added on marketplace"); // Show alert after document is successfully added
+      setPut(true);
+      
     } catch (error) {
       console.error('Error adding document: ', error);
     }
@@ -96,7 +104,14 @@ function OrderForm() {
   }, [navigate]);
 
   return (
+    
     <div className="container">
+          {/* {put && (
+      <Alert variant="success" onClose={() => setShow(false)} dismissible>
+        <Alert.Heading>Product Added!</Alert.Heading>
+        <p>Your product is on the marketplace!</p>
+      </Alert>
+    )} */}
       {isLoading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
           <div className="spinner-border" style={{ width: '3rem', height: '3rem', color: 'black' }} role="status">
@@ -146,7 +161,7 @@ function OrderForm() {
                 <div className="mb-3">
                   <label htmlFor="username">Product name</label>
                   <div className="input-group">
-                    <input type="text" className="form-control" id="product" value={product} onChange={(e) => setProduct(e.target.value)} placeholder="Product" required="" />
+                    <input type="text" className="form-control" id="product" value={product} onChange={(e) => setProduct(e.target.value)} placeholder="Product" required />
                     <div className="invalid-feedback" style={{ width: '100%' }}>
                       Your product name is required
                     </div>
@@ -155,25 +170,26 @@ function OrderForm() {
                 <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="firstName">Price per pound</label>
-                                <input type="text" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="e.g 7" required="" />
+                                <input type="text" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="e.g 7" required />
                                 <div className="invalid-feedback">
                                     
                                 </div>
                             </div>
                             <div className="col-md-6 mb-3">
-                                <label htmlFor="lastName">Quantity in pounds</label>
-                                <input type="text" className="form-control" id="amount" value={quantity} setQuantity={(e) => setProduct(e.target.value)} placeholder="e.g 100" required="" />
+                                <label htmlFor="firstName">Quantity in pounds</label>
+                                <input type="text" className="form-control" id="price" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="e.g 7" required />
                                 <div className="invalid-feedback">
                                     
                                 </div>
                             </div>
+                            
                         </div>
 
                         <div className="mb-3">
                             <label htmlFor="username">Description of product</label>
                             <div className="input-group">
                                 
-                                <input type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} id="description" placeholder="Description" required="" />
+                                <input type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} id="description" placeholder="Description" required />
                                 <div className="invalid-feedback" style={{ width: '100%' }}>
                                     Description is required
                                 </div>
@@ -184,7 +200,7 @@ function OrderForm() {
 
                         <div className="mb-3">
                             <label htmlFor="address">Street Address</label>
-                            <input type="text" className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} id="address" placeholder="1234 Main St" required="" />
+                            <input type="text" className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} id="address" placeholder="1234 Main St" required />
                             <div className="invalid-feedback">
                                 
                             </div>
@@ -193,14 +209,14 @@ function OrderForm() {
                         <div className="row">
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="firstName">State</label>
-                                <input type="text" className="form-control" value={state} onChange={(e) => setState(e.target.value)} id="state" placeholder="e.g CA" required="" />
+                                <input type="text" className="form-control" value={state} onChange={(e) => setState(e.target.value)} id="state" placeholder="e.g CA" required />
                                 <div className="invalid-feedback">
                                     
                                 </div>
                             </div>
                             <div className="col-md-6 mb-3">
                                 <label htmlFor="lastName">Zipcode</label>
-                                <input type="text" className="form-control" value={zip} onChange={(e) => setZip(e.target.value)} id="zipcode" placeholder="" required="" />
+                                <input type="text" className="form-control" value={zip} onChange={(e) => setZip(e.target.value)} id="zipcode" placeholder="e.g 12345" required />
                                 <div className="invalid-feedback">
                                 </div>
                             </div>
@@ -222,7 +238,7 @@ function OrderForm() {
                             <label htmlFor="username">Additonal Notes (optional) </label>
                             <div className="input-group">
                                 
-                                <input type="text" value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} className="form-control" id="username" placeholder="Username" required="" />
+                                <input type="text" value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} className="form-control" id="username" placeholder="Username"/>
                                 
                             </div>
                         </div>
