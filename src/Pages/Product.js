@@ -1,10 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
 
-function About(){
+function Product(){
+    
+    
+    
+    
+    
+    
+    
+    
     return (
         <div style={{height:'100vh'}}>About Go Green</div>
     )
 }
 
-export default About;
+export default Product;

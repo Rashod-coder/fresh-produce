@@ -1,8 +1,10 @@
-import React, { useState, useEffect} from 'react';
-import { auth, db } from '../Firebase/firebase';
+import React, { useState, useEffect, useRef} from 'react';
+import { auth, db, storage } from '../Firebase/firebase';
 import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../Components/Footer'
+import { ref, uploadBytes } from 'firebase/storage';
+
 
 
 function OrderForm() {
@@ -19,18 +21,33 @@ function OrderForm() {
   const [zip, setZip] = useState(''); 
   const [description, setDescription] = useState(''); 
   const [additionalNotes, setAdditionalNotes] = useState(''); 
-  const [image, setImage] = useState(null); 
   const [imageUrl, setImageUrl] = useState(''); 
   const [show, setShow] = useState(true);
   const [put, setPut] = useState(false);
+  const [image, setImage] = useState(null); 
+  const [imageName, setImageName] = useState('');
+  const uploadRef = useRef();
+  const [imageBlob, setImageBlob] = useState(null);
 
+  
 
-
+  const handleImageChange = (event) => {
+    const selectedImage = event.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+        setImageBlob(new Blob([reader.result], { type: selectedImage.type }));
+    };
+    if (selectedImage) {
+        reader.readAsArrayBuffer(selectedImage);
+    }
+    setImageName(selectedImage.name);
+    setImage(URL.createObjectURL(selectedImage));
+};
 
   const keepDatabase = async (event) => {
     event.preventDefault(); 
     try {
-      await addDoc(collection(db, 'store'), { 
+      const docRef = await addDoc(collection(db, 'store'), { 
         productName: product,
         price: price,
         quantity: quantity,
@@ -42,7 +59,10 @@ function OrderForm() {
         zip: zip,
         state: state,
         additionalNotes: additionalNotes,
+        Image: imageName,
       });
+      await uploadBytes(ref(storage, `${docRef.id}/${imageName}`), imageBlob);
+
 
     setProduct('');
     setPrice('');
@@ -52,11 +72,15 @@ function OrderForm() {
     setZip('');
     setState('');
     setAdditionalNotes('');
+    setImage(null);
+    setImageName("");
+    setImageBlob(null);
       window.alert("Product added on marketplace"); // Show alert after document is successfully added
-      setPut(true);
+      window.location.reload();
       
     } catch (error) {
       console.error('Error adding document: ', error);
+      window.alert(error)
     }
   };
 
@@ -227,10 +251,10 @@ function OrderForm() {
                             {/* <p className={`text-xl font-semibold text-white`}>{imageName === "" ? 'Add Image' : imageName }</p> */}
                             <input
                                 type="file"
-                                // ref={uploadRef}
+                                ref={uploadRef}
                                 className="form-control-file hidden fixed top-0 left-0"
                                 accept="image/*"  
-                                // onChange={handleImageChange} 
+                                onChange={handleImageChange} 
                             />
                         </div>
                         
