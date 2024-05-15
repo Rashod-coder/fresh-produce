@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from '../Firebase/firebase';
-import Card from 'react-bootstrap/Card';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -19,7 +16,7 @@ function Buy() {
 
             querySnapshot.forEach((doc) => {
                 newPosts.push({
-                    id: doc.id,
+                    id: doc.id, 
                     Type: doc.data()["productName"],
                     Price: doc.data()["price"],
                     Description: doc.data()["description"],
