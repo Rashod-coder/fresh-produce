@@ -6,6 +6,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 
+
 function Buy() {
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -60,7 +61,7 @@ function Buy() {
                                         <h2 className="card-title">{post.Type}</h2>
                                         <h4>Price: ${post.Price}</h4>
                                         <p className="card-text">{post.Description}</p>
-                                        <a href="#" className="btn btn-primary">View More</a>
+                                        <a href="#" onClick = {() => navigate("/Store/"+post.id)} className="btn btn-primary">View More</a>
                                         </div>
 
                                     </div>
