@@ -57,7 +57,7 @@ function Buy() {
                             <div key={post.id} className="col">
                                     <div className='card' style={{width: '18rem'}}>
                                         <div className="card-body">
-                                        <h5 className="card-title">{post.Type}</h5>
+                                        <h2 className="card-title">{post.Type}</h2>
                                         <h4>Price: ${post.Price}</h4>
                                         <p className="card-text">{post.Description}</p>
                                         <a href="#" className="btn btn-primary">View More</a>
