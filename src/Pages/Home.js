@@ -1,19 +1,25 @@
 import React from 'react';
-import backgroundImage from '../Assets/evi-radauscher-U_D5NWMmTTM-unsplash.jpg'; // Import the image file
+import backgroundImage from '../Assets/evi-radauscher-U_D5NWMmTTM-unsplash.jpg'; 
 
 function Home() {
   const backgroundStyle = {
-    backgroundImage: `url(${backgroundImage})`, // Set the background image using inline style
+    backgroundImage: `url(${backgroundImage})`, 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    height: '100vh', // Adjust the height as needed
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Add a semi-transparent background color
+    height: '100vh', 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
     position: 'relative',
-  };
+  };       
 
-  return (
+  return ( 
     <div style={backgroundStyle}>
-      {/* Add the content of your home page */}
+      <div className='container-fluid'>
+        <div className='row'>
+          <div className='col-lg-6 col-sm-12'>
+            <h1>treeees</h1>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
