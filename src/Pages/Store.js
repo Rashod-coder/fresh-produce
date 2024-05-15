@@ -40,7 +40,7 @@ function Buy() {
     }, []);
 
     return (
-        <div style={{ height: '100vh' }}>
+        <div style={{ minHeight: '100vh' }}>
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <div className="spinner-border" style={{ width: '3rem', height: '3rem' }} role="status">
