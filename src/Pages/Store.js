@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, query } from "firebase/firestore";
-import { db } from '../Firebase/firebase';
+import { db, storage } from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom';
+import { getDownloadURL, ref } from 'firebase/storage';
 
 
 function Buy() {
@@ -13,23 +14,34 @@ function Buy() {
             const q = query(collection(db, "store"));
             const querySnapshot = await getDocs(q);
             const newPosts = [];
-
+            const promises = [];
+    
             querySnapshot.forEach((doc) => {
-                newPosts.push({
-                    id: doc.id, 
-                    Type: doc.data()["productName"],
-                    Price: doc.data()["price"],
-                    Description: doc.data()["description"],
-                    Image: doc.data()["Image"],
-                    Amount: doc.data()["quantity"]
-                });
+                const imageRef = ref(storage, `${doc.id}/${doc.data().Image}`);
+                const downloadPromise = getDownloadURL(imageRef)
+                    .then((downloadUrl) => {
+                        newPosts.push({
+                            id: doc.id,
+                            Type: doc.data().productName,
+                            Price: doc.data().price,
+                            Description: doc.data().description,
+                            Image: downloadUrl,
+                            Amount: doc.data().quantity
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error getting download URL:", error);
+                    });
+                promises.push(downloadPromise);
             });
-
+        
+            await Promise.all(promises);
+    
             setPosts(newPosts);
-            setIsLoading(false); // Set loading to false after data is fetched
+            setIsLoading(false);
         } catch (error) {
             console.error("Error fetching data:", error);
-            setIsLoading(false); // Set loading to false in case of error
+            setIsLoading(false); 
         }
     };
 
@@ -49,16 +61,18 @@ function Buy() {
                 </div>
             ) : (
                 <div>
-                    <h2>Current Posts</h2>
-                    <div className="row row-cols-1 row-cols-md-2 g-4">
+                    <h2>Current Produce</h2>
+                    <div className="row row-cols-1 row-cols-md-2 g-4 mr-4 mb-5 ">
                         {posts.map(post => (
                             <div key={post.id} className="col">
                                     <div className='card' style={{width: '18rem'}}>
-                                        <div className="card-body">
-                                        <h2 className="card-title">{post.Type}</h2>
-                                        <h4>Price: ${post.Price}</h4>
-                                        <p className="card-text">{post.Description}</p>
-                                        <a href="#" onClick = {() => navigate("/Store/"+post.id)} className="btn btn-primary">View More</a>
+                                        <img src={post.Image} className='card-img-top' style={{height: '225px'}}/>
+                                        <div className="card-body bg-dark">
+                                        <h2 className="card-title text-light">{post.Type}</h2>
+                                        <h4 className='text-light'>Price: ${post.Price}</h4>
+                                        <h4 className='text-light'>Amount: {post.Amount} lbs</h4>
+                                        <p className="card-text text-light">{post.Description}</p>
+                                        <a href="#" onClick = {() => navigate("/Store/"+post.id)} className="btn btn-light">View More</a>
                                         </div>
 
                                     </div>
