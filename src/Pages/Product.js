@@ -79,6 +79,7 @@ useEffect(() => {
             ) : (
                 <div>
                     <h1>{posts.length > 0 && posts[0].Price}</h1>
+                    <h1></h1>
                 </div>
             )}
         </div>

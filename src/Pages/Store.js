@@ -4,7 +4,6 @@ import { db, storage } from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref } from 'firebase/storage';
 
-
 function Buy() {
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +14,7 @@ function Buy() {
             const querySnapshot = await getDocs(q);
             const newPosts = [];
             const promises = [];
-    
+
             querySnapshot.forEach((doc) => {
                 const imageRef = ref(storage, `${doc.id}/${doc.data().Image}`);
                 const downloadPromise = getDownloadURL(imageRef)
@@ -34,14 +33,14 @@ function Buy() {
                     });
                 promises.push(downloadPromise);
             });
-        
+
             await Promise.all(promises);
-    
+
             setPosts(newPosts);
             setIsLoading(false);
         } catch (error) {
             console.error("Error fetching data:", error);
-            setIsLoading(false); 
+            setIsLoading(false);
         }
     };
 
@@ -52,7 +51,7 @@ function Buy() {
     }, []);
 
     return (
-        <div style={{ minHeight: '100vh' }}>
+        <div style={{ minHeight: '100vh', padding: '2rem' }}>
             {isLoading ? (
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     <div className="spinner-border" style={{ width: '3rem', height: '3rem' }} role="status">
@@ -61,23 +60,24 @@ function Buy() {
                 </div>
             ) : (
                 <div>
-                    <h2>Current Produce</h2>
-                    <div className="row row-cols-1 row-cols-md-2 g-4 mr-4 mb-5 ">
-                        {posts.map(post => (
-                            <div key={post.id} className="col">
-                                    <div className='card' style={{width: '18rem'}}>
-                                        <img src={post.Image} className='card-img-top' style={{height: '225px'}}/>
+                    <h2 className="text-center mb-4">Current Produce</h2>
+                    <div className="container">
+                        <div className="row justify-content-center">
+                            {posts.map(post => (
+                                <div key={post.id} className="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center mb-4">
+                                    <div className="card shadow mb-4" style={{ boxShadow: '50px',width: '20rem' }}>
+                                        <img src={post.Image} className="card-img-top" style={{ height: '200px', objectFit: 'fit' }} alt={post.Type} />
                                         <div className="card-body bg-dark">
-                                        <h2 className="card-title text-light">{post.Type}</h2>
-                                        <h4 className='text-light'>Price: ${post.Price}</h4>
-                                        <h4 className='text-light'>Amount: {post.Amount} lbs</h4>
-                                        <p className="card-text text-light">{post.Description}</p>
-                                        <a href="#" onClick = {() => navigate("/Store/"+post.id)} className="btn btn-light">View More</a>
+                                            <h2 className="card-title text-light" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
+                                            <h4 className="text-light">Price: ${post.Price}</h4>
+                                            <h4 className="text-light">Amount: {post.Amount} lbs</h4>
+                                            <p className="card-text text-light">{post.Description}</p>
+                                            <a href="#" onClick={() => navigate("/Store/" + post.id)} className="btn btn-light">View More</a>
                                         </div>
-
                                     </div>
-                            </div>
-                        ))}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             )}
