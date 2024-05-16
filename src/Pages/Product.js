@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs, query } from "firebase/firestore";
 import { db, storage } from '../Firebase/firebase';
-import { useLocation } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref } from 'firebase/storage';
 
 function Product() {
@@ -9,7 +9,7 @@ const [isLoading, setIsLoading] = useState(true);
 const location = useLocation();
 let s = location.pathname.split("/")[2];
 const [posts, setPosts] = useState([]);
-
+const navigate = useNavigate();
 useEffect(() => {
     const getDatabase =  () => {
         try {
@@ -96,6 +96,9 @@ useEffect(() => {
                                 <h1 className='text-center mt-5'>{posts.length > 0 && posts[0].Description}</h1>
                                 <br/>
                                 <h1>BUY FUNCTIONALITY TO BE IMPLEMENTED THROUGH PAYPAL OR ADD TO CART</h1>
+                                <button className="btn btn-primary" onClick={() => navigate('/store')}>
+                                    Back to Store
+                                </button>
                             </div>
 
 
