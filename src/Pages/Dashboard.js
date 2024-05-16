@@ -29,6 +29,7 @@ function Home() {
               window.alert("An error occured please try again: ", error)
               console.log("Error fetching user data from Firestore:", error);
             }
+            setIsLoading(false);
           }
         } 
       });
@@ -52,13 +53,7 @@ function Home() {
     fetchData();
   }, [navigate]);
 
-  useEffect(() => {
-    if (!isLoading) {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 500); 
-    }
-  }, [isLoading]);
+  
 
   return (
     <div style={{ backgroundColor: isLoading ? 'black' : 'white', color: 'black', minHeight: '100vh', transition: 'background-color 1s ease-in-out' }}>

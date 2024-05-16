@@ -21,13 +21,12 @@ function OrderForm() {
   const [zip, setZip] = useState(''); 
   const [description, setDescription] = useState(''); 
   const [additionalNotes, setAdditionalNotes] = useState(''); 
-  const [imageUrl, setImageUrl] = useState(''); 
   const [show, setShow] = useState(true);
-  const [put, setPut] = useState(false);
   const [image, setImage] = useState(null); 
   const [imageName, setImageName] = useState('');
   const uploadRef = useRef();
   const [imageBlob, setImageBlob] = useState(null);
+  const [isUploading, setIsUploading] = useState(false); // State to track if button is uploading
 
   
 
@@ -98,6 +97,7 @@ function OrderForm() {
             if (userDoc.exists()) {
                 const userData = userDoc.data()
                 setSales(userData.sales)
+                setIsLoading(false);
             }
           } else {
             try {
@@ -107,6 +107,7 @@ function OrderForm() {
                 setUserName(userData.fullName);
                 setEmail(userData.email);
                 setSales(userData.sales)
+                setIsLoading(false);
                 console.log("User document not found in Firestore");
               }
             } catch (error) {
@@ -115,12 +116,20 @@ function OrderForm() {
             }
           }
         } 
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
+        
       });
 
       return () => unsubscribe();
+      const handleUpload = () => {
+        if (isUploading) return;
+
+        setIsUploading(true);
+
+
+        setTimeout(() => {
+            setIsUploading(false);
+        }, 3000); // 3000 milliseconds = 3 seconds
+    }
     };
 
     fetchData();
@@ -266,7 +275,7 @@ function OrderForm() {
                                 
                             </div>
                         </div>
-                <button style={{width:'100%'}} onSubmit={{keepDatabase}}type="submit" className="btn btn-dark btn-block mx-auto" >Upload</button>
+                <button style={{width:'100%'}} disabled={isUploading} onSubmit={{keepDatabase}}type="submit" className="btn btn-dark btn-block mx-auto" >Upload</button>
                 <hr className="mb-4" />
               </form>
             </div>

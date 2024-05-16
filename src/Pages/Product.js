@@ -78,18 +78,33 @@ useEffect(() => {
                 </div>
             ) : (
                 <div>
-                    <h1 className='text-center mt-4'>{posts.length > 0 && posts[0].Type}</h1>
+                   
+                    
                     <div className='container'>
                         <div className='row'>
+                            
+                            <div className='col-4'> 
+                                <button className="btn btn-primary mt-" onClick={() => navigate('/store')}>Back To Store</button>
+                            </div>  
+                            <div className='col-8'>
+                            <h1 className='mt-2 '>{posts.length > 0 && posts[0].Type}</h1>
+
+                            </div>      
+                                    
+                   
+                        
+                    
+                        </div>
+                        <div className='row'>
+                            
                             <div className='col-sm-6'>
-                                <img className='w-100 p-3' src={posts.length > 0 && posts[0].Image}   alt={posts.Type} />
-                                <h4 className='text-center'>Cost ${posts.length > 0 && posts[0].Price}/lb</h4>
+                                <img className='w-100 p-5 ' src={posts.length > 0 && posts[0].Image}   alt={posts.Type} />
+                                <h4 className=''>Cost ${posts.length > 0 && posts[0].Price}/lb</h4>
                                 <h4 className='text-center'>Amount avaliable: {posts.length > 0 && posts[0].Amount}lbs</h4>
                                 <h4 className='text-center'>Shipped from: {posts.length > 0 && posts[0].Address} {posts.length > 0 && posts[0].State} {posts.length > 0 && posts[0].Zip}</h4>
                                 <div className='mb-4'>
                                 <h4 className='text-center'>Seller Contact {posts.length > 0 && posts[0].Seller}</h4>
                                 <h4 className='text-center'>{posts.length > 0 && posts[0].Contact}</h4>
-
                                 </div>
                             </div>
                             <div className='col-sm-6'>
@@ -98,9 +113,7 @@ useEffect(() => {
                                 <h1>BUY FUNCTIONALITY TO BE IMPLEMENTED THROUGH PAYPAL OR ADD TO CART</h1>
                                 <h1>PAGE IS WIP</h1>
 
-                                <button className="btn btn-primary" onClick={() => navigate('/store')}>
-                                    Back to Store
-                                </button>
+                                
                                 
                             </div>
 

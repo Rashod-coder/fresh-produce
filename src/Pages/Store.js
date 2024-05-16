@@ -76,11 +76,11 @@ function Buy() {
                         </div>
                         <div className="row justify-content-center">
                             {posts.map(post => (
-                                <div key={post.id} className="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center mb-4">
+                                <div key={post.id} className="col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center mb-4">
                                     <div className="card shadow mb-4" style={{ width: '20rem' }}>
                                         <img src={post.Image} className="card-img-top" style={{ height: '200px', objectFit: 'fit' }} alt={post.Type} />
                                         <div className="card-body bg-dark">
-                                            <h2 className="card-title text-light" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
+                                            <h2 className="card-title text-light fw-bold" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
                                             <h4 className="text-light">Price: ${post.Price}</h4>
                                             <h4 className="text-light">Amount: {post.Amount} lbs</h4>
                                             <h4 className='text-light mt-3 mb-4 line-clamp-2'>{truncateDescription(post.Description, 30)}</h4>
