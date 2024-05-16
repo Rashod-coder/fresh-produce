@@ -51,7 +51,7 @@ useEffect(() => {
                 Promise.all(promises)
                     .then(() => {
                         console.log(newPosts);
-                        setPosts(newPosts); // Update the state with the new array of posts
+                        setPosts(newPosts); 
                     })
                     .catch((error) => {
                         console.error("Error fetching download URLs:", error);
