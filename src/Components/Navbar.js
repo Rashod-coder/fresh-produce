@@ -48,8 +48,8 @@ function Navbar() {
               <ul className="dropdown-menu">
                 {!isLoggedIn && (
                   <>
-                    <li><a style={{ color: 'white' }} className="dropdown-item" href="/Login">Login</a></li>
-                    <li><a style={{ color: 'white' }} className="dropdown-item" href="/Register">Register</a></li>
+                    <li><a style={{ color: 'black' }} className="dropdown-item" href="/Login">Login</a></li>
+                    <li><a style={{ color: 'black' }} className="dropdown-item" href="/Register">Register</a></li>
                   </>
                 )}
                 {isLoggedIn && (
