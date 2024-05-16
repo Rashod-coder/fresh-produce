@@ -40,6 +40,7 @@ useEffect(() => {
                         
                             });
                         })
+                        
                         .catch((error) => {
                             console.error("Error getting download URL:", error);
                         });
@@ -77,13 +78,27 @@ useEffect(() => {
                 </div>
             ) : (
                 <div>
-                    <h1 className='text-center'>{posts.length > 0 && posts[0].Type}</h1>
+                    <h1 className='text-center mt-4'>{posts.length > 0 && posts[0].Type}</h1>
                     <div className='container'>
                         <div className='row'>
                             <div className='col-sm-6'>
                                 <img className='w-100 p-3' src={posts.length > 0 && posts[0].Image}   alt={posts.Type} />
-                                <h1 className='text-center'>{posts.length > 0 && posts[0].Description}</h1>
+                                <h4 className='text-center'>Cost ${posts.length > 0 && posts[0].Price}/lb</h4>
+                                <h4 className='text-center'>Amount avaliable: {posts.length > 0 && posts[0].Amount}lbs</h4>
+                                <h4 className='text-center'>Shipped from: {posts.length > 0 && posts[0].Address} {posts.length > 0 && posts[0].State} {posts.length > 0 && posts[0].Zip}</h4>
+                                <div className='mb-4'>
+                                <h4 className='text-center'>Seller Contact {posts.length > 0 && posts[0].Seller}</h4>
+                                <h4 className='text-center'>{posts.length > 0 && posts[0].Contact}</h4>
+
+                                </div>
                             </div>
+                            <div className='col-sm-6'>
+                                <h1 className='text-center mt-5'>{posts.length > 0 && posts[0].Description}</h1>
+                                <br/>
+                                <h1>BUY FUNCTIONALITY TO BE IMPLEMENTED THROUGH PAYPAL OR ADD TO CART</h1>
+                            </div>
+
+
                             
                         </div>
                     </div>
