@@ -96,9 +96,12 @@ useEffect(() => {
                                 <h1 className='text-center mt-5'>{posts.length > 0 && posts[0].Description}</h1>
                                 <br/>
                                 <h1>BUY FUNCTIONALITY TO BE IMPLEMENTED THROUGH PAYPAL OR ADD TO CART</h1>
+                                <h1>PAGE IS WIP</h1>
+
                                 <button className="btn btn-primary" onClick={() => navigate('/store')}>
                                     Back to Store
                                 </button>
+                                
                             </div>
 
 

@@ -45,6 +45,7 @@ function Buy() {
     };
 
     const navigate = useNavigate();
+    
     const truncateDescription = (description, maxLength) => {
         if (description.length > maxLength) {
             return `${description.substr(0, maxLength)}...`;
@@ -82,7 +83,7 @@ function Buy() {
                                             <h2 className="card-title text-light" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
                                             <h4 className="text-light">Price: ${post.Price}</h4>
                                             <h4 className="text-light">Amount: {post.Amount} lbs</h4>
-                                            <h4 className='text-light mt-3 mb-4'>{truncateDescription(post.Description, 30)}</h4>
+                                            <h4 className='text-light mt-3 mb-4 line-clamp-2'>{truncateDescription(post.Description, 30)}</h4>
                                             <a href="#" onClick={() => navigate("/Store/" + post.id)} className="btn btn-light">View More</a>
                                         </div>
                                     </div>
