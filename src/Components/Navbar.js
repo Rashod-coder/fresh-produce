@@ -63,7 +63,7 @@ function Navbar() {
               </ul>
             </li>
 
-            {isLoggedIn && (
+            {/* {isLoggedIn && (
               <li className="nav-item dropdown">
                 <a style={{ color: 'white' }} className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Products
@@ -75,7 +75,7 @@ function Navbar() {
                   
                 </ul>
               </li>
-            )}
+            )} */}
           </ul>
         </div>
       </div>
