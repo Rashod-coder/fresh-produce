@@ -78,8 +78,16 @@ useEffect(() => {
             ) : (
                 <div>
                     <h1 className='text-center'>{posts.length > 0 && posts[0].Type}</h1>
-                    <img src={posts.length > 0 && posts[0].Image}  style={{ height: '100%', objectFit: 'cover' }} alt={posts.Type} />
-                    <h1 className='text-center'>{posts.length > 0 && posts[0].Description}</h1>
+                    <div className='container'>
+                        <div className='row'>
+                            <div className='col-sm-6'>
+                                <img className='w-100 p-3' src={posts.length > 0 && posts[0].Image}   alt={posts.Type} />
+                                <h1 className='text-center'>{posts.length > 0 && posts[0].Description}</h1>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
 
                     <img></img>
                 </div>
