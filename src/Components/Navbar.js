@@ -31,25 +31,25 @@ function Navbar() {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg bg-light">
+    <nav className="navbar navbar-dark navbar-expand-lg bg-dark" style={{ boxShadow: '0px 2px 4px rgba(0,0,0,0.8)' }}>
       <div className="container-fluid">
-        <a style={{ color: 'black' }} className="navbar-brand" href="/">Home</a>
+        <a style={{ color: 'white' }} className="navbar-brand" href="/">Home</a>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
+          <span style={{color: 'white'}}className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             
             
             <li className="nav-item dropdown">
-              <a style={{ color: 'black' }} className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a style={{ color: 'white' }} className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Account
               </a>
               <ul className="dropdown-menu">
                 {!isLoggedIn && (
                   <>
-                    <li><a style={{ color: 'black' }} className="dropdown-item" href="/Login">Login</a></li>
-                    <li><a style={{ color: 'black' }} className="dropdown-item" href="/Register">Register</a></li>
+                    <li><a style={{ color: 'white' }} className="dropdown-item" href="/Login">Login</a></li>
+                    <li><a style={{ color: 'white' }} className="dropdown-item" href="/Register">Register</a></li>
                   </>
                 )}
                 {isLoggedIn && (
@@ -65,7 +65,7 @@ function Navbar() {
 
             {isLoggedIn && (
               <li className="nav-item dropdown">
-                <a style={{ color: 'black' }} className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a style={{ color: 'white' }} className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Products
                 </a>
                 <ul className="dropdown-menu">

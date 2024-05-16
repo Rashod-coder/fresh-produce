@@ -51,21 +51,21 @@ function Buy() {
     }, []);
 
     return (
-        <div style={{ minHeight: '100vh', padding: '2rem' }}>
+        <div style={{ background: '#fbfef9',minHeight: '100vh', padding: '2rem' }}>
             {isLoading ? (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
                     <div className="spinner-border" style={{ width: '3rem', height: '3rem' }} role="status">
                         <span className="visually-hidden">Loading...</span>
                     </div>
                 </div>
             ) : (
                 <div>
-                    <h2 className="text-center mb-4">Current Produce</h2>
+                    <h1 className=" text-dark text-center mb-4">Current Produce</h1>
                     <div className="container">
                         <div className="row justify-content-center">
                             {posts.map(post => (
                                 <div key={post.id} className="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center mb-4">
-                                    <div className="card shadow mb-4" style={{ boxShadow: '50px',width: '20rem' }}>
+                                    <div className="card shadow mb-4" style={{ width: '20rem' }}>
                                         <img src={post.Image} className="card-img-top" style={{ height: '200px', objectFit: 'fit' }} alt={post.Type} />
                                         <div className="card-body bg-dark">
                                             <h2 className="card-title text-light" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
