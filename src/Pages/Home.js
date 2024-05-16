@@ -1,5 +1,5 @@
 import React from 'react';
-import backgroundImage from '../Assets/evi-radauscher-U_D5NWMmTTM-unsplash.jpg'; 
+import backgroundImage from '../Assets/sumner-mahaffey-7vCt_lFxKx4-unsplash.jpg'; 
 
 function Home() {
   const backgroundStyle = {
@@ -12,14 +12,19 @@ function Home() {
   };       
 
   return ( 
+    <div>
     <div style={backgroundStyle}>
-      <div className='container-fluid'>
+      <div className='container'>
         <div className='row'>
-          <div className='col-lg-6 col-sm-12'>
-            <h1>treeees</h1>
+          <div className='col-lg-12 col-sm-12'>
+            <h1 className='text-center mt-4 py-5'>Welcome to Fresh for all - a digital farmers market</h1>
           </div>
         </div>
       </div>
+    </div>
+    <div>
+      <h1>About: </h1>
+    </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { auth, db, create} from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, doc, setDoc } from "firebase/firestore"; 
 import {createUserWithEmailAndPassword, signOut} from "firebase/auth"
-import Nature from '../Assets/amy-shamblen-bqjyFm32HDM-unsplash.jpg'
+import Nature from '../Assets/brooke-lark-3A1etBW5cBk-unsplash.jpg'
 
 
 function Register() {

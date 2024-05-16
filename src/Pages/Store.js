@@ -62,6 +62,11 @@ function Buy() {
                 <div>
                     <h1 className=" text-dark text-center mb-4">Current Produce</h1>
                     <div className="container">
+                    <div className="row justify-content-start">
+                            <div className="col-md-6">
+                                <h6 className="text-dark">To know more details of an specific product click on "View More".</h6>
+                            </div>
+                        </div>
                         <div className="row justify-content-center">
                             {posts.map(post => (
                                 <div key={post.id} className="col-12 col-sm-6 col-md-4 col-lg-3 d-flex justify-content-center mb-4">

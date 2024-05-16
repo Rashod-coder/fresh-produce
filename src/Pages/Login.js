@@ -9,7 +9,7 @@ import {
 import { auth, db } from '../Firebase/firebase';
 import GoogleButton from 'react-google-button'
 import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
-import Nature from '../Assets/jamie-street-qpN5MLx1uwk-unsplash.jpg'
+import Nature from '../Assets/brooke-lark-3A1etBW5cBk-unsplash.jpg'
 
 
 
