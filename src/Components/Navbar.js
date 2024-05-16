@@ -63,19 +63,19 @@ function Navbar() {
               </ul>
             </li>
 
-            {/* {isLoggedIn && (
+            {isLoggedIn && (
               <li className="nav-item dropdown">
                 <a style={{ color: 'white' }} className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Products
                 </a>
                 <ul className="dropdown-menu">
-                  <li><a style={{ color: 'black' }} className="dropdown-item" href="/Store">Store</a></li>
+                  {/* <li><a style={{ color: 'black' }} className="dropdown-item" href="/Store">Store</a></li> */}
                   <li><a style={{ color: 'black' }} className="dropdown-item" href="/Sell">Sell</a></li>
                  
                   
                 </ul>
               </li>
-            )} */}
+            )}
           </ul>
         </div>
       </div>
