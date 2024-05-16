@@ -7,7 +7,7 @@ import { getDownloadURL, ref } from 'firebase/storage';
 function Product() {
 const [isLoading, setIsLoading] = useState(true);
 const location = useLocation();
-let s = location.pathname.substring(5);
+let s = location.pathname.split("/")[2];
 const [posts, setPosts] = useState([]);
 
 useEffect(() => {
@@ -18,7 +18,7 @@ useEffect(() => {
             .then((querySnapshot) => {
                 const newPosts = [];
                 const promises = [];
-                querySnapshot.forEach((doc) => {
+                querySnapshot.docs.forEach((doc) => {
                     if (doc.id === s) {
                         const imageRef = ref(storage, `${doc.id}/${doc.data().Image}`);
                         const downloadPromise = getDownloadURL(imageRef)
@@ -55,7 +55,6 @@ useEffect(() => {
                     .catch((error) => {
                         console.error("Error fetching download URLs:", error);
                     });
-                setPosts(newPosts);
                 setIsLoading(false);
             }); 
         } 
@@ -78,8 +77,11 @@ useEffect(() => {
                 </div>
             ) : (
                 <div>
-                    <h1>{posts.length > 0 && posts[0].Price}</h1>
-                    <h1></h1>
+                    <h1 className='text-center'>{posts.length > 0 && posts[0].Type}</h1>
+                    <img src={posts.length > 0 && posts[0].Image}  style={{ height: '100%', objectFit: 'cover' }} alt={posts.Type} />
+                    <h1 className='text-center'>{posts.length > 0 && posts[0].Description}</h1>
+
+                    <img></img>
                 </div>
             )}
         </div>
