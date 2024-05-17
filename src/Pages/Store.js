@@ -25,7 +25,8 @@ function Buy() {
                             Price: doc.data().price,
                             Description: doc.data().description,
                             Image: downloadUrl,
-                            Amount: doc.data().quantity
+                            Amount: doc.data().quantity,
+                            Zip: doc.data().zip
                         });
                     })
                     .catch((error) => {
@@ -83,6 +84,7 @@ function Buy() {
                                             <h2 className="card-title text-light fw-bold" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
                                             <h4 className="text-light">Price: ${post.Price}</h4>
                                             <h4 className="text-light">Amount: {post.Amount} lbs</h4>
+                                            <h6 className="text-light">Zipcode: {post.Zip} </h6>
                                             <h4 className='text-light mt-3 mb-4 line-clamp-2'>{truncateDescription(post.Description, 30)}</h4>
                                             <a href="#" onClick={() => navigate("/Store/" + post.id)} className="btn btn-light">View More</a>
                                         </div>
