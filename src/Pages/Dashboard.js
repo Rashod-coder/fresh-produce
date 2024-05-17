@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { auth, db } from '../Firebase/firebase';
 import { collection, doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import { BarChart } from '@mui/x-charts/BarChart';
 import { LineChart } from '@mui/x-charts';
 
 
@@ -22,12 +21,21 @@ function Home() {
           console.log("User:", user); 
           if (user.displayName) {
             setUserName(user.displayName);
+            const userDoc = await getDoc(doc(collection(db, 'users'), user.uid));
+              if (userDoc.exists()) {
+                const userData = userDoc.data();
+                setSolds(userData.sales)
+              } else {
+                console.log("User document not found in Firestore");
+              }
+
           } else {
             try {
               const userDoc = await getDoc(doc(collection(db, 'users'), user.uid));
               if (userDoc.exists()) {
                 const userData = userDoc.data();
                 setUserName(userData.fullName);
+                setSolds(userData.sales)
               } else {
                 console.log("User document not found in Firestore");
               }
@@ -62,7 +70,7 @@ function Home() {
   
 
   return (
-    <div style={{ backgroundColor: isLoading ? 'black' : 'white', color: 'black', minHeight: '100vh', transition: 'background-color 1s ease-in-out' }}>
+    <div style={{ backgroundColor: isLoading ? 'black' : 'white', color: 'black', minHeight: '100vh', transition: 'background-color 0.5s ease-in-out' }}>
       {isLoading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <div className="spinner-border" style={{ width: '3rem', height: '3rem', color:'white' }} role="status">
@@ -73,13 +81,17 @@ function Home() {
       (
         <div className='container-fluid'style={{ height: '100vh', padding: '20px' }}>
           <div className='row'>
-            <div className='col-sm-6'>
+            <div className='col-sm-12'>
               <h3 style={{ color: 'black' }}>{greeting} {userName} welcome to your dashboard</h3>
-              <LineChart
-                xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+              
+            </div>
+            <div className='col-sm-12 col-lg-12'>
+            <LineChart
+                xAxis={[{ data: [1, 2, 3, 4, 5, 6,7] }]}
                 series={[
                   {
-                    data: [2, 5.5, 2, 8.5, 1.5, 5],
+                    data: [2, 5.5, 2, 8.5, 1.5, 5, 90],
+                    area: true
                   },
                 ]}
                 width={500}
