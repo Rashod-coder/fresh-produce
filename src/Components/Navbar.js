@@ -69,7 +69,7 @@ function Navbar() {
                   Products
                 </a>
                 <ul className="dropdown-menu">
-                  {/* <li><a style={{ color: 'black' }} className="dropdown-item" href="/Store">Store</a></li> */}
+                  <li><a style={{ color: 'black' }} className="dropdown-item" href="/Store">Store</a></li>
                   <li><a style={{ color: 'black' }} className="dropdown-item" href="/Sell">Sell</a></li>
                  
                   

@@ -138,12 +138,6 @@ function OrderForm() {
   return (
     
     <div className="container">
-          {/* {put && (
-      <Alert variant="success" onClose={() => setShow(false)} dismissible>
-        <Alert.Heading>Product Added!</Alert.Heading>
-        <p>Your product is on the marketplace!</p>
-      </Alert>
-    )} */}
       {isLoading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
           <div className="spinner-border" style={{ width: '3rem', height: '3rem', color: 'black' }} role="status">
@@ -256,8 +250,6 @@ function OrderForm() {
                         </div>
                         <h7 className='text-light fw-bold'>Upload image of product</h7>
                         <div className={`w-full bg-blue-950 rounded-xl hover:bg-blue-900 cursor-pointer flex flex-col justify-center items-center py-8 mb-4`}>
-                            {/* {imageName === "" ? <FaFileUpload size={20} className={`mb-2`} fill='white' /> : <img src={image} alt='image-preview' className={`w-72 mb-2 h-auto`} />} */}
-                            {/* <p className={`text-xl font-semibold text-white`}>{imageName === "" ? 'Add Image' : imageName }</p> */}
                             <input
                                 type="file"
                                 ref={uploadRef}

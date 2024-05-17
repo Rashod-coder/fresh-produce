@@ -22,6 +22,7 @@ function Home() {
     </div>
     <div style={{minHeight: '100vh'}}>
       <h1>About: </h1>
+      <h3>Same Day Delivery through Door Dash or other food delivery services, you can only order produce from local areas </h3>
     </div>
     </div>
   );
