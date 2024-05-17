@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { auth, db } from '../Firebase/firebase';
 import { collection, doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { BarChart } from '@mui/x-charts/BarChart';
+import { LineChart } from '@mui/x-charts';
+
+
 
 function Home() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [greeting, setGreeting] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [sold, setSolds] = useState();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,7 +75,18 @@ function Home() {
           <div className='row'>
             <div className='col-sm-6'>
               <h3 style={{ color: 'black' }}>{greeting} {userName} welcome to your dashboard</h3>
+              <LineChart
+                xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+                series={[
+                  {
+                    data: [2, 5.5, 2, 8.5, 1.5, 5],
+                  },
+                ]}
+                width={500}
+                height={300}
+              />
             </div>
+            
             
           </div>
           
