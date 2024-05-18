@@ -39,7 +39,8 @@ function Register() {
             email: registerEmail,
             fullName: name,
             earnings: 0.0,
-            sales: 0
+            sales: 0,
+            money: 0
           });
 
     } catch (e) {

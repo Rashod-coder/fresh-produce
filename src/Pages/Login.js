@@ -73,34 +73,34 @@ function Login() {
   const handleGoogle = async (e) => {
     e.preventDefault();
     const googleLogin = new GoogleAuthProvider();
-    return signInWithPopup(auth, googleLogin)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-        console.log("User: ", user)
-
-        setDoc(doc(db, "users", result.user.uid), {
-          email: result.user.email,
-          fullName: result.user.displayName,
-          earnings: 0,
+    try {
+      const result = await signInWithPopup(auth, googleLogin);
+      const user = result.user;
+  
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDocs(userRef);
+  
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          email: user.email,
+          fullName: user.displayName,
+          money: 0,
           sales: 0
-          
-        }, { merge: true }).then(() => {
-          console.log("Here");
-          console.log(result.user.uid);
-          navigate('/Dashboard');
         });
-
-
-      })
-      .catch((error) => {  
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
-  }
+      } else {
+        // User already exists, no need to update money and sales
+        console.log("User already exists in Firestore");
+      }
+  
+      navigate('/Dashboard');
+    } catch (error) {
+      console.error("Error during Google login:", error);
+      setMsg("Login with Google failed, please try again.");
+      setTimeout(() => {
+        setMsg("");
+      }, 5000);
+    }
+  };
 
   return (
     

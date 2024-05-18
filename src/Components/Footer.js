@@ -4,7 +4,7 @@ function Footer() {
   return (
     <footer style={footerStyle}>
       <div style={containerStyle}>
-        <p style={textStyle}>Fresh For All &copy; {new Date().getFullYear()}</p>
+        <p style={textStyle}>Fresh Market Hub &copy; {new Date().getFullYear()}</p>
       </div>
     </footer>
   );
@@ -15,7 +15,7 @@ const footerStyle = {
   color: '#fff',
   textAlign: 'center',
   padding: '1rem 0',
-  position: 'relative', // Change to 'fixed'
+  position: 'relative', 
   bottom: 0,
   width: '100%',
 };

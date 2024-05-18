@@ -83,22 +83,24 @@ useEffect(() => {
                     <div className='container'>
                         <div className='row'>
                             
-                            <div className='col-4'> 
-                                <button className="btn btn-primary mt-" onClick={() => navigate('/store')}>Back To Store</button>
-                            </div>  
-                            <div className='col-8'>
-                            <h1 className='mt-2 '>{posts.length > 0 && posts[0].Type}</h1>
+                            
+                            <div className='col-8 mt-4'>
+                            <h1 className='text-center'>{posts.length > 0 && posts[0].Type}</h1>
 
                             </div>      
+                            <div className='col-2 mt-4'>  
+                            <button className="btn btn-primary mt-" onClick={() => navigate('/store')}>Back To Store</button>
+
+                            </div>
                                     
                    
                         
                     
                         </div>
                         <div className='row'>
-                            
                             <div className='col-sm-6'>
                                 <img className='w-100 p-5 ' src={posts.length > 0 && posts[0].Image}   alt={posts.Type} />
+                                <div style={{backgroundColor: 'black'}}>
                                 <h4 className=''>Cost ${posts.length > 0 && posts[0].Price}/lb</h4>
                                 <h4 className='text-center'>Amount avaliable: {posts.length > 0 && posts[0].Amount}lbs</h4>
                                 <h4 className='text-center'>Shipped from: {posts.length > 0 && posts[0].Address} {posts.length > 0 && posts[0].State} {posts.length > 0 && posts[0].Zip}</h4>
@@ -106,6 +108,7 @@ useEffect(() => {
                                 <h4 className='text-center'>Seller Contact {posts.length > 0 && posts[0].Seller}</h4>
                                 <h4 className='text-center'>{posts.length > 0 && posts[0].Contact}</h4>
                                 </div>
+                            </div>
                             </div>
                             <div className='col-sm-6'>
                                 <h1 className='text-center mt-5'>{posts.length > 0 && posts[0].Description}</h1>
