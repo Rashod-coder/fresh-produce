@@ -87,9 +87,10 @@ function Login() {
           money: 0,
           sales: 0,
           zipCode: 0,
-          address: "placeholder",
+          street: "placeholder",
           state: 'placeholder',
-          phoneNumber: 0
+          phoneNumber: 0,
+          city: "placeholder"
         });
       } else {
         // User already exists, no need to update money and sales

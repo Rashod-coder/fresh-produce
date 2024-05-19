@@ -42,9 +42,10 @@ function Register() {
             sales: 0,
             money: 0,
             zipCode: 0,
-            address: "placeholder",
+            street: "placeholder",
             state: 'placeholder',
-            phoneNumber: 0
+            phoneNumber: 0,
+            city: 'placeholder'
           });
 
     } catch (e) {
