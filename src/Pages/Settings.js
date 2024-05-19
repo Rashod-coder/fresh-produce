@@ -48,6 +48,7 @@ function Settings() {
   
       if (Object.keys(updatedUserInfo).length === 0) {
         console.log('No fields updated.');
+        window.alert('All fields left blank please enter at least one field to update account information')
         return;
       }
   
@@ -63,12 +64,16 @@ function Settings() {
   
 
   return (
-    <div className="bg-light-blue" style={{ minHeight: '100vh', backgroundColor: '#8CBCE0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div className="bg-light-blue" style={{ minHeight: '100vh', backgroundColor: '#BADBFB', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      
       <div className="container py-5">
+      <h2 className="mb-2 mt-4 text-center">Account Settings</h2>
+
         <div className="row justify-content-center">
           <div className="col-xl-8 col-lg-8 col-md-10 col-sm-12">
-            <div className="card custom-shadow p-5">
-              <h2 className="mb-4 text-center">Account Settings</h2>
+          <h7>Update your account settings here</h7>
+          <div className="card custom-shadow p-5" style={{ position: 'relative', backgroundColor: 'rgba(255, 255, 255, 0.3)', backdropFilter: 'blur(10px)' }}>
+                
               <div className="row">
                 <div className="col-md-6 mb-4">
                   <label htmlFor="fullName" className="form-label">Full Name</label>
@@ -104,8 +109,7 @@ function Settings() {
                 </div>
                 <div className="col-12">
                   <div className="text-center">
-                    <button type="button" id="submit" name="submit" className="btn btn-secondary me-2">Cancel</button>
-                    <button type="button" id="submit" name="submit" className="btn btn-primary" onClick={handleUpdate}>Update</button>
+                    <button type="button" id="submit" name="submit" className="btn btn-light" onClick={handleUpdate}>Update</button>
                   </div>
                 </div>
               </div>
