@@ -64,20 +64,29 @@ function Buy() {
 
     const handleSearchKeyPress = (e) => {
         if (e.key === 'Enter') {
-            setIsSearchLoading(true);
-            const query = searchQuery.toLowerCase();
-            setTimeout(() => { // Simulate a network request for demonstration
-                const filtered = posts.filter(post =>
-                    post.Type.toLowerCase().includes(query) ||
-                    post.Description.toLowerCase().includes(query) ||
-                    post.Price.toString().includes(query) ||
-                    post.Amount.toString().includes(query) ||
-                    post.Zip.toLowerCase().includes(query)
-                );
-                setFilteredPosts(filtered);
-                setIsSearchLoading(false);
-            }, 1000); // Simulating a 1 second delay for the search
+            performSearch();
         }
+    };
+
+    const handleClearSearch = () => {
+        setSearchQuery("");
+        setFilteredPosts(posts);
+    };
+
+    const performSearch = () => {
+        setIsSearchLoading(true);
+        const query = searchQuery.toLowerCase();
+        setTimeout(() => { // Simulate a network request for demonstration
+            const filtered = posts.filter(post =>
+                post.Type.toLowerCase().includes(query) ||
+                post.Description.toLowerCase().includes(query) ||
+                post.Price.toString().includes(query) ||
+                post.Amount.toString().includes(query) ||
+                post.Zip.toLowerCase().includes(query)
+            );
+            setFilteredPosts(filtered);
+            setIsSearchLoading(false);
+        }, 1000); // Simulating a 1 second delay for the search
     };
 
     useEffect(() => {
@@ -94,20 +103,29 @@ function Buy() {
                 </div>
             ) : (
                 <div>
-                    <h1 className="text-dark text-center mb-4">Current Produce</h1>
+                    <h1 className="text-dark text-center mb-4">Welcome to the marketplace</h1>
                     <div className="container">
                         <div className="row justify-content-center mb-4">
-                            <div className="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <div className="col-12 position-relative">
                                 <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Search produce..."
+                                    placeholder="Search products..."
                                     value={searchQuery}
                                     onChange={handleSearchChange}
                                     onKeyPress={handleSearchKeyPress}
                                     style={{ paddingLeft: '2.5rem' }}
                                 />
                                 <i className="fas fa-search position-absolute" style={{ left: '25px', top: '50%', transform: 'translateY(-50%)', color: '#999', pointerEvents: 'none' }}></i>
+                                {searchQuery && (
+                                    <button
+                                        className="btn btn-outline-secondary position-absolute"
+                                        style={{ right: '10px', top: '50%', transform: 'translateY(-50%)' }}
+                                        onClick={handleClearSearch}
+                                    >
+                                        Clear
+                                    </button>
+                                )}
                             </div>
                         </div>
                         {isSearchLoading ? (
@@ -126,7 +144,7 @@ function Buy() {
                                 {filteredPosts.length === 0 ? (
                                     <div className="row justify-content-center">
                                         <div className="col-md-6 text-center">
-                                            <h2 className="text-dark mt-5">Produce not found please use different keywords</h2>
+                                            <h4 className="text-dark">Produce not found</h4>
                                         </div>
                                     </div>
                                 ) : (
