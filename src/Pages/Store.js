@@ -70,13 +70,17 @@ function Buy() {
 
     const handleClearSearch = () => {
         setSearchQuery("");
-        setFilteredPosts(posts);
+        setIsSearchLoading(true); // Set loading state when clearing search
+        setTimeout(() => { // Simulate a network request for demonstration
+            setFilteredPosts(posts);
+            setIsSearchLoading(false);
+        }, 500); // Simulating a 1 second delay for the search
     };
 
     const performSearch = () => {
         setIsSearchLoading(true);
         const query = searchQuery.toLowerCase();
-        setTimeout(() => { // Simulate a network request for demonstration
+        setTimeout(() => { 
             const filtered = posts.filter(post =>
                 post.Type.toLowerCase().includes(query) ||
                 post.Description.toLowerCase().includes(query) ||
@@ -86,7 +90,7 @@ function Buy() {
             );
             setFilteredPosts(filtered);
             setIsSearchLoading(false);
-        }, 1000); // Simulating a 1 second delay for the search
+        }, 1000); 
     };
 
     useEffect(() => {
@@ -104,6 +108,7 @@ function Buy() {
             ) : (
                 <div>
                     <h1 className="text-dark text-center mb-4">Welcome to the marketplace</h1>
+                    <h6 className='text-center text-dark mt-4'> </h6>
                     <div className="container">
                         <div className="row justify-content-center mb-4">
                             <div className="col-12 position-relative">
@@ -155,7 +160,7 @@ function Buy() {
                                                     <img src={post.Image} className="card-img-top" style={{ height: '200px', objectFit: 'fit' }} alt={post.Type} />
                                                     <div className="card-body bg-dark">
                                                         <h2 className="card-title text-light fw-bold" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
-                                                        <h4 className="text-light">Price: ${post.Price}</h4>
+                                                        <h4 className="text-light">Price: ${post.Price}/lb</h4>
                                                         <h4 className="text-light">Amount: {post.Amount} lbs</h4>
                                                         <h6 className="text-light">Zipcode: {post.Zip} </h6>
                                                         <h4 className='text-light mt-3 mb-4 line-clamp-2'>{truncateDescription(post.Description, 30)}</h4>
