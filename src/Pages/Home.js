@@ -45,9 +45,9 @@ function Home() {
 
   return ( 
     <div>
-      <div style={headerStyle}>
+      {/* <div style={headerStyle}>
         <h1 className='text-light text-center' style={{fontFamily: 'montserrat'}}> Welcome to Fresh Market Hub.</h1>
-      </div>
+      </div> */}
       <div id="carouselExampleAutoplaying" className="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="2500">
         <div className="carousel-indicators">
           <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
@@ -58,7 +58,7 @@ function Home() {
           <div className="carousel-item active" data-bs-interval="2500">
             <img src={backgroundImage} style={{height: '90vh'}} className="d-block w-100" alt="Slide 1" />
             <div className="carousel-caption d-md-block">
-              <h5>A full on digital farmers market nothing like others!</h5>
+              <h3>A full on digital farmers market nothing like others!</h3>
               <a href="/register" 
                 style={buttonStyle}
                 onMouseOver={e => e.currentTarget.style.backgroundColor = buttonHoverStyle.backgroundColor}
@@ -70,14 +70,14 @@ function Home() {
           <div className="carousel-item" data-bs-interval="2500">
             <img src={backGroundI} style={{height: '90vh'}} className="d-block w-100" alt="Slide 2" />
             <div className="carousel-caption d-md-block">
-              <h5>First slide label</h5>
+              <h3>Upload your own produce</h3>
               <p>Some representative placeholder content for the first slide.</p>
             </div>
           </div>
           <div className="carousel-item" data-bs-interval="2500">
             <img src={backGroundi} style={{height: '90vh'}} className="d-block w-100" alt="Slide 3" />
             <div className="carousel-caption d-md-block">
-              <h5>First slide label</h5>
+              <h3 className='text-light'>Purchase fresh produce from other sellers & farmers</h3>
               <p>Some representative placeholder content for the first slide.</p>
             </div>
           </div>
