@@ -69,15 +69,14 @@ function Settings() {
           <div className="col-xl-8 col-lg-8 col-md-10 col-sm-12">
             <div className="card custom-shadow p-5">
               <h2 className="mb-4 text-center">Account Settings</h2>
-              <h6 className='text-center'>Your data is secured & encrypted in our databases</h6>
               <div className="row">
                 <div className="col-md-6 mb-4">
                   <label htmlFor="fullName" className="form-label">Full Name</label>
                   <input type="text" className="form-control form-control-lg" id="fullName" placeholder="Enter full name" value={fullName} onChange={(e) => setFullName(e.target.value)} />
                 </div>
                 <div className="col-md-6 mb-4">
-                  <label htmlFor="eMail" className="form-label">Email</label>
-                  <input type="email" className="form-control form-control-lg" id="eMail" placeholder="Enter email ID" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <label htmlFor="eMail" className="form-label">Bio</label>
+                  <input type="email" className="form-control form-control-lg" id="eMail" placeholder="Bio about you to display on listings" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="col-md-6 mb-4">
                   <label htmlFor="phone" className="form-label">Phone</label>
@@ -85,7 +84,7 @@ function Settings() {
                 </div>
                 <div className="col-md-6 mb-4">
                   <label htmlFor="website" className="form-label">Bank Info</label>
-                  <input type="url" className="form-control form-control-lg" id="website" placeholder="Website url" value={website} onChange={(e) => setWebsite(e.target.value)} />
+                  <input type="url" className="form-control form-control-lg" id="website" placeholder="Paypal" value={website} onChange={(e) => setWebsite(e.target.value)} />
                 </div>
                 <div className="col-md-6 mb-4">
                   <label htmlFor="Street" className="form-label">Street</label>
