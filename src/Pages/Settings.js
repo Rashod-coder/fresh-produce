@@ -55,7 +55,7 @@ function Settings() {
         const userRef = doc(db, 'users', currentUser.uid);
         await setDoc(userRef, updatedUserInfo, { merge: true });
         console.log('User information updated successfully.');
-        window.alert('Information updated');
+        window.alert('Account information updated');
       } catch (error) {
         console.error('Error updating user information:', error);
       }

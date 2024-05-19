@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from '../Firebase/firebase';
 import GoogleButton from 'react-google-button'
-import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc, where, getDoc } from "firebase/firestore";
 import Nature from '../Assets/brooke-lark-3A1etBW5cBk-unsplash.jpg'
 
 
@@ -74,26 +74,30 @@ function Login() {
     e.preventDefault();
     const googleLogin = new GoogleAuthProvider();
     try {
+      console.log("Before signInWithPopup");
       const result = await signInWithPopup(auth, googleLogin);
+      console.log("After signInWithPopup");
+  
       const user = result.user;
   
       const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDocs(userRef);
+      const userSnap = await getDoc(userRef); // Corrected method name
   
       if (!userSnap.exists()) {
+        console.log("Before document creation");
         await setDoc(userRef, {
           email: user.email,
           fullName: user.displayName,
           money: 0,
           sales: 0,
           zipCode: 0,
-          street: "placeholder",
-          state: 'placeholder',
+          street: 0,
+          state: 0,
           phoneNumber: 0,
-          city: "placeholder"
+          city: 0
         });
+        console.log("After document creation");
       } else {
-        // User already exists, no need to update money and sales
         console.log("User already exists in Firestore");
       }
   
