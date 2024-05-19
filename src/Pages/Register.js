@@ -40,7 +40,11 @@ function Register() {
             fullName: name,
             earnings: 0.0,
             sales: 0,
-            money: 0
+            money: 0,
+            zipCode: 0,
+            address: "placeholder",
+            state: 'placeholder',
+            phoneNumber: 0
           });
 
     } catch (e) {

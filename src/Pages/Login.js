@@ -85,7 +85,11 @@ function Login() {
           email: user.email,
           fullName: user.displayName,
           money: 0,
-          sales: 0
+          sales: 0,
+          zipCode: 0,
+          address: "placeholder",
+          state: 'placeholder',
+          phoneNumber: 0
         });
       } else {
         // User already exists, no need to update money and sales

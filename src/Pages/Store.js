@@ -70,11 +70,11 @@ function Buy() {
 
     const handleClearSearch = () => {
         setSearchQuery("");
-        setIsSearchLoading(true); // Set loading state when clearing search
+        setIsSearchLoading(true); 
         setTimeout(() => { // Simulate a network request for demonstration
             setFilteredPosts(posts);
             setIsSearchLoading(false);
-        }, 500); // Simulating a 1 second delay for the search
+        }, 500); 
     };
 
     const performSearch = () => {
@@ -156,7 +156,7 @@ function Buy() {
                                     <div className="row justify-content-center">
                                         {filteredPosts.map(post => (
                                             <div key={post.id} className="col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center mb-4">
-                                                <div className="card shadow mb-4" style={{ width: '20rem' }}>
+                                                <div className="card shadow mb-4" style={{ width: '22rem' }}>
                                                     <img src={post.Image} className="card-img-top" style={{ height: '200px', objectFit: 'fit' }} alt={post.Type} />
                                                     <div className="card-body bg-dark">
                                                         <h2 className="card-title text-light fw-bold" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
@@ -164,7 +164,9 @@ function Buy() {
                                                         <h4 className="text-light">Amount: {post.Amount} lbs</h4>
                                                         <h6 className="text-light">Zipcode: {post.Zip} </h6>
                                                         <h4 className='text-light mt-3 mb-4 line-clamp-2'>{truncateDescription(post.Description, 30)}</h4>
-                                                        <a href="#" onClick={() => navigate("/Store/" + post.id)} className="btn btn-light">View More</a>
+                                                        <div>
+                                                            <a href="#" onClick={() => navigate("/Store/" + post.id)} className="btn btn-light">View More</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
