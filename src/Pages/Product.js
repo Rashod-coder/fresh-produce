@@ -65,6 +65,8 @@ useEffect(() => {
             console.error("Error fetching data:", error);
             setIsLoading(false);
         }
+        
+        
     };
 
     getDatabase();
@@ -94,13 +96,13 @@ useEffect(() => {
                         
                         <div className="row">
                             <div className="col-md-6">
-                                <img src={posts.length > 0 && posts[0].Image}  style={{ minWidth: '600px'}}className="img-fluid rounded" alt={posts.length > 0 && posts[0].Type} />
+                                <img src={posts.length > 0 && posts[0].Image}  style={{ minWidth: '500px'}}className="img-fluid rounded" alt={posts.length > 0 && posts[0].Type} />
                                 <p className="text" style={{fontSize: '20px'}}>{posts.length > 0 && posts[0].Notes}</p>
 
                             </div>
                             
                             <div className="col-md-6 mt-3">
-                                <h3 className="text">Description:</h3>
+                                <h3 className="text-dark fw-bold">Description:</h3>
                                 <p className="text" style={{fontSize: '20px'}}>{posts.length > 0 && posts[0].Description}</p>
                             
                         
@@ -112,12 +114,24 @@ useEffect(() => {
                                     <p><strong>Seller:</strong> {posts.length > 0 && posts[0].Seller}</p>
                                     <p><strong>Contact:</strong> {posts.length > 0 && posts[0].Contact}</p>
                                 </div>
-                                <div className="col-md-12 mt-5 py-5">
+                                
+
+                                <div className="payment mt-3">
+                                    
+                                <h2>Payment:</h2>
+                                <div className="col-md-12 mt-3 ">
+                                    
                                 <div className="justify-content-center">
                                 <PayPalScriptProvider options={{ clientId: "test" }}>
-                                        <PayPalButtons style={{ layout: "horizontal" }} />
-                                    </PayPalScriptProvider>
+                                    <PayPalButtons style={{ layout: "horizontal", height: 45, width: 34, color: "blue", shape: "pill", tagline: 'false' }} 
+                                        
+                                    />
+                                </PayPalScriptProvider>
                                 </div>
+
+                                </div>
+                                
+                                
                             </div>
                             </div>
                             
