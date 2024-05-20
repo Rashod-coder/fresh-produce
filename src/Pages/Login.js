@@ -96,11 +96,13 @@ function Login() {
           phoneNumber: 0,
           city: 0
         });
+        window.alert('Please update your zipcode through account settings')
         console.log("After document creation");
       } else {
         console.log("User already exists in Firestore");
       }
-  
+      
+      
       navigate('/Dashboard');
     } catch (error) {
       console.error("Error during Google login:", error);

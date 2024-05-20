@@ -10,6 +10,7 @@ function Buy() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSearchLoading, setIsSearchLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [searchPerformed, setSearchPerformed] = useState(false);
 
     const getDatabase = async () => {
         try {
@@ -74,11 +75,13 @@ function Buy() {
         setTimeout(() => { // Simulate a network request for demonstration
             setFilteredPosts(posts);
             setIsSearchLoading(false);
+            setSearchPerformed(false);
         }, 500); 
     };
 
     const performSearch = () => {
         setIsSearchLoading(true);
+        setSearchPerformed(true); // Set searchPerformed to true when a search is performed
         const query = searchQuery.toLowerCase();
         setTimeout(() => { 
             const filtered = posts.filter(post =>
@@ -141,6 +144,13 @@ function Buy() {
                             </div>
                         ) : (
                             <div>
+                                {/* {searchPerformed && (
+                                    <div className="row justify-content-center mb-2">
+                                        <div className="col-12 text-center">
+                                            <h5 className="text-dark">Showing results for "{searchQuery}"</h5>
+                                        </div>
+                                    </div>
+                                )} */}
                                 <div className="row justify-content-start">
                                     <div className="col-md-6">
                                         <h6 className="text-dark">To know more details of a specific product, click on "View More".</h6>
@@ -178,6 +188,7 @@ function Buy() {
                     </div>
                 </div>
             )}
+            
         </div>
     );
 }

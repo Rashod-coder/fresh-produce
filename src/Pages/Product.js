@@ -71,73 +71,71 @@ useEffect(() => {
 }, []);
 
     return (
-        <div style={{ minHeight: '100vh' }}>
+        <div className="container mt-5">
             {isLoading ? (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                    <div className="spinner-border" style={{ width: '3rem', height: '3rem' }} role="status">
+                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
+                    <div className="spinner-border" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </div>
                 </div>
             ) : (
-                <div>
-                   
-                    
-                    <div className='container'>
-                        <div className='row'>
-                            
-                            
-                            <div className='col-8 mt-4'>
-                            <h1 className='text-center'>{posts.length > 0 && posts[0].Type}</h1>
-
-                            </div>      
-                            <div className='col-2 mt-4'>  
-                            <button className="btn btn-primary mt-" onClick={() => navigate('/store')}>Back To Store</button>
-
+                posts && (
+                    <div style={{ minHeight: '90vh' }}>
+                        <div className="row">
+                            <div className="col-md-9">
+                                <h1 className="text-center">{posts.length > 0 && posts[0].Type}</h1>
                             </div>
-                                    
-                   
-                        
-                    
+                            <div className="col-md-3 d-flex align-items-center justify-content-end">
+                                <button className="btn btn-primary" onClick={() => navigate('/store')}>Back To Store</button>
+                            </div>
                         </div>
-                        <div className='row'>
-                            <div className='col-sm-6'>
-                                <img className='w-100 p-5 ' src={posts.length > 0 && posts[0].Image}   alt={posts.Type} />
-                                <div className="text-light text-center"style={{backgroundColor: 'black', borderRadius: '10px'}}>
-                                <h4 className=''>Cost ${posts.length > 0 && posts[0].Price}/lb</h4>
-                                <h4 className='text-center'>Amount avaliable: {posts.length > 0 && posts[0].Amount}lbs</h4>
-                                <h4 className='text-center'>Shipped from: {posts.length > 0 && posts[0].Address} {posts.length > 0 && posts[0].State} {posts.length > 0 && posts[0].Zip}</h4>
-                                <div className='mb-4'>
-                                <h4 className='text-center'>Seller Contact {posts.length > 0 && posts[0].Seller}</h4>
-                                <h4 className='text-center'>{posts.length > 0 && posts[0].Contact}</h4>
+                        <hr />
+
+                        
+                        <div className="row">
+                            <div className="col-md-6">
+                                <img src={posts.length > 0 && posts[0].Image}  style={{ minWidth: '600px'}}className="img-fluid rounded" alt={posts.length > 0 && posts[0].Type} />
+                                <p className="text" style={{fontSize: '20px'}}>{posts.length > 0 && posts[0].Notes}</p>
+
+                            </div>
+                            
+                            <div className="col-md-6 mt-3">
+                                <h3 className="text">Description:</h3>
+                                <p className="text" style={{fontSize: '20px'}}>{posts.length > 0 && posts[0].Description}</p>
+                            
+                        
+                                <div className="bg-light p-4 rounded">
+                                    <h3>Product Details:</h3>
+                                    <p><strong>Price:</strong> ${posts.length > 0 && posts[0].Price}/lb</p>
+                                    <p><strong>Amount available:</strong> {posts.length > 0 && posts[0].Amount} lbs</p>
+                                    <p><strong>Shipped from:</strong> {posts.length > 0 && posts[0].Address}, {posts.length > 0 && posts[0].State}, {posts.length > 0 && posts[0].Zip}</p>
+                                    <p><strong>Seller:</strong> {posts.length > 0 && posts[0].Seller}</p>
+                                    <p><strong>Contact:</strong> {posts.length > 0 && posts[0].Contact}</p>
                                 </div>
-                            </div>
-                            </div>
-                            <div className='col-sm-6'>
-                                <h1 className='text-center mt-5 py-5'>{posts.length > 0 && posts[0].Description}</h1>
-                                <br/>
-                                <div className='mt-5 py-5'>
-                                    <PayPalScriptProvider  options={{ clientId: "test" }}>
+                                <div className="col-md-12 mt-5 py-5">
+                                <div className="justify-content-center">
+                                <PayPalScriptProvider options={{ clientId: "test" }}>
                                         <PayPalButtons style={{ layout: "horizontal" }} />
                                     </PayPalScriptProvider>
                                 </div>
-                                
-                                <h1>PAGE IS WIP</h1>
-
-                                
-                                
                             </div>
-
-
+                            </div>
                             
                         </div>
-                    </div>
-                    
+                        
 
-                    <img></img>
-                </div>
+                        
+
+                           
+
+                        
+                    </div>
+                )
             )}
         </div>
     );
 }
+    
+
 
 export default Product;

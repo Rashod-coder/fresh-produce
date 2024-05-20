@@ -51,7 +51,7 @@ function Register() {
     } catch (e) {
         console.error("Error adding document: ", e);
     } 
-      window.alert("Account Created")
+      window.alert("Account Created & please update your zipcode through account settings when you're logged in")
       navigate("/Login");
       }
       catch (error) {
