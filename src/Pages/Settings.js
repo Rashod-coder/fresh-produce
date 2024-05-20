@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth, db } from '../Firebase/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { sha256 } from 'crypto-hash';
+import { useNavigate } from 'react-router-dom';
+
 
 function Settings() {
     const [fullName, setFullName] = useState('');
@@ -13,12 +15,16 @@ function Settings() {
     const [state, setState] = useState('');
     const [zipCode, setZipCode] = useState('');
     const currentUser = auth.currentUser; // Access currentUser directly from auth
-  
+    const navigate = useNavigate();
+    // useEffect(() => {
+    //     if (!currentUser) {
+    //         navigate('/');
+    //         window.alert('Must be logged in')
+    //     }
+    // }, [currentUser]);
+
     const handleUpdate = async () => {
-      if (!currentUser) {
-        console.error('User not authenticated.');
-        return;
-      }
+
   
       const updatedUserInfo = {};
   
