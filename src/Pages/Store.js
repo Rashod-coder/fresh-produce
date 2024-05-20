@@ -144,13 +144,13 @@ function Buy() {
                             </div>
                         ) : (
                             <div>
-                                {/* {searchPerformed && (
+                                {searchPerformed && (
                                     <div className="row justify-content-center mb-2">
                                         <div className="col-12 text-center">
                                             <h5 className="text-dark">Showing results for "{searchQuery}"</h5>
                                         </div>
                                     </div>
-                                )} */}
+                                )}
                                 <div className="row justify-content-start">
                                     <div className="col-md-6">
                                         <h6 className="text-dark">To know more details of a specific product, click on "View More".</h6>

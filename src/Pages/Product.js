@@ -95,10 +95,12 @@ function Product() {
                         <hr />
 
                         <div className="row">
-                            <div className="col-md-6">
-                                <img src={posts[0].Image} className="img-fluid rounded" alt={posts[0].Type} style={{ width: '100%', height: 'auto', maxWidth: '500px', maxHeight: '500px' }} />
-                                <p className="text" style={{ fontSize: '20px' }}>{posts[0].Notes}</p>
-                            </div>
+                        <div className="col-md-6">
+    <div className="d-flex justify-content-center">
+        <img src={posts[0].Image} className="img-fluid rounded" alt={posts[0].Type} style={{ width: '100%', height: 'auto', maxWidth: '550px', maxHeight: '550px'  }} />
+    </div>
+    <p className="text" style={{ fontSize: '20px', textAlign: 'center' }}>{posts[0].Notes}</p>
+</div>
 
                             <div className="col-md-6 mt-3">
                                 <h3 className="text-dark fw-bold">Description:</h3>
