@@ -123,9 +123,7 @@ useEffect(() => {
                                     
                                 <div className="justify-content-center">
                                 <PayPalScriptProvider options={{ clientId: "test" }}>
-                                    <PayPalButtons style={{ layout: "horizontal", height: 45, width: 34, color: "blue", shape: "pill", tagline: 'false' }} 
-                                        
-                                    />
+                                    <PayPalButtons style={{ layout: "horizontal", height: 45, width: 34, color: "blue", shape: "pill", tagline: 'false' }} />
                                 </PayPalScriptProvider>
                                 </div>
 
