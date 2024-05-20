@@ -1,76 +1,66 @@
 import React, { useEffect, useState } from 'react';
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getDownloadURL, ref } from 'firebase/storage';
 import { collection, getDocs, query } from "firebase/firestore";
 import { db, storage } from '../Firebase/firebase';
-import { useLocation,useNavigate } from 'react-router-dom';
-import { getDownloadURL, ref } from 'firebase/storage';
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-
 
 function Product() {
-const [isLoading, setIsLoading] = useState(true);
-const location = useLocation();
-let s = location.pathname.split("/")[2];
-const [posts, setPosts] = useState([]);
-const navigate = useNavigate();
-useEffect(() => {
-    const getDatabase =  () => {
-        try {
-            const q = query(collection(db, "store"));
-            getDocs(q)
-            .then((querySnapshot) => {
-                const newPosts = [];
-                const promises = [];
-                querySnapshot.docs.forEach((doc) => {
-                    if (doc.id === s) {
-                        const imageRef = ref(storage, `${doc.id}/${doc.data().Image}`);
-                        const downloadPromise = getDownloadURL(imageRef)
-                        .then((downloadUrl) => {
-                            newPosts.push({
-                                id: doc.id,
-                                Type: doc.data().productName,
-                                Price: doc.data().price,
-                                Description: doc.data().description,
-                                Image: downloadUrl,
-                                Amount: doc.data().quantity,
-                                Seller: doc.data().name,
-                                Contact: doc.data().email,
-                                Notes: doc.data().additionalNotes,
-                                Address: doc.data().address,
-                                State: doc.data().state,
-                                Zip: doc.data().zip,
-                                Sales: doc.data().sales,
-                        
-                            });
-                        })
-                        
-                        .catch((error) => {
-                            console.error("Error getting download URL:", error);
-                        });
-                        promises.push(downloadPromise);
-                    }
-                });
+    const [isLoading, setIsLoading] = useState(true);
+    const location = useLocation();
+    let s = location.pathname.split("/")[2];
+    const [posts, setPosts] = useState([]);
+    const navigate = useNavigate();
 
-                Promise.all(promises)
-                    .then(() => {
+    useEffect(() => {
+        const getDatabase = () => {
+            try {
+                const q = query(collection(db, "store"));
+                getDocs(q).then((querySnapshot) => {
+                    const newPosts = [];
+                    const promises = [];
+                    querySnapshot.docs.forEach((doc) => {
+                        if (doc.id === s) {
+                            const imageRef = ref(storage, `${doc.id}/${doc.data().Image}`);
+                            const downloadPromise = getDownloadURL(imageRef).then((downloadUrl) => {
+                                newPosts.push({
+                                    id: doc.id,
+                                    Type: doc.data().productName,
+                                    Price: doc.data().price,
+                                    Description: doc.data().description,
+                                    Image: downloadUrl,
+                                    Amount: doc.data().quantity,
+                                    Seller: doc.data().name,
+                                    Contact: doc.data().email,
+                                    Notes: doc.data().additionalNotes,
+                                    Address: doc.data().address,
+                                    State: doc.data().state,
+                                    Zip: doc.data().zip,
+                                    Sales: doc.data().sales,
+                                });
+                            }).catch((error) => {
+                                console.error("Error getting download URL:", error);
+                            });
+                            promises.push(downloadPromise);
+                        }
+                    });
+
+                    Promise.all(promises).then(() => {
                         console.log(newPosts);
-                        setPosts(newPosts); 
-                    })
-                    .catch((error) => {
+                        setPosts(newPosts);
+                    }).catch((error) => {
                         console.error("Error fetching download URLs:", error);
                     });
+                    setIsLoading(false);
+                });
+            } catch (error) {
+                console.error("Error fetching data:", error);
                 setIsLoading(false);
-            }); 
-        } 
-        catch (error) {
-            console.error("Error fetching data:", error);
-            setIsLoading(false);
-        }
-        
-        
-    };
+            }
+        };
 
-    getDatabase();
-}, []);
+        getDatabase();
+    }, []);
 
     return (
         <div className="container mt-5">
@@ -93,19 +83,16 @@ useEffect(() => {
                         </div>
                         <hr />
 
-                        
                         <div className="row">
                             <div className="col-md-6">
-                            <img src={posts.length > 0 && posts[0].Image} className="img-fluid rounded" alt={posts.length > 0 && posts[0].Type} style={{ width: '100%', height: 'auto', maxWidth: '500px', maxHeight: '500px' }} />
-                                <p className="text" style={{fontSize: '20px'}}>{posts.length > 0 && posts[0].Notes}</p>
-
+                                <img src={posts.length > 0 && posts[0].Image} className="img-fluid rounded" alt={posts.length > 0 && posts[0].Type} style={{ width: '100%', height: 'auto', maxWidth: '500px', maxHeight: '500px' }} />
+                                <p className="text" style={{ fontSize: '20px' }}>{posts.length > 0 && posts[0].Notes}</p>
                             </div>
-                            
+
                             <div className="col-md-6 mt-3">
                                 <h3 className="text-dark fw-bold">Description:</h3>
-                                <p className="text" style={{fontSize: '20px'}}>{posts.length > 0 && posts[0].Description}</p>
-                            
-                        
+                                <p className="text" style={{ fontSize: '20px' }}>{posts.length > 0 && posts[0].Description}</p>
+
                                 <div className="bg-light p-4 rounded">
                                     <h3>Product Details:</h3>
                                     <p><strong>Price:</strong> ${posts.length > 0 && posts[0].Price}/lb</p>
@@ -114,40 +101,36 @@ useEffect(() => {
                                     <p><strong>Seller:</strong> {posts.length > 0 && posts[0].Seller}</p>
                                     <p><strong>Contact:</strong> {posts.length > 0 && posts[0].Contact}</p>
                                 </div>
-                                
 
                                 <div className="payment mt-3">
-                                    
-                                <h2>Payment:</h2>
-                                <div className="col-md-12 mt-3 ">
-                                    
-                                <div className="justify-content-center">
-                                <PayPalScriptProvider options={{ clientId: "test" }}>
-                                    <PayPalButtons style={{ layout: "horizontal", height: 45, width: 34, color: "blue", shape: "pill", tagline: 'false' }} />
-                                </PayPalScriptProvider>
+                                    <h2>Payment:</h2>
+                                    <div className="col-md-12 mt-3 ">
+                                        <PayPalScriptProvider options={{ clientId: "YOUR_PAYPAL_CLIENT_ID" }}>
+                                            <PayPalButtons
+                                                style={{ layout: "horizontal", color: "blue", shape: "pill", tagline: 'false' }}
+                                                createOrder={(data, actions) => {
+                                                    return actions.order.create({
+                                                        purchase_units: [
+                                                            {
+                                                                amount: {
+                                                                    value: posts.length > 0 && posts[0].Price,
+                                                                    currency_code: 'USD',
+                                                                },
+                                                            },
+                                                        ],
+                                                    });
+                                                }}
+                                            />
+                                        </PayPalScriptProvider>
+                                    </div>
                                 </div>
-
-                                </div>
-                                
-                                
                             </div>
-                            </div>
-                            
                         </div>
-                        
-
-                        
-
-                           
-
-                        
                     </div>
                 )
             )}
         </div>
     );
 }
-    
-
 
 export default Product;
