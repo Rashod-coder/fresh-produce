@@ -96,7 +96,7 @@ useEffect(() => {
                         
                         <div className="row">
                             <div className="col-md-6">
-                                <img src={posts.length > 0 && posts[0].Image}  style={{ minWidth: '500px'}}className="img-fluid rounded" alt={posts.length > 0 && posts[0].Type} />
+                            <img src={posts.length > 0 && posts[0].Image} className="img-fluid rounded" alt={posts.length > 0 && posts[0].Type} style={{ width: '100%', height: 'auto', maxWidth: '500px', maxHeight: '500px' }} />
                                 <p className="text" style={{fontSize: '20px'}}>{posts.length > 0 && posts[0].Notes}</p>
 
                             </div>
