@@ -27,7 +27,8 @@ function OrderForm() {
   const [imageName, setImageName] = useState('');
   const uploadRef = useRef();
   const [imageBlob, setImageBlob] = useState(null);
-  const [isUploading, setIsUploading] = useState(false); // State to track if button is uploading
+  const [isUploading, setIsUploading] = useState(false); 
+  const [payId, setPayId] = useState('');
 
   
 
@@ -60,6 +61,7 @@ function OrderForm() {
         state: state,
         additionalNotes: additionalNotes,
         Image: imageName,
+        payPal: payId
       });
       await uploadBytes(ref(storage, `${docRef.id}/${imageName}`), imageBlob);
 
@@ -98,7 +100,9 @@ function OrderForm() {
             if (userDoc.exists()) {
                 const userData = userDoc.data()
                 setSales(userData.sales)
+                setPayId(userData.payPal)
                 setIsLoading(false);
+
             }
           } else {
             try {
@@ -108,6 +112,7 @@ function OrderForm() {
                 setUserName(userData.fullName);
                 setEmail(userData.email);
                 setSales(userData.sales)
+                setPayId(user.payPal)
                 setIsLoading(false);
                 console.log("User document not found in Firestore");
               }
