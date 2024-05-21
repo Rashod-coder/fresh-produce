@@ -23,6 +23,7 @@ function OrderForm() {
   const [additionalNotes, setAdditionalNotes] = useState(''); 
   const [show, setShow] = useState(true);
   const [image, setImage] = useState(null); 
+  const [payPal, setId] = useState('');
   const [imageName, setImageName] = useState('');
   const uploadRef = useRef();
   const [imageBlob, setImageBlob] = useState(null);

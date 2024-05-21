@@ -45,7 +45,8 @@ function Register() {
             street: "placeholder",
             state: 'placeholder',
             phoneNumber: 0,
-            city: 'placeholder'
+            city: 'placeholder',
+            payPal: 0
           });
 
     } catch (e) {

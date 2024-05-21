@@ -94,7 +94,8 @@ function Login() {
           street: 0,
           state: 0,
           phoneNumber: 0,
-          city: 0
+          city: 0,
+          payPal: 0
         });
         window.alert('Please update your zipcode through account settings')
         console.log("After document creation");
