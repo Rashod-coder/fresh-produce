@@ -1,74 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { auth, db } from '../Firebase/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import { sha256 } from 'crypto-hash';
+import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
 
+const encryptionKey = 'FXsaNKzW0gSVv3yTP9mtYZJEpe28RlkL';
 
 function Settings() {
-    const [fullName, setFullName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [payPal, setPay] = useState('');
-    const [street, setStreet] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [zipCode, setZipCode] = useState('');
-    const currentUser = auth.currentUser; // Access currentUser directly from auth
-    const navigate = useNavigate();
-    // useEffect(() => {
-    //     if (!currentUser) {
-    //         navigate('/');
-    //         window.alert('Must be logged in')
-    //     }
-    // }, [currentUser]);
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [payPal, setPay] = useState('');
+  const [street, setStreet] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  const currentUser = auth.currentUser; 
+  const navigate = useNavigate();
 
-    const handleUpdate = async () => {
+  const handleUpdate = async () => {
+    const updatedUserInfo = {};
 
-  
-      const updatedUserInfo = {};
-  
-      if (fullName.trim() !== '') {
-        updatedUserInfo.fullName = fullName;
-      }
-      if (email.trim() !== '') {
-        updatedUserInfo.email = email;
-      }
-      if (phone.trim() !== '') {
-        updatedUserInfo.phoneNumber = phone;
-      }
-      if (payPal.trim() !== '') {
-        const hashedPayPal = await sha256(payPal);
-        updatedUserInfo.payPal = hashedPayPal;
-      }
-      if (street.trim() !== '') {
-        updatedUserInfo.street = street;
-      }
-      if (city.trim() !== '') {
-        updatedUserInfo.city = city;
-      }
-      if (state.trim() !== '') {
-        updatedUserInfo.state = state;
-      }
-      if (zipCode.trim() !== '') {
-        updatedUserInfo.zipCode = zipCode;
-      }
-  
-      if (Object.keys(updatedUserInfo).length === 0) {
-        console.log('No fields updated.');
-        window.alert('All fields left blank please enter at least one field to update account information')
-        return;
-      }
-  
-      try {
-        const userRef = doc(db, 'users', currentUser.uid);
-        await setDoc(userRef, updatedUserInfo, { merge: true });
-        console.log('User information updated successfully.');
-        window.alert('Account information updated');
-      } catch (error) {
-        console.error('Error updating user information:', error);
-      }
-    };
+    if (fullName.trim() !== '') {
+      updatedUserInfo.fullName = fullName;
+    }
+    if (email.trim() !== '') {
+      updatedUserInfo.email = email;
+    }
+    if (phone.trim() !== '') {
+      updatedUserInfo.phoneNumber = phone;
+    }
+    if (payPal.trim() !== '') {
+      updatedUserInfo.payPal = payPal;
+    }
+    if (street.trim() !== '') {
+      updatedUserInfo.street = street;
+    }
+    if (city.trim() !== '') {
+      updatedUserInfo.city = city;
+    }
+    if (state.trim() !== '') {
+      updatedUserInfo.state = state;
+    }
+    if (zipCode.trim() !== '') {
+      updatedUserInfo.zipCode = zipCode;
+    }
+
+    if (Object.keys(updatedUserInfo).length === 0) {
+      window.alert('All fields left blank. Please enter at least one field to update account information.');
+      return;
+    }
+
+    try {
+      const userRef = doc(db, 'users', currentUser.uid);
+      await setDoc(userRef, updatedUserInfo, { merge: true });
+      console.log('User information updated successfully.');
+      window.alert('Account information updated');
+    } catch (error) {
+      console.error('Error updating user information:', error);
+      window.alert('Failed to update account information. Please try again later.');
+    }
+  };
   
 
   return (
@@ -94,7 +86,7 @@ function Settings() {
                 </div>
                 <div className="col-md-6">
                   <label htmlFor="website" className="form-label">Paypal</label>
-                  <input type="url" className="form-control" id="website" placeholder="Enter paypal ID" value={payPal} onChange={(e) => setPay(e.target.value)} />
+                  <input type="url" className="form-control" id="website" placeholder="Enter paypal email" value={payPal} onChange={(e) => setPay(e.target.value)} />
                 </div>
                 <div className="col-md-6">
                   <label htmlFor="street" className="form-label">Street</label>

@@ -1,7 +1,9 @@
 import React from 'react';
 import backgroundImage from '../Assets/tirza-van-dijk-dq0x8AvNKv8-unsplash.jpg'; 
 import backGroundI from '../Assets/nery-montenegro-3ak9PMcx048-unsplash.jpg';
-import backGroundi from '../Assets/masahiro-naruse-4Hmf3K6NRQY-unsplash.jpg'
+import backGroundi from '../Assets/masahiro-naruse-4Hmf3K6NRQY-unsplash.jpg';
+import About from './About';
+
 
 function Home() {
   const backgroundStyle = {
@@ -94,6 +96,7 @@ function Home() {
       <div style={{minHeight: '100vh'}}>
         <h1>About: </h1>
         <h3>Same Day Delivery through Door Dash or other food delivery services, you can only order produce from local areas</h3>
+        <About/>
       </div>
     </div>
   );

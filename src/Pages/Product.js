@@ -4,8 +4,18 @@ import { db, storage } from '../Firebase/firebase';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import CryptoJS from 'crypto-js'; // Import CryptoJS
+
 
 function Product() {
+
+    // const decryptPayPal = (encryptedPayPal) => {
+    //     const decryptedPayPal = CryptoJS.AES.decrypt(encryptedPayPal, 'FXsaNKzW0gSVv3yTP9mtYZJEpe28RlkL').toString(CryptoJS.enc.Utf8);
+    //     return decryptedPayPal;
+    // };
+    
+
+
     const [isLoading, setIsLoading] = useState(true);
     const location = useLocation();
     let s = location.pathname.split("/")[2];
@@ -41,6 +51,7 @@ function Product() {
                                     State: doc.data().state,
                                     Zip: doc.data().zip,
                                     Sales: doc.data().sales,
+                                    payId: doc.data().payPal
                                 });
                             })
                             .catch((error) => {
@@ -65,6 +76,7 @@ function Product() {
     const createOrder = (data, actions) => {
         const price = posts.length > 0 ? posts[0].Price : 0;
         const total = price * quantity;
+        const payeeEmail = posts.length > 0 ? posts[0].payId : '';
         console.log(total);
         return actions.order.create({
             purchase_units: [
@@ -72,6 +84,9 @@ function Product() {
                     amount: {
                         value: total,
                     },
+                    payee: {
+                        email_address: payeeEmail,
+                    }
                 },
             ],
         });
