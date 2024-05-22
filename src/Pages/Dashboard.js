@@ -12,6 +12,10 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+
+
+
 
 function Home() {
   const navigate = useNavigate();
@@ -36,10 +40,10 @@ function Home() {
             if (userDoc.exists()) {
               const userData = userDoc.data();
               setSolds(userData.sales || 0);
-              setMoneyEarned(userData.moneyEarned || 0); // Assuming you have money earned data
-              setIncomingOrders(userData.incomingOrders || []); // Assuming you have incoming orders data
-              setPlacedOrders(userData.placedOrders || []); // Assuming you have placed orders data
-              setSalesData(userData.salesData || []); // Assuming you have sales data
+              setMoneyEarned(userData.moneyEarned || 0); 
+              setIncomingOrders(userData.incomingOrders || []); 
+              setPlacedOrders(userData.placedOrders || []);
+              setSalesData(userData.salesData || []); 
             } else {
               console.log("User document not found in Firestore");
             }
@@ -95,8 +99,11 @@ function Home() {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={12} md={12}>
             <Paper elevation={3} sx={{ p: 3, backgroundColor: '#fff' }}>
-              <Typography variant="h3" gutterBottom>{greeting} {userName}, welcome to your dashboard</Typography>
-              <Typography variant="body1" gutterBottom>Email: {userEmail}</Typography>
+              <Typography variant="h3" gutterBottom>{greeting} {userName} welcome to your dashboard</Typography>
+              <Box sx={{ width: '100%' }}>
+      <Divider sx={{ borderColor: 'black' }} />
+    </Box>
+              <Typography variant="body1" className='mt-2' gutterBottom>Email: {userEmail}</Typography>
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>

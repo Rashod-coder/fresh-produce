@@ -57,7 +57,6 @@ function Settings() {
       await setDoc(userRef, updatedUserInfo, { merge: true });
       setAlertMessage('Account information updated');
       setAlertType('success');
-      // Reset form fields after successful update
       setFullName('');
       setEmail('');
       setPhone('');
@@ -66,7 +65,6 @@ function Settings() {
       setCity('');
       setState('');
       setZipCode('');
-      // Clear alert after 5 seconds
       setTimeout(() => {
         setAlertMessage('');
         setAlertType('');

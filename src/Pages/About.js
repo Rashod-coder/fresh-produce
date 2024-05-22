@@ -25,7 +25,7 @@ function About() {
               </AccordionSummary>
               <AccordionDetails>
                 <Typography>
-                  PlaceHolder
+                  Sellers have the ability 
                 </Typography>
               </AccordionDetails>
             </Accordion>
