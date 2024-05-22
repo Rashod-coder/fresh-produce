@@ -54,7 +54,7 @@ function Home() {
 <header className="masthead d-flex align-items-center" style={{ position: 'relative', height: '100vh', color: '#fff' }}>
         <img src={backGroundI} alt="Background" style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(1.5px)', zIndex: '-2' }} />
         <div className="container px-4 px-lg-5 text-center animate-drop">
-          <h1 className="mb-1 text-dark display-1 fw-bold" style={{ fontFamily: 'Outfit' }}>Fresh Market Hub</h1>
+          <h1 className="mb-1 text-dark display-1 fw-bold" style={{ fontFamily: 'Outfit' }}>Fresh Market Hub.</h1>
           <h3 className="mb-5 text-dark"><em>A full on Digital Farmers Market.</em></h3>
           <a className="btn btn-dark btn-lg" href="/Register">Get Started Today</a>
         </div>
@@ -64,9 +64,9 @@ function Home() {
         <div className="container px-4 px-lg-5 text-center">
           <div className="row gx-4 gx-lg-5 justify-content-center">
             <div className="col-lg-10">
-              <h2>What is Fresh Market Hub?</h2>
-              <p className="lead mb-5">
-                A digital farmers market
+              <h2 className='mt-2'>What is Fresh Market Hub?</h2>
+              <p className="lead mb-5 mt-3">
+                A digital farmers market that strives to make an impact on reducing food wastage, & we aim to help farmers too. We noticed that a lot of people grow fruits/veggies in their backyard, however most of the times they end up falling on the ground ultimatley going to waste.
                 
               </p>
               <a className="btn btn-dark btn-xl" href="#services">What We Offer</a>
