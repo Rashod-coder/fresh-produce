@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { auth, db } from '../Firebase/firebase';
 import { doc, setDoc } from 'firebase/firestore';
-import Alert from 'react-bootstrap/Alert';
+
 
 const encryptionKey = 'FXsaNKzW0gSVv3yTP9mtYZJEpe28RlkL';
 
