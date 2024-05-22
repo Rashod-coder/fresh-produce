@@ -23,6 +23,7 @@ function Home() {
   const [moneyEarned, setMoneyEarned] = useState(0); // Assuming you have money earned data
   const [incomingOrders, setIncomingOrders] = useState([]); // Initialize as empty array
   const [placedOrders, setPlacedOrders] = useState([]); // Initialize as empty array
+  const [salesData, setSalesData] = useState([]); // Initialize as empty array
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,6 +39,7 @@ function Home() {
               setMoneyEarned(userData.moneyEarned || 0); // Assuming you have money earned data
               setIncomingOrders(userData.incomingOrders || []); // Assuming you have incoming orders data
               setPlacedOrders(userData.placedOrders || []); // Assuming you have placed orders data
+              setSalesData(userData.salesData || []); // Assuming you have sales data
             } else {
               console.log("User document not found in Firestore");
             }
@@ -51,6 +53,7 @@ function Home() {
                 setMoneyEarned(userData.moneyEarned || 0); // Assuming you have money earned data
                 setIncomingOrders(userData.incomingOrders || []); // Assuming you have incoming orders data
                 setPlacedOrders(userData.placedOrders || []); // Assuming you have placed orders data
+                setSalesData(userData.salesData || []); // Assuming you have sales data
               } else {
                 console.log("User document not found in Firestore");
               }
@@ -112,10 +115,10 @@ function Home() {
             <Paper elevation={3} sx={{ p: 3 }}>
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                 <LineChart
-                  xAxis={[{ data: [1, 2, 3, 4, 5, 6, 7] }]}
+                  xAxis={[{ data: salesData.map(item => item.date) }]} 
                   series={[
                     {
-                      data: [2, 5.5, 2, 8.5, 1.5, 5, 90],
+                      data: salesData.map(item => item.value),
                       area: true,
                     },
                   ]}
@@ -184,3 +187,4 @@ function Home() {
 }
 
 export default Home;
+
