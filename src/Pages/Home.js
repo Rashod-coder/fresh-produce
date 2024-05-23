@@ -5,32 +5,7 @@ import backGroundi from '../Assets/masahiro-naruse-4Hmf3K6NRQY-unsplash.jpg';
 import About from './About';
 
 function Home() {
-  const carouselCaptionStyle = {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderRadius: '10px',
-    padding: '20px',
-  };
-
-  const buttonStyle = {
-    padding: '15px 30px',
-    fontSize: '18px',
-    color: '#fff',
-    backgroundColor: '#003366', 
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    textTransform: 'uppercase',
-    fontWeight: 'bold',
-    letterSpacing: '1px',
-    transition: 'background-color 0.3s ease',
-    textDecoration: 'none',
-    display: 'inline-block',
-  };
-
-  const buttonHoverStyle = {
-    backgroundColor: '#002244', 
-  };
-
+  
   return ( 
     <div className="App">
       <style jsx>{`
@@ -46,7 +21,7 @@ function Home() {
         }
 
         .animate-drop {
-          animation: drop 1s ease-out forwards;
+          animation: drop 3s ease-out forwards;
         }
       `}</style>
 
@@ -54,7 +29,7 @@ function Home() {
 <header className="masthead d-flex align-items-center" style={{ position: 'relative', height: '100vh', color: '#fff' }}>
         <img src={backGroundI} alt="Background" style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(1.5px)', zIndex: '-2' }} />
         <div className="container px-4 px-lg-5 text-center animate-drop">
-          <h1 className="mb-1 text-dark display-1 fw-bold" style={{ fontFamily: 'Outfit' }}>Fresh Market Hub.</h1>
+          <h1 className="mb-1 text-dark display-1 fw-bold" style={{ fontFamily: 'Outfit' }}>Fresh Market Hub<span style={{ color: '#203966' }}>.</span></h1>
           <h3 className="mb-5 text-dark"><em>A full on Digital Farmers Market.</em></h3>
           <a className="btn btn-dark btn-lg" href="/Register">Get Started Today</a>
         </div>
@@ -64,21 +39,21 @@ function Home() {
         <div className="container px-4 px-lg-5 text-center">
           <div className="row gx-4 gx-lg-5 justify-content-center">
             <div className="col-lg-10">
-              <h2 className='mt-2'>What is Fresh Market Hub?</h2>
+              <h2 className='mt-3'>What is Fresh Market Hub?</h2>
               <p className="lead mb-5 mt-3">
-                A digital farmers market that strives to make an impact on reducing food wastage, & we aim to help farmers too. We noticed that a lot of people grow fruits/veggies in their backyard, however most of the times they end up falling on the ground ultimatley going to waste.
+                A digital farmers market that strives to make an impact on reducing food wastage, & we aim to help farmers too. We noticed that a lot of people grow fruits/veggies in their backyard, however most of the times they end up falling on the ground which ultimatley go to waste. Which is why Fresh Market Hub gives a oppurtunity to the public to sell their produce online
                 
               </p>
-              <a className="btn btn-dark btn-xl" href="#services">What We Offer</a>
+              <a className="btn btn-dark btn-xl mb-5" href="#services">What We Offer</a>
             </div>
           </div>
         </div>
       </section>
       
-      <section className="content-section bg-primary text-white text-center" id="services">
+      <section className="content-section bg-primary text-dark text-center" id="services">
         <div className="container px-4 px-lg-5">
           <div className="content-section-heading">
-            <h3 className="text-secondary mb-0">Services</h3>
+            <h3 className="text-secondary text-light mt-3 mb-2">Services</h3>
             <h2 className="mb-5">Upload your produce</h2>
           </div>
           <div className="row gx-4 gx-lg-5">
