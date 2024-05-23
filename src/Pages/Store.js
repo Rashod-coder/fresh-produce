@@ -110,11 +110,10 @@ function Buy() {
                 </div>
             ) : (
                 <div>
-                    <h1 className="text-dark text-center mb-4">Welcome to the marketplace</h1>
                     <h6 className='text-center text-dark mt-4'> </h6>
                     <div className="container">
-                        <div className="row justify-content-center mb-4">
-                            <div className="col-12 position-relative">
+                        <div className="row justify-content-center mb-5">
+                            <div className="col-12 position-relative ">
                                 <input
                                     type="text"
                                     className="form-control"
@@ -152,7 +151,7 @@ function Buy() {
                                     </div>
                                 )}
                                 <div className="row justify-content-start">
-                                    <div className="col-md-6">
+                                    <div className="col-md-6 mt-5">
                                         <h6 className="text-dark">To know more details of a specific product, click on "View More".</h6>
                                     </div>
                                 </div>
