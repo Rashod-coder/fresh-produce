@@ -26,11 +26,11 @@ function Home() {
       `}</style>
 
        
-<header className="masthead d-flex align-items-center" style={{ position: 'relative', height: '100vh', color: '#fff' }}>
+<header className="masthead d-flex align-items-center" style={{ position: 'relative', height: '100vh', color: '#fff' }} id='home'>
         <img src={backGroundI} alt="Background" style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', filter: 'blur(1.5px)', zIndex: '-2' }} />
         <div className="container px-4 px-lg-5 text-center animate-drop">
-          <h1 className="mb-1 text-dark display-1 fw-bold" style={{ fontFamily: 'Outfit' }}>Fresh Market Hub<span style={{ color: '#203966' }}>.</span></h1>
-          <h3 className="mb-5 text-dark"><em>A full on Digital Farmers Market.</em></h3>
+          <h1 className="mb-1 text-dark display-1 fw-bold" style={{ fontFamily: 'Outfit' }}>Fresh Market Hub<span style={{ color: '#9AC3FF' }}>.</span></h1>
+          <h3 className="mb-5 text-dark"><em>Farmers Market <span className='fw-bold'>Reimagined</span>.</em></h3>
           <a className="btn btn-dark btn-lg" href="/Register">Get Started Today</a>
         </div>
       </header>
@@ -53,32 +53,31 @@ function Home() {
       <section className="content-section bg-primary text-dark text-center" id="services">
         <div className="container px-4 px-lg-5">
           <div className="content-section-heading">
-            <h3 className="text-secondary text-light mt-3 mb-2">Services</h3>
-            <h2 className="mb-5">Upload your produce</h2>
+            <h2 className="mb-5">How we operate</h2>
           </div>
           <div className="row gx-4 gx-lg-5">
             <div className="col-lg-3 col-md-6 mb-5 mb-lg-0">
               <span className="service-icon rounded-circle mx-auto mb-3"><i className="icon-screen-smartphone"></i></span>
               <h4><strong>Buyers</strong></h4>
-              <p className="text-faded mb-0">Seamless transactions through paypal</p>
+              <p className="text-faded mb-2">Buy Fresh Produce locally, you can only order produce from your city or neighboring cities</p>
             </div>
             <div className="col-lg-3 col-md-6 mb-5 mb-lg-0">
               <span className="service-icon rounded-circle mx-auto mb-3"><i className="icon-pencil"></i></span>
               <h4><strong>Delivery</strong></h4>
-              <p className="text-faded mb-0">Get produce right to your doorstep</p>
+              <p className="text-faded mb-5">Get produce delivered right to your doorstep through Doordash</p>
             </div>
-            {/* <div className="col-lg-3 col-md-6 mb-5 mb-md-0">
+            <div className="col-lg-3 col-md-6 mb-5 mb-md-0">
               <span className="service-icon rounded-circle mx-auto mb-3"><i className="icon-like"></i></span>
-              <h4><strong>Favorited</strong></h4>
+              <h4><strong>Sellers</strong></h4>
               <p className="text-faded mb-0">
-                Millions of users <i className="fas fa-heart"></i> Start Bootstrap!
+                Fully integrated platform to upload your produce & link your paypal account directly.
               </p>
             </div>
             <div className="col-lg-3 col-md-6">
               <span className="service-icon rounded-circle mx-auto mb-3"><i className="icon-mustache"></i></span>
               <h4><strong>Question</strong></h4>
-              <p className="text-faded mb-0">I mustache you a question...</p>
-            </div> */}
+              <p className="text-dark mb-4 px-5">Have more questions? Contact us at: <a href="mailto:sales@freshmarket.com" class="text-dark contact-link">sales@freshmarket.com</a></p>
+            </div>
           </div>
         </div>
       </section>
@@ -86,13 +85,13 @@ function Home() {
       <section className="callout">
         <div className="container px-4 px-lg-5 text-center">
           <h2 className="mx-auto mb-5">
-            Welcome to <em>your</em> next website!
+            About
           </h2>
           {/* <a className="btn btn-primary btn-xl" href="https://startbootstrap.com/theme/stylish-portfolio/">Download Now!</a> */}
         </div>
       </section>
       
-      <section className="content-section" id="portfolio">
+      {/* <section className="content-section" id="portfolio">
         <div className="container px-4 px-lg-5">
           <div className="content-section-heading text-center">
             <h3 className="text-secondary mb-0">How to sell</h3>
@@ -145,7 +144,7 @@ function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
       
       <section className="content-section bg-primary text-white">
         <div className="container px-4 px-lg-5 text-center">
@@ -164,7 +163,7 @@ function Home() {
         <small><a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a></small>
       </div> */}
       
-      <footer className="footer text-center">
+      {/* <footer className="footer text-center">
         <div className="container px-4 px-lg-5">
           <ul className="list-inline mb-5">
             <li className="list-inline-item">
@@ -179,9 +178,9 @@ function Home() {
           </ul>
           <p className="text-muted small mb-0">Copyright &copy; Your Website 2023</p>
         </div>
-      </footer>
+      </footer> */}
       
-      <a className="scroll-to-top rounded" href="#page-top"><i className="fas fa-angle-up"></i></a>
+      <a className="scroll-to-top rounded" href="#home"><i className="fas fa-angle-up"></i></a>
       
       {/* Bootstrap core JS*/}
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
