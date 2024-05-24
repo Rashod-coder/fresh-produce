@@ -172,18 +172,18 @@ function Home() {
                 </AccordionDetails>
               </Accordion>
             </div>
-            <div className="qa-accordion">
+            <div className="qa-accordion mb-5">
               <Accordion>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel3a-content"
                   id="panel3a-header"
                 >
-                  <Typography><strong>How is delivery handled?</strong></Typography>
+                  <Typography><strong>How is delivery of produced handled?</strong></Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                    We partner with DoorDash to ensure your produce is delivered fresh to your doorstep.
+                    We partner with DoorDash to ensure your produce is delivered to you fresh.
                   </Typography>
                   </AccordionDetails>
               </Accordion>
@@ -195,11 +195,11 @@ function Home() {
                   aria-controls="panel4a-content"
                   id="panel4a-header"
                 >
-                  <Typography><strong>What payment methods are accepted?</strong></Typography>
+                  <Typography><strong>What payment is accepted?</strong></Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                    We accept payments via PayPal, credit cards, and other common payment methods.
+                    We accept payments via PayPal, credit cards, and debit cards
                   </Typography>
                 </AccordionDetails>
               </Accordion>
@@ -208,12 +208,7 @@ function Home() {
         </div>
       </section>
 
-      <section className="content-section bg-primary text-white" style={{ paddingBottom: '40px' }}>
-        <div className="container px-4 px-lg-5 text-center">
-          <h2 className="mx-auto mb-5">More Information</h2>
-          {/* Additional content can go here */}
-        </div>
-      </section>
+    
     </div>
   );
 }
