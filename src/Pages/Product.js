@@ -81,7 +81,8 @@ function Product() {
                 quantity: quantity,
                 productName: posts[0].Type,
                 Price: posts[0].Price || 0,  
-                payee: posts[0].payId
+                payee: posts[0].payId,
+                Id: posts[0].id
             };
     
             const docRef = await addDoc(collection(db, 'cart'), dataToAdd);

@@ -81,6 +81,7 @@ function Cart() {
                                                 <h5>{item.productName}</h5>
                                                 <p>Price: ${parseFloat(item.Price).toFixed(2)} each</p>
                                                 <p>Quantity: {item.quantity} lbs</p>
+                                                <p>Produce Code: {item.id.substring(0, 8)}</p>
                                                 <p>Total: ${(parseFloat(item.Price) * parseInt(item.quantity, 10)).toFixed(2)}</p>
                                                 <PayPalScriptProvider options={{ "client-id": "AZbnZ6MJRL0j1tx5Pa_ZNsMCy_kGlr626jtRg86ZLRB9PiIlJTOCDKKf53X6xZHt9k1X-QIww7uGbQAz" }}>
                                                 <PayPalButtons
