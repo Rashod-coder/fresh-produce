@@ -80,6 +80,8 @@ function Product() {
                 productId: posts[0].id,
                 quantity: quantity,
                 productName: posts[0].Type,
+                Price: posts[0].Price || 0,  // Ensure Price is not undefined
+                payee: posts[0].payId
             };
     
             const docRef = await addDoc(collection(db, 'cart'), dataToAdd);
@@ -150,12 +152,7 @@ function Product() {
                                     
                                     <div className="col-md-12 mt-3">
                                         <div className="justify-content-center mb-5 py-5">
-                                            {/* <PayPalScriptProvider options={{ clientId: "ATTcJ1St4dYpH9o1rBiiZo_U2bz4Gpr8ZozUjDOfL2SDB7b36T67bFHotc7-icFYi9k0m7kQeob_HZNN" }}>
-                                                <PayPalButtons
-                                                    // createOrder={createOrder}
-                                                    style={{ layout: "horizontal", height: 45, color: "blue", shape: "pill", tagline: false }}
-                                                />
-                                            </PayPalScriptProvider> */}
+                                        
                                         </div>
                                     </div>
                                 </div>
