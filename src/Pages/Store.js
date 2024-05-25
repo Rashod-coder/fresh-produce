@@ -5,37 +5,23 @@ import { useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref } from 'firebase/storage';
 
 function Buy() {
-    useEffect(() => {
-        // Show loading state for 3 seconds when the component mounts or when the user is set
-        const timer = setTimeout(() => {
-            setShowNoProduceMessage(true);
-        }, 3000);
-
-        // Clear the timer when the component unmounts or when the user is set
-        return () => clearTimeout(timer);
-    }, []);
     const [posts, setPosts] = useState([]);
     const [filteredPosts, setFilteredPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSearchLoading, setIsSearchLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchPerformed, setSearchPerformed] = useState(false);
-    const [user, setUser] = useState(null); 
-    const [showNoProduceMessage, setShowNoProduceMessage] = useState(false); // State to control the display of "No produce options available" message
-
+    const [user, setUser] = useState(null);
+    const [showNoProduceMessage, setShowNoProduceMessage] = useState(false);
 
     const navigate = useNavigate();
 
-
     const getDatabase = async () => {
-        
-        setIsLoading(true); // Set loading to false when data fetching is complete
-
+        setIsLoading(true);
 
         try {
-            // Check if user is authenticated
             if (!user) {
-                setIsLoading(false); // Stop loading if user is not authenticated
+                setIsLoading(false);
                 return;
             }
 
@@ -76,10 +62,11 @@ function Buy() {
 
             setPosts(newPosts);
             setFilteredPosts(newPosts);
+            setShowNoProduceMessage(newPosts.length === 0);
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
-            setIsLoading(false); // Set loading to false when data fetching is complete
+            setIsLoading(false);
         }
     };
 
@@ -96,7 +83,7 @@ function Buy() {
     const handleClearSearch = () => {
         setSearchQuery("");
         setIsSearchLoading(true);
-        setTimeout(() => { // Simulate a network request for demonstration
+        setTimeout(() => {
             setFilteredPosts(posts);
             setIsSearchLoading(false);
             setSearchPerformed(false);
@@ -129,7 +116,12 @@ function Buy() {
     }, []);
 
     useEffect(() => {
-        getDatabase();
+        if (user) {
+            getDatabase();
+        } else {
+            setIsLoading(false);
+            setShowNoProduceMessage(false);
+        }
     }, [user]);
 
     const truncateDescription = (description, maxLength) => {
@@ -152,7 +144,7 @@ function Buy() {
                     <h6 className='text-center text-dark mt-4'> </h6>
                     <div className="container">
                         <div className="row justify-content-center mb-5">
-                            <div className="col-12 position-relative ">
+                            <div className="col-12 position-relative">
                                 <input
                                     type="text"
                                     className="form-control"
@@ -182,14 +174,14 @@ function Buy() {
                             </div>
                         ) : (
                             <div>
-                                {searchPerformed && filteredPosts.length === 0 && ( // Only show "Produce not found" if a search is performed and no results are found
+                                {searchPerformed && filteredPosts.length === 0 && (
                                     <div className="row justify-content-center">
                                         <div className="col-md-6 text-center">
                                             <h4 className="text-dark">Produce not found</h4>
                                         </div>
                                     </div>
                                 )}
-                                {!isLoading && !showNoProduceMessage && !searchPerformed && posts.length === 0 && ( // If no search is performed and no posts are available, show "No produce options available" message
+                                {!isLoading && showNoProduceMessage && !searchPerformed && (
                                     <div className="row justify-content-center">
                                         <div className="col-md-6 text-center">
                                             <h4 className="text-dark">No produce options available in your zip code</h4>
@@ -209,7 +201,7 @@ function Buy() {
                                             <h6 className="text-dark">To know more details of a specific product, click on "View More".</h6>
                                         </div>
                                     </div>
-                                    {filteredPosts.length > 0 && ( // Only display posts if there are filtered posts available
+                                    {filteredPosts.length > 0 && (
                                         <div className="row justify-content-center">
                                             {filteredPosts.map(post => (
                                                 <div key={post.id} className="col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center mb-4">
@@ -219,7 +211,7 @@ function Buy() {
                                                             <h2 className="card-title text-light fw-bold" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
                                                             <h4 className="text-light">Price: ${post.Price}/lb</h4>
                                                             <h4 className="text-light">Amount: {post.Amount} lbs</h4>
-                                                            <h6 className="text-light">Zipcode: {post.Zip} </h6>
+                                                            <h6 className="text-light">Zipcode: {post.Zip}</h6>
                                                             <h4 className='text-light mt-3 mb-4 line-clamp-2'>{truncateDescription(post.Description, 30)}</h4>
                                                             <div>
                                                                 <a href="#" onClick={() => navigate("/Store/" + post.id)} className="btn btn-light">View More</a>
@@ -241,4 +233,3 @@ function Buy() {
 }
 
 export default Buy;
-

@@ -61,7 +61,7 @@ function OrderForm() {
         state: state,
         additionalNotes: additionalNotes,
         Image: imageName,
-        payPal: payId
+        payPal: payId 
       });
       await uploadBytes(ref(storage, `${docRef.id}/${imageName}`), imageBlob);
 
@@ -112,7 +112,8 @@ function OrderForm() {
                 setUserName(userData.fullName);
                 setEmail(userData.email);
                 setSales(userData.sales)
-                setPayId(user.payPal)
+                setPayId(userData.payPal)
+                console.log(payId)
                 setIsLoading(false);
                 console.log("User document not found in Firestore");
               }

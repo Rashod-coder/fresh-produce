@@ -56,11 +56,13 @@ function Navbar() {
             )}
           </ul>
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link style={{ color: 'white' }} className="nav-link" to="/Cart">
-                <FontAwesomeIcon icon={faCartShopping} />
-              </Link>
-            </li>
+            {isLoggedIn && (
+              <li className="nav-item">
+                <Link style={{ color: 'white' }} className="nav-link" to="/Cart">
+                  <FontAwesomeIcon icon={faCartShopping} />
+                </Link>
+              </li>
+            )}
             <li className="nav-item dropdown">
               <a style={{ color: 'white' }} className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Account

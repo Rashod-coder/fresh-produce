@@ -14,9 +14,6 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
 
-
-
-
 function Home() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
@@ -24,10 +21,11 @@ function Home() {
   const [greeting, setGreeting] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [sold, setSolds] = useState(0);
-  const [moneyEarned, setMoneyEarned] = useState(0); // Assuming you have money earned data
-  const [incomingOrders, setIncomingOrders] = useState([]); // Initialize as empty array
-  const [placedOrders, setPlacedOrders] = useState([]); // Initialize as empty array
-  const [salesData, setSalesData] = useState([]); // Initialize as empty array
+  const [moneyEarned, setMoneyEarned] = useState(0);
+  const [incomingOrders, setIncomingOrders] = useState([]);
+  const [placedOrders, setPlacedOrders] = useState([]);
+  const [salesData, setSalesData] = useState([]);
+  const [zipCode, setZipCode] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,10 +38,11 @@ function Home() {
             if (userDoc.exists()) {
               const userData = userDoc.data();
               setSolds(userData.sales || 0);
-              setMoneyEarned(userData.moneyEarned || 0); 
-              setIncomingOrders(userData.incomingOrders || []); 
+              setMoneyEarned(userData.moneyEarned || 0);
+              setIncomingOrders(userData.incomingOrders || []);
               setPlacedOrders(userData.placedOrders || []);
-              setSalesData(userData.salesData || []); 
+              setSalesData(userData.salesData || []);
+              setZipCode(userData.zipCode || '');
             } else {
               console.log("User document not found in Firestore");
             }
@@ -54,10 +53,11 @@ function Home() {
                 const userData = userDoc.data();
                 setUserName(userData.fullName);
                 setSolds(userData.sales || 0);
-                setMoneyEarned(userData.moneyEarned || 0); // Assuming you have money earned data
-                setIncomingOrders(userData.incomingOrders || []); // Assuming you have incoming orders data
-                setPlacedOrders(userData.placedOrders || []); // Assuming you have placed orders data
-                setSalesData(userData.salesData || []); // Assuming you have sales data
+                setMoneyEarned(userData.moneyEarned || 0);
+                setIncomingOrders(userData.incomingOrders || []);
+                setPlacedOrders(userData.placedOrders || []);
+                setSalesData(userData.salesData || []);
+                setZipCode(userData.zipCode || '');
               } else {
                 console.log("User document not found in Firestore");
               }
@@ -101,11 +101,20 @@ function Home() {
             <Paper elevation={3} sx={{ p: 3, backgroundColor: '#fff' }}>
               <Typography variant="h3" gutterBottom>{greeting} {userName} welcome to your dashboard</Typography>
               <Box sx={{ width: '100%' }}>
-      <Divider sx={{ borderColor: 'black' }} />
-    </Box>
+                <Divider sx={{ borderColor: 'black' }} />
+              </Box>
               <Typography variant="body1" className='mt-2' gutterBottom>Email: {userEmail}</Typography>
             </Paper>
           </Grid>
+          
+          {!zipCode && (
+            <Grid item xs={12} sm={12} md={12}>
+              <Paper elevation={3} sx={{ p: 3, backgroundColor: '#ffe6e6' }}>
+                <Typography variant="h6" color="error">Please set your 5-digit zip code in account settings to ensure you can view products in your area or neighboring cities.</Typography>
+              </Paper>
+            </Grid>
+          )}
+
           <Grid item xs={12} sm={6} md={4}>
             <Paper elevation={3} sx={{ p: 3, textAlign: 'center' }}>
               <Typography variant="h6">Money Earned</Typography>
@@ -194,4 +203,3 @@ function Home() {
 }
 
 export default Home;
-
