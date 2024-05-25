@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, query } from "firebase/firestore";
-import { db, storage } from '../Firebase/firebase';
+import { collection, getDocs, query, addDoc } from "firebase/firestore";
+import { db, storage, auth } from '../Firebase/firebase';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
@@ -9,20 +9,13 @@ import CryptoJS from 'crypto-js'; // Import CryptoJS
 
 function Product() {
 
-    // const decryptPayPal = (encryptedPayPal) => {
-    //     const decryptedPayPal = CryptoJS.AES.decrypt(encryptedPayPal, 'FXsaNKzW0gSVv3yTP9mtYZJEpe28RlkL').toString(CryptoJS.enc.Utf8);
-    //     return decryptedPayPal;
-    // };
-    
-
-
     const [isLoading, setIsLoading] = useState(true);
     const location = useLocation();
     let s = location.pathname.split("/")[2];
     const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(3);
-    const [inputQuantity, setInputQuantity] = useState(2);
+    const [inputQuantity, setInputQuantity] = useState(1);
 
     useEffect(() => {
         const getDatabase = async () => {
@@ -73,42 +66,55 @@ function Product() {
         getDatabase();
     }, [s]);
 
-    const createOrder = (data, actions) => {
-        const price = posts.length > 0 ? posts[0].Price : 0;
-        const total = price * quantity;
-        const payeeEmail = posts.length > 0 ? posts[0].payId : '';
-        console.log(total);
-        return actions.order.create({
-            purchase_units: [
-                {
-                    amount: {
-                        value: total,
-                    },
-                    payee: {
-                        email_address: payeeEmail,
-                    }
-                },
-            ],
-        });
+    const addToCart = async () => {
+        try {
+            const user = auth.currentUser;
+            if (!user) {
+                // Handle case where user is not logged in
+                console.error("User is not logged in");
+                return;
+            }
+    
+            const dataToAdd = {
+                userId: user.uid, // Assuming Firebase UID is used as the userId
+                productId: posts[0].id,
+                quantity: quantity,
+                productName: posts[0].Type,
+            };
+    
+            const docRef = await addDoc(collection(db, 'cart'), dataToAdd);
+            console.log("Item added to cart with ID: ", docRef.id);
+            alert('Item added to cart successfully!');
+        } catch (error) {
+            console.error("Error adding to cart:", error);
+            throw error; // Rethrow the error to handle it elsewhere, if needed
+        }
     };
 
     const handleQuantityChange = (event) => {
-        const value = parseInt(event.target.value);
-        setInputQuantity(value);
-    };
-
-    const updateQuantity = () => {
-        if (inputQuantity > 0 && inputQuantity <= posts[0].Amount) {
-            setQuantity(inputQuantity);
-            console.log(quantity)
-        } else if (inputQuantity > posts[0].Amount) {
-            setQuantity(posts[0].Amount);
-            console.log(quantity)
-
+        const value = event.target.value.trim(); // Remove leading and trailing spaces
+    
+        // Check if the value is empty or not a number
+        if (value === '' || isNaN(value)) {
+            setInputQuantity(''); // Update input quantity state to empty string
+            setQuantity(1); // Set quantity state to default 1
         } else {
-            setQuantity(1);
-            console.log(quantity)
-
+            const intValue = parseInt(value);
+    
+            // Ensure quantity stays within valid range
+            if (intValue > 0 && intValue <= posts[0].Amount) {
+                setInputQuantity(intValue);
+                setQuantity(intValue); // Update quantity state
+            } else if (intValue > posts[0].Amount) {
+                // If quantity exceeds max stock, set it to max stock
+                setInputQuantity(posts[0].Amount.toString());
+                setQuantity(posts[0].Amount); // Update quantity state
+                // Display alert to notify user
+                alert("Quantity cannot exceed maximum stock!");
+            } else {
+                setInputQuantity('1');
+                setQuantity(1); // Update quantity state
+            }
         }
     };
 
@@ -137,19 +143,19 @@ function Product() {
                             <div className="col-md-6">
                                 <div className="d-flex justify-content-center">
                                     <img src={posts[0].Image} className="img-fluid rounded" alt={posts[0].Type} style={{ width: '100%', height: 'auto', maxWidth: '550px', maxHeight: '550px'  }} />
+                                    
                                 </div>
                                 <p className="text" style={{ fontSize: '20px', textAlign: 'center' }}>{posts[0].Notes}</p>
                                 <div className="payment mt-3">
-                                    <h2>Payment:</h2>
+                                    
                                     <div className="col-md-12 mt-3">
                                         <div className="justify-content-center mb-5 py-5">
-                                            <PayPalScriptProvider options={{ clientId: "test" }}>
+                                            {/* <PayPalScriptProvider options={{ clientId: "ATTcJ1St4dYpH9o1rBiiZo_U2bz4Gpr8ZozUjDOfL2SDB7b36T67bFHotc7-icFYi9k0m7kQeob_HZNN" }}>
                                                 <PayPalButtons
-                                                                                                    createOrder={createOrder}
-
+                                                    // createOrder={createOrder}
                                                     style={{ layout: "horizontal", height: 45, color: "blue", shape: "pill", tagline: false }}
                                                 />
-                                            </PayPalScriptProvider>
+                                            </PayPalScriptProvider> */}
                                         </div>
                                     </div>
                                 </div>
@@ -176,12 +182,15 @@ function Product() {
                                             onChange={handleQuantityChange}
                                             min="1"
                                             max={posts[0].Amount}
-                                            style={{ width: '100px', display: 'inline-block', marginRight: '10px' }}
+                                            style={{ width: '100px', display: 'inline-block', marginRight: '10'}}
                                         />
-                                        <button className="btn btn-primary" onClick={updateQuantity}>Set Quantity</button>
                                     </div>
                                 </div>
+                                <button className="btn btn-dark btn-lg mt-5" onClick={addToCart}>Add to Cart</button>
+                                <h6>Note that if quantity field is left blank it will automatically add only 1 lbs to cart</h6>
+
                             </div>
+                            
                         </div>
                     </div>
                 )
@@ -191,3 +200,4 @@ function Product() {
 }
 
 export default Product;
+

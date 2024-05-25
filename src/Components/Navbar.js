@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from '../Firebase/firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
+import { faCartShopping } from '@fortawesome/free-solid-svg-icons'; // Import the cart icon
 
 function Navbar() {
   const navigate = useNavigate();
@@ -54,6 +56,11 @@ function Navbar() {
             )}
           </ul>
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <Link style={{ color: 'white' }} className="nav-link" to="/Cart">
+                <FontAwesomeIcon icon={faCartShopping} />
+              </Link>
+            </li>
             <li className="nav-item dropdown">
               <a style={{ color: 'white' }} className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Account

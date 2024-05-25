@@ -12,6 +12,8 @@ import Settings from './Pages/Settings';
 import Sell from './Pages/Sell';
 import Footer from './Components/Footer';
 import Product from './Pages/Product';
+import Cart from './Pages/Cart';
+
 
 
 
@@ -44,6 +46,7 @@ function App() {
           <Route path="/Store" element={<Store />} />
           <Route path="/Settings" element={<Settings />} />
           <Route path="/" element={<Home />} />
+          <Route path="/Cart" element={<Cart />} />
           <Route path="/Store/:id" element={<Product/>} />
 
         </Routes>
