@@ -133,7 +133,7 @@ function Cart() {
                                                     <td style={{ verticalAlign: 'middle' }}>${parseFloat(item.Price).toFixed(2)}</td>
                                                     <td style={{ verticalAlign: 'middle' }}>{item.quantity}</td>
                                                     <td style={{ verticalAlign: 'middle' }}>
-                                                        <span style={{ fontSize: '1.2em', color: '#555' }}>{item.id.substring(0, 8)}</span>
+                                                        <span style={{ fontSize: '1.2em', color: '#555' }}>{item.Id.substring(0, 8)}</span>
                                                     </td>
                                                     <td style={{ verticalAlign: 'middle' }}>
                                                         <PayPalScriptProvider options={{ "client-id": "AZbnZ6MJRL0j1tx5Pa_ZNsMCy_kGlr626jtRg86ZLRB9PiIlJTOCDKKf53X6xZHt9k1X-QIww7uGbQAz" }}>
