@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, query, addDoc } from "firebase/firestore";
+import { collection, getDocs, query, addDoc, doc, updateDoc } from "firebase/firestore";
 import { db, storage, auth } from '../Firebase/firebase';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref } from 'firebase/storage';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import CryptoJS from 'crypto-js'; // Import CryptoJS
-
 
 function Product() {
 
@@ -16,6 +15,7 @@ function Product() {
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);
     const [inputQuantity, setInputQuantity] = useState(1);
+    const [isOutOfStock, setIsOutOfStock] = useState(false); // State variable to track if product is out of stock
 
     useEffect(() => {
         const getDatabase = async () => {
@@ -46,6 +46,11 @@ function Product() {
                                     Sales: doc.data().sales,
                                     payId: doc.data().payPal
                                 });
+
+                                // Check if the product is out of stock
+                                if (doc.data().quantity === 0) {
+                                    setIsOutOfStock(true);
+                                }
                             })
                             .catch((error) => {
                                 console.error("Error getting download URL:", error);
@@ -180,11 +185,15 @@ function Product() {
                                         />
                                     </div>
                                 </div>
-                                <button className="btn btn-dark btn-lg mt-5" onClick={addToCart}>Add to Cart</button>
-                                <h6>Note that if quantity field is left blank it will automatically add only 1 lbs to cart</h6>
-
+                                {isOutOfStock ? (
+                                    <button className="btn btn-dark btn-lg mt-5" disabled>Add to Cart (Out of Stock)</button>
+                                ) : (
+                                    <div>
+                                        <button className="btn btn-dark btn-lg mt-5" onClick={addToCart}>Add to Cart</button>
+                                        <h6>Note that if quantity field is left blank it will automatically add only 1 lbs to cart</h6>
+                                    </div>
+                                )}
                             </div>
-                            
                         </div>
                     </div>
                 )
@@ -194,4 +203,3 @@ function Product() {
 }
 
 export default Product;
-
