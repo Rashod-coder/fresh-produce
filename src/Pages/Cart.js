@@ -82,36 +82,40 @@ function Cart() {
                                                 <p>Price: ${parseFloat(item.Price).toFixed(2)} each</p>
                                                 <p>Quantity: {item.quantity} lbs</p>
                                                 <p>Produce Code: {item.id.substring(0, 8)}</p>
+                                                <p>Produce Code: {item.payee}</p>
                                                 <p>Total: ${(parseFloat(item.Price) * parseInt(item.quantity, 10)).toFixed(2)}</p>
                                                 <PayPalScriptProvider options={{ "client-id": "AZbnZ6MJRL0j1tx5Pa_ZNsMCy_kGlr626jtRg86ZLRB9PiIlJTOCDKKf53X6xZHt9k1X-QIww7uGbQAz" }}>
                                                 <PayPalButtons
-    createOrder={(data, actions) => {
-        return actions.order.create({
-            purchase_units: [{
-                amount: {
-                    value: (parseFloat(item.Price) * parseInt(item.quantity, 10)).toFixed(2),
-                },
-            }],
-        });
-    }}
-    style={{ layout: 'vertical', color: 'blue', shape: 'rect', label: 'pay' }}
-    onApprove={(data, actions) => {
-        return actions.order.capture().then(async details => {
-            // Remove the item from the cart
-            await removeFromCart(item.id);
-    
-            // Close PayPal window
-            actions.restart();
-    
-            // Optionally, you can update the cart items state
-            const updatedCartItems = cartItems.filter(cartItem => cartItem.id !== item.id);
-            setCartItems(updatedCartItems);
-    
-            // Show alert or any other action
-            alert('Transaction completed by ' + details.payer.name.given_name);
-        });
-    }}
-/>
+                                                    createOrder={(data, actions) => {
+                                                        return actions.order.create({
+                                                            purchase_units: [{
+                                                                amount: {
+                                                                    value: (parseFloat(item.Price) * parseInt(item.quantity, 10)).toFixed(2),
+                                                                },
+                                                                payee: {
+                                                                    email_address: item.payee, 
+                                                                },
+                                                            }],
+                                                        });
+                                                    }}
+                                                    style={{ layout: 'vertical', color: 'blue', shape: 'rect', label: 'pay' }}
+                                                    onApprove={(data, actions) => {
+                                                        return actions.order.capture().then(async details => {
+                                                            // Remove the item from the cart
+                                                            await removeFromCart(item.id);
+                                                    
+                                                            // Close PayPal window
+                                                            actions.restart();
+                                                    
+                                                            // Optionally, you can update the cart items state
+                                                            const updatedCartItems = cartItems.filter(cartItem => cartItem.id !== item.id);
+                                                            setCartItems(updatedCartItems);
+                                                    
+                                                            // Show alert or any other action
+                                                            alert('Transaction completed by ' + details.payer.name.given_name);
+                                                        });
+                                                    }}
+                                                />
                                                 </PayPalScriptProvider>
                                             </div>
                                             <button className="btn btn-danger btn-lg" onClick={() => removeFromCart(item.id)}>Remove</button>
