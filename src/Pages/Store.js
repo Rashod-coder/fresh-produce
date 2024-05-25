@@ -1,19 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, query } from "firebase/firestore";
-import { db, storage } from '../Firebase/firebase';
+import { collection, getDocs, query, getDoc, doc } from "firebase/firestore";
+import { db, storage, auth } from '../Firebase/firebase';
 import { useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref } from 'firebase/storage';
 
 function Buy() {
+    useEffect(() => {
+        // Show loading state for 3 seconds when the component mounts or when the user is set
+        const timer = setTimeout(() => {
+            setShowNoProduceMessage(true);
+        }, 3000);
+
+        // Clear the timer when the component unmounts or when the user is set
+        return () => clearTimeout(timer);
+    }, []);
     const [posts, setPosts] = useState([]);
     const [filteredPosts, setFilteredPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSearchLoading, setIsSearchLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [searchPerformed, setSearchPerformed] = useState(false);
+    const [user, setUser] = useState(null); 
+    const [showNoProduceMessage, setShowNoProduceMessage] = useState(false); // State to control the display of "No produce options available" message
+
+
+    const navigate = useNavigate();
+
 
     const getDatabase = async () => {
+        
+        setIsLoading(true); // Set loading to false when data fetching is complete
+
+
         try {
+            // Check if user is authenticated
+            if (!user) {
+                setIsLoading(false); // Stop loading if user is not authenticated
+                return;
+            }
+
+            const userId = user.uid;
+            const userDoc = await getDoc(doc(db, "users", userId));
+            const userData = userDoc.data();
+            const userZipCode = userData.zipCode;
+
             const q = query(collection(db, "store"));
             const querySnapshot = await getDocs(q);
             const newPosts = [];
@@ -23,15 +53,18 @@ function Buy() {
                 const imageRef = ref(storage, `${doc.id}/${doc.data().Image}`);
                 const downloadPromise = getDownloadURL(imageRef)
                     .then((downloadUrl) => {
-                        newPosts.push({
-                            id: doc.id,
-                            Type: doc.data().productName,
-                            Price: doc.data().price,
-                            Description: doc.data().description,
-                            Image: downloadUrl,
-                            Amount: doc.data().quantity,
-                            Zip: doc.data().zip
-                        });
+                        const postZipCode = doc.data().zip;
+                        if (postZipCode === userZipCode) {
+                            newPosts.push({
+                                id: doc.id,
+                                Type: doc.data().productName,
+                                Price: doc.data().price,
+                                Description: doc.data().description,
+                                Image: downloadUrl,
+                                Amount: doc.data().quantity,
+                                Zip: postZipCode
+                            });
+                        }
                     })
                     .catch((error) => {
                         console.error("Error getting download URL:", error);
@@ -42,21 +75,12 @@ function Buy() {
             await Promise.all(promises);
 
             setPosts(newPosts);
-            setFilteredPosts(newPosts); // Initialize filtered posts with all posts
-            setIsLoading(false);
+            setFilteredPosts(newPosts);
         } catch (error) {
             console.error("Error fetching data:", error);
-            setIsLoading(false);
+        } finally {
+            setIsLoading(false); // Set loading to false when data fetching is complete
         }
-    };
-
-    const navigate = useNavigate();
-    
-    const truncateDescription = (description, maxLength) => {
-        if (description.length > maxLength) {
-            return `${description.substr(0, maxLength)}...`;
-        }
-        return description;
     };
 
     const handleSearchChange = (e) => {
@@ -71,19 +95,19 @@ function Buy() {
 
     const handleClearSearch = () => {
         setSearchQuery("");
-        setIsSearchLoading(true); 
+        setIsSearchLoading(true);
         setTimeout(() => { // Simulate a network request for demonstration
             setFilteredPosts(posts);
             setIsSearchLoading(false);
             setSearchPerformed(false);
-        }, 500); 
+        }, 500);
     };
 
     const performSearch = () => {
         setIsSearchLoading(true);
-        setSearchPerformed(true); // Set searchPerformed to true when a search is performed
+        setSearchPerformed(true);
         const query = searchQuery.toLowerCase();
-        setTimeout(() => { 
+        setTimeout(() => {
             const filtered = posts.filter(post =>
                 post.Type.toLowerCase().includes(query) ||
                 post.Description.toLowerCase().includes(query) ||
@@ -93,12 +117,27 @@ function Buy() {
             );
             setFilteredPosts(filtered);
             setIsSearchLoading(false);
-        }, 1000); 
+        }, 1000);
     };
 
     useEffect(() => {
-        getDatabase();
+        const unsubscribe = auth.onAuthStateChanged((user) => {
+            setUser(user);
+        });
+
+        return () => unsubscribe();
     }, []);
+
+    useEffect(() => {
+        getDatabase();
+    }, [user]);
+
+    const truncateDescription = (description, maxLength) => {
+        if (description.length > maxLength) {
+            return `${description.substr(0, maxLength)}...`;
+        }
+        return description;
+    };
 
     return (
         <div style={{ background: '#fbfef9', minHeight: '100vh', padding: '2rem' }}>
@@ -143,53 +182,63 @@ function Buy() {
                             </div>
                         ) : (
                             <div>
-                                {searchPerformed && (
-                                    <div className="row justify-content-center mb-2">
-                                        <div className="col-12 text-center">
-                                            <h5 className="text-dark">Showing results for "{searchQuery}"</h5>
-                                        </div>
-                                    </div>
-                                )}
-                                <div className="row justify-content-start">
-                                    <div className="col-md-6 mt-5">
-                                        <h6 className="text-dark">To know more details of a specific product, click on "View More".</h6>
-                                    </div>
-                                </div>
-                                {filteredPosts.length === 0 ? (
+                                {searchPerformed && filteredPosts.length === 0 && ( // Only show "Produce not found" if a search is performed and no results are found
                                     <div className="row justify-content-center">
                                         <div className="col-md-6 text-center">
                                             <h4 className="text-dark">Produce not found</h4>
                                         </div>
                                     </div>
-                                ) : (
+                                )}
+                                {!isLoading && !showNoProduceMessage && !searchPerformed && posts.length === 0 && ( // If no search is performed and no posts are available, show "No produce options available" message
                                     <div className="row justify-content-center">
-                                        {filteredPosts.map(post => (
-                                            <div key={post.id} className="col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center mb-4">
-                                                <div className="card shadow mb-4" style={{ width: '22rem' }}>
-                                                    <img src={post.Image} className="card-img-top" style={{ height: '200px', objectFit: 'fit' }} alt={post.Type} />
-                                                    <div className="card-body bg-dark">
-                                                        <h2 className="card-title text-light fw-bold" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
-                                                        <h4 className="text-light">Price: ${post.Price}/lb</h4>
-                                                        <h4 className="text-light">Amount: {post.Amount} lbs</h4>
-                                                        <h6 className="text-light">Zipcode: {post.Zip} </h6>
-                                                        <h4 className='text-light mt-3 mb-4 line-clamp-2'>{truncateDescription(post.Description, 30)}</h4>
-                                                        <div>
-                                                            <a href="#" onClick={() => navigate("/Store/" + post.id)} className="btn btn-light">View More</a>
+                                        <div className="col-md-6 text-center">
+                                            <h4 className="text-dark">No produce options available in your zip code</h4>
+                                        </div>
+                                    </div>
+                                )}
+                                <div>
+                                    {searchPerformed && (
+                                        <div className="row justify-content-center mb-2">
+                                            <div className="col-12 text-center">
+                                                <h5 className="text-dark">Showing results for "{searchQuery}"</h5>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="row justify-content-start">
+                                        <div className="col-md-6 mt-5">
+                                            <h6 className="text-dark">To know more details of a specific product, click on "View More".</h6>
+                                        </div>
+                                    </div>
+                                    {filteredPosts.length > 0 && ( // Only display posts if there are filtered posts available
+                                        <div className="row justify-content-center">
+                                            {filteredPosts.map(post => (
+                                                <div key={post.id} className="col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center mb-4">
+                                                    <div className="card shadow mb-4" style={{ width: '22rem' }}>
+                                                        <img src={post.Image} className="card-img-top" style={{ height: '200px', objectFit: 'fit' }} alt={post.Type} />
+                                                        <div className="card-body bg-dark">
+                                                            <h2 className="card-title text-light fw-bold" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
+                                                            <h4 className="text-light">Price: ${post.Price}/lb</h4>
+                                                            <h4 className="text-light">Amount: {post.Amount} lbs</h4>
+                                                            <h6 className="text-light">Zipcode: {post.Zip} </h6>
+                                                            <h4 className='text-light mt-3 mb-4 line-clamp-2'>{truncateDescription(post.Description, 30)}</h4>
+                                                            <div>
+                                                                <a href="#" onClick={() => navigate("/Store/" + post.id)} className="btn btn-light">View More</a>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>
                 </div>
             )}
-            
         </div>
     );
 }
 
 export default Buy;
+

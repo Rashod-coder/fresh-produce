@@ -43,12 +43,15 @@ function Cart() {
     const removeFromCart = async (itemId) => {
         try {
             await deleteDoc(doc(db, "cart", itemId));
-            setCartItems(cartItems.filter(item => item.id !== itemId));
+            console.log("Item removed from cart:", itemId);
+    
+            // Update cartItems state after removing the item
+            const updatedCartItems = cartItems.filter(item => item.id !== itemId);
+            setCartItems(updatedCartItems);
         } catch (error) {
             console.error("Error removing item from cart:", error);
         }
     };
-
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => {
             const price = parseFloat(item.Price) || 0;
@@ -58,61 +61,74 @@ function Cart() {
     };
 
     return (
-        <div style={{ minHeight: '100vh' }}>
-            {isLoading ? (
-                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
-                    <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            ) : (
-                <div className="container mt-5">
+        <div className="container-fluid mt-5" style={{ minHeight: '100vh' }}>
+            <div className="row">
+                <div className="col-md-8 border-end">
                     <h1>Your Cart</h1>
-                    {cartItems.length > 0 ? (
-                        <div>
-                            <ul className="list-group">
-                                {cartItems.map(item => (
-                                    <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h5>{item.productName}</h5>
-                                            <p>Price: ${parseFloat(item.Price).toFixed(2)} each</p>
-                                            <p>Quantity: {item.quantity} lbs</p>
-                                            <p>Total: ${(parseFloat(item.Price) * parseInt(item.quantity, 10)).toFixed(2)}</p>
-                                            <PayPalScriptProvider options={{ "client-id": "AZbnZ6MJRL0j1tx5Pa_ZNsMCy_kGlr626jtRg86ZLRB9PiIlJTOCDKKf53X6xZHt9k1X-QIww7uGbQAz" }}>
-                                <PayPalButtons
-                                    createOrder={(data, actions) => {
-                                        return actions.order.create({
-                                            purchase_units: [{
-                                                amount: {
-                                                    value: calculateTotal(),
-                                                },
-                                            }],
-                                        });
-                                    }}
-                                    style={{ layout: 'vertical', color: 'blue', shape: 'rect', label: 'pay' }}
-
-                                    onApprove={(data, actions) => {
-                                        return actions.order.capture().then(details => {
-                                            alert('Transaction completed by ' + details.payer.name.given_name);
-                                        });
-                                    }}
-                                />
-                            </PayPalScriptProvider>
-                                        </div>
-                                        <button className="btn btn-danger btn-lg" onClick={() => removeFromCart(item.id)}>Remove</button>
-                                    </li>
-                                ))}
-                                
-                            </ul>
-                            <h3 className="mt-3">Total: ${calculateTotal()}</h3>
-
-                            
+                    {isLoading ? (
+                        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '50vh' }}>
+                            <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
                         </div>
                     ) : (
-                        <p>Your cart is empty</p>
+                        <div>
+                            {cartItems.length > 0 ? (
+                                <ul className="list-group">
+                                    {cartItems.map(item => (
+                                        <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center border-bottom">
+                                            <div>
+                                                <h5>{item.productName}</h5>
+                                                <p>Price: ${parseFloat(item.Price).toFixed(2)} each</p>
+                                                <p>Quantity: {item.quantity} lbs</p>
+                                                <p>Total: ${(parseFloat(item.Price) * parseInt(item.quantity, 10)).toFixed(2)}</p>
+                                                <PayPalScriptProvider options={{ "client-id": "AZbnZ6MJRL0j1tx5Pa_ZNsMCy_kGlr626jtRg86ZLRB9PiIlJTOCDKKf53X6xZHt9k1X-QIww7uGbQAz" }}>
+                                                <PayPalButtons
+    createOrder={(data, actions) => {
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    value: (parseFloat(item.Price) * parseInt(item.quantity, 10)).toFixed(2),
+                },
+            }],
+        });
+    }}
+    style={{ layout: 'vertical', color: 'blue', shape: 'rect', label: 'pay' }}
+    onApprove={(data, actions) => {
+        return actions.order.capture().then(async details => {
+            // Remove the item from the cart
+            await removeFromCart(item.id);
+    
+            // Close PayPal window
+            actions.restart();
+    
+            // Optionally, you can update the cart items state
+            const updatedCartItems = cartItems.filter(cartItem => cartItem.id !== item.id);
+            setCartItems(updatedCartItems);
+    
+            // Show alert or any other action
+            alert('Transaction completed by ' + details.payer.name.given_name);
+        });
+    }}
+/>
+                                                </PayPalScriptProvider>
+                                            </div>
+                                            <button className="btn btn-danger btn-lg" onClick={() => removeFromCart(item.id)}>Remove</button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>Your cart is empty</p>
+                            )}
+                        </div>
                     )}
                 </div>
-            )}
+                <div className="col-md-4">
+                    <div className="border-start p-3">
+                        <h3 className="mt-3">Total: ${calculateTotal()}</h3>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
