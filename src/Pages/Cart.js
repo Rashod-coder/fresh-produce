@@ -78,14 +78,7 @@ function Cart() {
                                             <p>Price: ${parseFloat(item.Price).toFixed(2)} each</p>
                                             <p>Quantity: {item.quantity} lbs</p>
                                             <p>Total: ${(parseFloat(item.Price) * parseInt(item.quantity, 10)).toFixed(2)}</p>
-                                        </div>
-                                        <button className="btn btn-danger btn-lg" onClick={() => removeFromCart(item.id)}>Remove</button>
-                                    </li>
-                                ))}
-                            </ul>
-                            <h3 className="mt-3">Total: ${calculateTotal()}</h3>
-
-                            <PayPalScriptProvider options={{ "client-id": "AZbnZ6MJRL0j1tx5Pa_ZNsMCy_kGlr626jtRg86ZLRB9PiIlJTOCDKKf53X6xZHt9k1X-QIww7uGbQAz" }}>
+                                            <PayPalScriptProvider options={{ "client-id": "AZbnZ6MJRL0j1tx5Pa_ZNsMCy_kGlr626jtRg86ZLRB9PiIlJTOCDKKf53X6xZHt9k1X-QIww7uGbQAz" }}>
                                 <PayPalButtons
                                     createOrder={(data, actions) => {
                                         return actions.order.create({
@@ -105,6 +98,15 @@ function Cart() {
                                     }}
                                 />
                             </PayPalScriptProvider>
+                                        </div>
+                                        <button className="btn btn-danger btn-lg" onClick={() => removeFromCart(item.id)}>Remove</button>
+                                    </li>
+                                ))}
+                                
+                            </ul>
+                            <h3 className="mt-3">Total: ${calculateTotal()}</h3>
+
+                            
                         </div>
                     ) : (
                         <p>Your cart is empty</p>

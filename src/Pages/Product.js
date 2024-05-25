@@ -14,7 +14,7 @@ function Product() {
     let s = location.pathname.split("/")[2];
     const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
-    const [quantity, setQuantity] = useState(3);
+    const [quantity, setQuantity] = useState(1);
     const [inputQuantity, setInputQuantity] = useState(1);
 
     useEffect(() => {
@@ -76,11 +76,11 @@ function Product() {
             }
     
             const dataToAdd = {
-                userId: user.uid, // Assuming Firebase UID is used as the userId
+                userId: user.uid, 
                 productId: posts[0].id,
                 quantity: quantity,
                 productName: posts[0].Type,
-                Price: posts[0].Price || 0,  // Ensure Price is not undefined
+                Price: posts[0].Price || 0,  
                 payee: posts[0].payId
             };
     
@@ -89,33 +89,29 @@ function Product() {
             alert('Item added to cart successfully!');
         } catch (error) {
             console.error("Error adding to cart:", error);
-            throw error; // Rethrow the error to handle it elsewhere, if needed
+            throw error; 
         }
     };
 
     const handleQuantityChange = (event) => {
-        const value = event.target.value.trim(); // Remove leading and trailing spaces
+        const value = event.target.value.trim(); 
     
-        // Check if the value is empty or not a number
         if (value === '' || isNaN(value)) {
-            setInputQuantity(''); // Update input quantity state to empty string
-            setQuantity(1); // Set quantity state to default 1
+            setInputQuantity(''); 
+            setQuantity(1); 
         } else {
             const intValue = parseInt(value);
     
-            // Ensure quantity stays within valid range
             if (intValue > 0 && intValue <= posts[0].Amount) {
                 setInputQuantity(intValue);
-                setQuantity(intValue); // Update quantity state
+                setQuantity(intValue); 
             } else if (intValue > posts[0].Amount) {
-                // If quantity exceeds max stock, set it to max stock
                 setInputQuantity(posts[0].Amount.toString());
-                setQuantity(posts[0].Amount); // Update quantity state
-                // Display alert to notify user
+                setQuantity(posts[0].Amount); 
                 alert("Quantity cannot exceed maximum stock!");
             } else {
                 setInputQuantity('1');
-                setQuantity(1); // Update quantity state
+                setQuantity(1); 
             }
         }
     };
