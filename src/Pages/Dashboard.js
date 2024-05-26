@@ -13,6 +13,8 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function Home() {
   const navigate = useNavigate();
@@ -55,8 +57,8 @@ function Home() {
               console.log("Error fetching user data from Firestore:", error);
             }
           }
+          
     
-          // Fetch earnings and sales data for the seller from the "users" collection
           try {
             const sellerDoc = await getDoc(doc(collection(db, 'users'), user.uid));
             if (sellerDoc.exists()) {
@@ -117,129 +119,84 @@ function Home() {
         </Box>
       ) : (
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={12} md={12}>
-            <Paper elevation={3} sx={{ p: 3, backgroundColor: '#fff' }}>
+          <Grid item xs={12}>
+            <Box sx={{ p: 3, backgroundColor: '#fff', borderRadius: 8, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
               <Typography variant="h3" gutterBottom>{greeting} {userName} welcome to your dashboard</Typography>
-              <Box sx={{ width: '100%' }}>
-                <Divider sx={{ borderColor: 'black' }} />
-              </Box>
+              <Divider sx={{ borderColor: 'black' }} />
               <Typography variant="body1" className='mt-2' gutterBottom>Email: {userEmail}</Typography>
-            </Paper>
+            </Box>
           </Grid>
           
-          {!zipCode && (
-            <Grid item xs={12} sm={12} md={12}>
-              <Paper elevation={3} sx={{ p: 3, backgroundColor: '#ffe6e6' }}>
-                <Typography variant="h6" color="error">Please set your 5-digit zip code in account settings to ensure you can view products in your area or neighboring cities.</Typography>
-              </Paper>
+          
+            <Grid item xs={12} lg={6}>
+              <Box sx={{ p: 3, backgroundColor: 'white', borderRadius: 8, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
+                <Typography variant="h6" color="black">Please set your 5-digit zip code in account settings to ensure you can view products in your area or neighboring cities.</Typography>
+              </Box>
             </Grid>
-          )}
+            <Grid item xs={12} lg={6}>
+              <Box sx={{ p: 3, backgroundColor: 'white', borderRadius: 8, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
+                <Typography variant="h6" color="black">Ensure you have set your paypal email in account settings to recieve payments if you are going to be selling produce. </Typography>
+              </Box>
+            </Grid>
+          
 
-          <Grid item xs={12} sm={6} md={4}>
-            <Paper elevation={3} sx={{ p: 3, textAlign: 'center' }}>
+          <Grid item xs={12} sm={6} md={6}>
+            <Box sx={{ p: 3, textAlign: 'center', backgroundColor: '#fff', borderRadius: 8, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
               <Typography variant="h6">Money Earned</Typography>
               <Typography variant="h4">${moneyEarned}</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Paper elevation={3} sx={{ p: 3, textAlign: 'center' }}>
-              <Typography variant="h6">Sales Made</Typography>
-              <Typography variant="h4">{sold}</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12}>
-            <Paper elevation={3} sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                <LineChart
-                  xAxis={[{ data: salesData.map(item => item.date) }]} 
-                  series={[
-                    {
-                      data: salesData.map(item => item.value),
-                      area: true,
-                    },
-                  ]}
-                  width={600}
-                  height={400}
-                />
-              </Box>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12}>
-            <Paper elevation={3} sx={{ p: 3 }}>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>How do I sell a product?</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>
-                    To sell a product, first link your PayPal account email in account settings. Then go to the "Sell" section and upload your produce.
-                  </Typography>
-                </AccordionDetails>
-              </Accordion>
-            </Paper>
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
-            <Paper elevation={3} sx={{ p: 3, maxHeight: '250px', overflowY: 'auto' }}>
+            <Box sx={{ p: 3, textAlign: 'center', backgroundColor: '#fff', borderRadius: 8, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
+              <Typography variant="h6">Sales Made</Typography>
+              <Typography variant="h4">{sold}</Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12}>
+            <Box sx={{ p: 3, backgroundColor: '#fff', borderRadius: 8, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
+              <Typography variant="h6">How do I sell a product?</Typography>
+              <Typography variant="body1">
+                To sell a product, first link your PayPal account email in account settings. Then go to the "Sell" section and upload your produce.
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6} md={6}>
+            <Box sx={{ p: 3, maxHeight: '250px', overflowY: 'auto', backgroundColor: '#fff', borderRadius: 8, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
               <Typography variant="h6" gutterBottom>Incoming Orders</Typography>
               {incomingOrders && incomingOrders.length > 0 ? (
                 <ul>
                   {incomingOrders.map((order, index) => (
                     <li key={index}>{order}</li>
-                    
                   ))}
                 </ul>
               ) : (
                 <Typography>No incoming orders</Typography>
               )}
-            </Paper>
+            </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
-            <Paper elevation={3} sx={{ p: 3, maxHeight: '250px', overflowY: 'auto' }}>
+            <Box sx={{ p: 3, maxHeight: '250px', overflowY: 'auto', backgroundColor: '#fff', borderRadius: 8, boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)' }}>
               <Typography variant="h6" gutterBottom>Order History</Typography>
+              <Typography variant='subtitle1'><i>Note you may have to scroll down to view all your orders.</i></Typography>
               {placedOrders && placedOrders.length > 0 ? (
                 <ul>
                   {placedOrders.map((order, index) => (
                     <li key={order.id}>
                       <Typography variant="body1"><strong>Product:</strong> {order.productName}</Typography>
-                      <Typography variant="body1"><strong>Quantity:</strong> {order.quantity}</Typography>
+                      <Typography variant="body1"><strong>Quantity:</strong> {order.quantity} lbs</Typography>
                       <Typography variant="body1"><strong>Date:</strong> {new Date(order.timestamp.seconds * 1000).toLocaleString()}</Typography>
                       <Typography variant="body1"><strong>SKU:</strong> {order.itemId.substring(0, 8)}</Typography>
+                      <IconButton aria-label="delete" onClick={() => handleDeletePost(order.id)}>
+                        <DeleteIcon />
+                      </IconButton>
                       <hr></hr>
-                      
                     </li>
                   ))}
                 </ul>
               ) : (
-                <Typography>No orders placed</Typography>
+                <Typography>No orders history found</Typography>
               )}
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12}>
-            <Paper elevation={3} sx={{ p: 3, textAlign: 'center' }}>
-              <Typography>You can access your ordered produce here and view incoming orders from other users.</Typography>
-              <Typography variant="h1">PAGE IS W.I.P</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={12} md={12}>
-            <Paper elevation={3} sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>Your Posts</Typography>
-              {userPosts && userPosts.length > 0 ? (
-                <ul>
-                  {userPosts.map((post, index) => (
-                    <li key={index}>
-                      {post.title} - {post.description}
-                      <button onClick={() => handleDeletePost(post.id)}>Delete</button>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <Typography>No posts found</Typography>
-              )}
-            </Paper>
+            </Box>
           </Grid>
         </Grid>
       )}
@@ -248,3 +205,6 @@ function Home() {
 }
 
 export default Home;
+
+
+
