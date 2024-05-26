@@ -27,10 +27,9 @@ import { styled } from '@mui/system';
 const StyledBox = styled(Box)(({ theme }) => ({
     minHeight: '100vh',
     backgroundColor: 'white',
-
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start', // Align items at the top
 }));
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
@@ -38,7 +37,8 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
     fontSize: '3rem',
     fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: theme.spacing(5),
+    marginTop: theme.spacing(2), // Increase top margin
+    marginBottom: theme.spacing(2), // Add some bottom margin
     [theme.breakpoints.down('sm')]: {
         fontSize: '2.5rem',
     },
@@ -56,6 +56,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    marginBottom: theme.spacing(2), // Add some bottom margin
     [theme.breakpoints.down('sm')]: {
         width: '100%',
         margin: '0 auto',
@@ -67,6 +68,7 @@ const TotalCostContainer = styled(Box)(({ theme }) => ({
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: '8px',
     textAlign: 'center',
+    marginBottom: theme.spacing(2), // Add some bottom margin
     [theme.breakpoints.down('sm')]: {
         marginTop: theme.spacing(2),
     },
@@ -243,3 +245,4 @@ function Cart() {
 }
 
 export default Cart;
+
