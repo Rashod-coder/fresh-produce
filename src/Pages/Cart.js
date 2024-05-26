@@ -147,6 +147,7 @@ function Cart() {
 
             if (updatedStock <= 0) {
                 await updateDoc(itemRef, { quantity: 0, status: "Out of Stock" });
+                await deleteDoc(doc(db, 'store', itemId))
             } else {
                 await updateDoc(itemRef, { quantity: updatedStock });
             }
