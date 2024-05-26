@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, query, where, deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, query, where, deleteDoc, doc, getDoc, updateDoc, addDoc } from "firebase/firestore";
 import { db, auth } from '../Firebase/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
@@ -23,6 +23,8 @@ import {
     Grid
 } from '@mui/material';
 import { styled } from '@mui/system';
+import { serverTimestamp } from 'firebase/firestore';
+
 
 const StyledBox = styled(Box)(({ theme }) => ({
     minHeight: '100vh',
@@ -132,7 +134,7 @@ function Cart() {
         }, 0).toFixed(2);
     };
 
-    const handlePaymentSuccess = async (itemId, quantity, cart) => {
+    const handlePaymentSuccess = async (itemId, quantity, cart, userId) => {
         try {
             const itemRef = doc(db, "store", itemId);
             const itemSnapshot = await getDoc(itemRef);
@@ -142,6 +144,13 @@ function Cart() {
                 console.error("Item data not found");
                 return;
             }
+            const orderRef = collection(db, "orders");
+            await addDoc(orderRef, {
+                userId: userId,
+                itemId: itemId,
+                quantity: quantity,
+                timestamp: serverTimestamp(),
+            });
 
             const updatedStock = currentItem.quantity - quantity;
 
@@ -161,9 +170,9 @@ function Cart() {
         }
     };
 
-    const onPaymentApprove = (itemId, quantity, cart) => (data, actions) => {
+    const onPaymentApprove = (itemId, quantity, cart, userId) => (data, actions) => {
         return actions.order.capture().then(async details => {
-            await handlePaymentSuccess(itemId, quantity, cart);
+            await handlePaymentSuccess(itemId, quantity, cart, userId);
             actions.close();
         });
     };
@@ -217,8 +226,8 @@ function Cart() {
                                                                 });
                                                             }}
                                                             style={{ layout: 'vertical', color: 'blue', shape: 'rect', label: 'pay', height: 30 }}
-                                                            onApprove={onPaymentApprove(item.Id, parseInt(item.quantity, 10), item.id)}
-                                                        />
+                                                            onApprove={onPaymentApprove(item.Id, parseInt(item.quantity, 10), item.id, user.uid)}
+                                                            />
                                                     </PayPalScriptProvider>
                                                 </StyledTableCell>
                                                 <StyledTableCell>{item.Id.substring(0, 8)}</StyledTableCell>
