@@ -134,45 +134,75 @@ function Cart() {
         }, 0).toFixed(2);
     };
 
-    const handlePaymentSuccess = async (itemId, quantity, cart, userId) => {
+    const handlePaymentSuccess = async (itemId, quantity, cart, userId, name, price) => {
         try {
             const itemRef = doc(db, "store", itemId);
             const itemSnapshot = await getDoc(itemRef);
             const currentItem = itemSnapshot.data();
-
+    
             if (!currentItem) {
                 console.error("Item data not found");
                 return;
             }
+    
+            // Fetch the seller's user document
+            const sellerId = currentItem.sellerId; // Assuming sellerId is stored in the store item
+            const sellerRef = doc(db, "users", sellerId);
+            const sellerSnapshot = await getDoc(sellerRef);
+            const sellerData = sellerSnapshot.data();
+    
+            if (!sellerData) {
+                console.error("Seller data not found");
+                return;
+            }
+    
+            // Calculate the total price for the sold items
+            console.log(currentItem.price)
+            const totalPrice = (parseFloat(currentItem.price) || 0) * quantity;
+            console.log(totalPrice)
+    
+            // Ensure earnings field is properly handled
+            const currentEarnings = parseFloat(sellerData.earnings) || 0;
+    
+            // Update seller's sales and earnings
+            await updateDoc(sellerRef, {
+                sales: (sellerData.sales || 0) + 1,
+                earnings: (currentEarnings + parseFloat(totalPrice)).toFixed(2)
+            });
+    
+            // Add the order to the "orders" collection
             const orderRef = collection(db, "orders");
             await addDoc(orderRef, {
                 userId: userId,
                 itemId: itemId,
                 quantity: quantity,
                 timestamp: serverTimestamp(),
+                productName: name
             });
-
+    
+            // Update the stock of the item
             const updatedStock = currentItem.quantity - quantity;
-
+    
             if (updatedStock <= 0) {
                 await updateDoc(itemRef, { quantity: 0, status: "Out of Stock" });
-                await deleteDoc(doc(db, 'store', itemId))
+                await deleteDoc(itemRef);
             } else {
                 await updateDoc(itemRef, { quantity: updatedStock });
             }
-
+    
+            // Remove the item from the cart
             await removeFromCart(cart);
             setCartItems(cartItems.filter(cartItem => cartItem.id !== itemId));
-
+    
             alert('Transaction completed successfully!');
         } catch (error) {
             console.error("Error updating stock:", error);
         }
     };
 
-    const onPaymentApprove = (itemId, quantity, cart, userId) => (data, actions) => {
+    const onPaymentApprove = (itemId, quantity, cart, userId, name, price) => (data, actions) => {
         return actions.order.capture().then(async details => {
-            await handlePaymentSuccess(itemId, quantity, cart, userId);
+            await handlePaymentSuccess(itemId, quantity, cart, userId, name, price);
             actions.close();
         });
     };
@@ -226,7 +256,7 @@ function Cart() {
                                                                 });
                                                             }}
                                                             style={{ layout: 'vertical', color: 'blue', shape: 'rect', label: 'pay', height: 30 }}
-                                                            onApprove={onPaymentApprove(item.Id, parseInt(item.quantity, 10), item.id, user.uid)}
+                                                            onApprove={onPaymentApprove(item.Id, parseInt(item.quantity, 10), item.id, user.uid, item.productName, item.Price)}
                                                             />
                                                     </PayPalScriptProvider>
                                                 </StyledTableCell>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../Firebase/firebase';
-import { collection, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, deleteDoc, query, where, getDocs } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { LineChart } from '@mui/x-charts';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -35,19 +35,6 @@ function Home() {
           setUserEmail(user.email);
           if (user.displayName) {
             setUserName(user.displayName);
-            const userDoc = await getDoc(doc(collection(db, 'users'), user.uid));
-            if (userDoc.exists()) {
-              const userData = userDoc.data();
-              setSolds(userData.sales || 0);
-              setMoneyEarned(userData.moneyEarned || 0);
-              setIncomingOrders(userData.incomingOrders || []);
-              setPlacedOrders(userData.placedOrders || []);
-              setSalesData(userData.salesData || []);
-              setZipCode(userData.zipCode || '');
-              setUserPosts(userData.posts || []);
-            } else {
-              console.log("User document not found in Firestore");
-            }
           } else {
             try {
               const userDoc = await getDoc(doc(collection(db, 'users'), user.uid));
@@ -57,7 +44,6 @@ function Home() {
                 setSolds(userData.sales || 0);
                 setMoneyEarned(userData.moneyEarned || 0);
                 setIncomingOrders(userData.incomingOrders || []);
-                setPlacedOrders(userData.placedOrders || []);
                 setSalesData(userData.salesData || []);
                 setZipCode(userData.zipCode || '');
                 setUserPosts(userData.posts || []);
@@ -69,10 +55,31 @@ function Home() {
               console.log("Error fetching user data from Firestore:", error);
             }
           }
+    
+          // Fetch earnings and sales data for the seller from the "users" collection
+          try {
+            const sellerDoc = await getDoc(doc(collection(db, 'users'), user.uid));
+            if (sellerDoc.exists()) {
+              const sellerData = sellerDoc.data();
+              setMoneyEarned(sellerData.earnings || 0);
+              setSolds(sellerData.sales || 0);
+            } else {
+              console.log("Seller document not found in Firestore");
+            }
+          } catch (error) {
+            console.error("Error fetching seller data from Firestore:", error);
+          }
+    
+          // Fetch placed orders from 'orders' collection
+          const ordersQuery = query(collection(db, 'orders'), where('userId', '==', user.uid));
+          const ordersSnapshot = await getDocs(ordersQuery);
+          const userPlacedOrders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setPlacedOrders(userPlacedOrders);
+    
           setIsLoading(false);
         }
       });
-
+    
       const currentTime = new Date().getHours();
       if (currentTime >= 5 && currentTime < 12) {
         setGreeting('Good morning, ');
@@ -81,11 +88,11 @@ function Home() {
       } else {
         setGreeting('Good evening, ');
       }
-
+    
       setTimeout(() => {
         setIsLoading(false);
       }, 1000);
-
+    
       return () => unsubscribe();
     };
 
@@ -176,12 +183,13 @@ function Home() {
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
-            <Paper elevation={3} sx={{ p: 3 }}>
+            <Paper elevation={3} sx={{ p: 3, maxHeight: '250px', overflowY: 'auto' }}>
               <Typography variant="h6" gutterBottom>Incoming Orders</Typography>
               {incomingOrders && incomingOrders.length > 0 ? (
                 <ul>
                   {incomingOrders.map((order, index) => (
                     <li key={index}>{order}</li>
+                    
                   ))}
                 </ul>
               ) : (
@@ -190,12 +198,19 @@ function Home() {
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
-            <Paper elevation={3} sx={{ p: 3 }}>
-              <Typography variant="h6" gutterBottom>Orders Placed</Typography>
+            <Paper elevation={3} sx={{ p: 3, maxHeight: '250px', overflowY: 'auto' }}>
+              <Typography variant="h6" gutterBottom>Order History</Typography>
               {placedOrders && placedOrders.length > 0 ? (
                 <ul>
                   {placedOrders.map((order, index) => (
-                    <li key={index}>{order}</li>
+                    <li key={order.id}>
+                      <Typography variant="body1"><strong>Product:</strong> {order.productName}</Typography>
+                      <Typography variant="body1"><strong>Quantity:</strong> {order.quantity}</Typography>
+                      <Typography variant="body1"><strong>Date:</strong> {new Date(order.timestamp.seconds * 1000).toLocaleString()}</Typography>
+                      <Typography variant="body1"><strong>SKU:</strong> {order.itemId.substring(0, 8)}</Typography>
+                      <hr></hr>
+                      
+                    </li>
                   ))}
                 </ul>
               ) : (
@@ -233,4 +248,3 @@ function Home() {
 }
 
 export default Home;
-
