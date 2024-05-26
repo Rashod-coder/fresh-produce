@@ -34,11 +34,10 @@ const StyledBox = styled(Box)(({ theme }) => ({
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
     color: 'black',
-    fontSize: '3rem',
-    fontWeight: 'bold',
+    fontSize: '3rem', // Change font size here
+    fontWeight: 300, // Change font weight here
     textAlign: 'center',
-    marginTop: theme.spacing(2), // Increase top margin
-    marginBottom: theme.spacing(2), // Add some bottom margin
+    marginTop: theme.spacing(5),
     [theme.breakpoints.down('sm')]: {
         fontSize: '2.5rem',
     },
@@ -46,13 +45,14 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     color: 'black',
-    fontWeight: 'bold',
-    fontSize: '1.2rem',
+    fontWeight: 300, // Change font weight here
+    fontSize: '1.2rem', // Change font size here
     [theme.breakpoints.down('sm')]: {
         fontSize: '1rem',
         padding: theme.spacing(0.5),
     },
 }));
+
 
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
@@ -68,11 +68,12 @@ const TotalCostContainer = styled(Box)(({ theme }) => ({
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: '8px',
     textAlign: 'center',
-    marginBottom: theme.spacing(2), // Add some bottom margin
     [theme.breakpoints.down('sm')]: {
         marginTop: theme.spacing(2),
     },
+    fontWeight: 300, // Change font weight here
 }));
+
 
 function Cart() {
     const [cartItems, setCartItems] = useState([]);
