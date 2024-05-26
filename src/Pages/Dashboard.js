@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../Firebase/firebase';
-import { collection, doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { LineChart } from '@mui/x-charts';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -26,6 +26,7 @@ function Home() {
   const [placedOrders, setPlacedOrders] = useState([]);
   const [salesData, setSalesData] = useState([]);
   const [zipCode, setZipCode] = useState('');
+  const [userPosts, setUserPosts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +44,7 @@ function Home() {
               setPlacedOrders(userData.placedOrders || []);
               setSalesData(userData.salesData || []);
               setZipCode(userData.zipCode || '');
+              setUserPosts(userData.posts || []);
             } else {
               console.log("User document not found in Firestore");
             }
@@ -58,6 +60,7 @@ function Home() {
                 setPlacedOrders(userData.placedOrders || []);
                 setSalesData(userData.salesData || []);
                 setZipCode(userData.zipCode || '');
+                setUserPosts(userData.posts || []);
               } else {
                 console.log("User document not found in Firestore");
               }
@@ -88,6 +91,16 @@ function Home() {
 
     fetchData();
   }, [navigate]);
+
+  const handleDeletePost = async (postId) => {
+    try {
+      await deleteDoc(doc(collection(db, 'posts'), postId));
+      setUserPosts(userPosts.filter(post => post.id !== postId));
+      console.log("Post deleted successfully");
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
 
   return (
     <Box sx={{ backgroundColor: '#f0f2f5', minHeight: '100vh', p: 3 }}>
@@ -196,6 +209,23 @@ function Home() {
               <Typography variant="h1">PAGE IS W.I.P</Typography>
             </Paper>
           </Grid>
+          <Grid item xs={12} sm={12} md={12}>
+            <Paper elevation={3} sx={{ p: 3 }}>
+              <Typography variant="h6" gutterBottom>Your Posts</Typography>
+              {userPosts && userPosts.length > 0 ? (
+                <ul>
+                  {userPosts.map((post, index) => (
+                    <li key={index}>
+                      {post.title} - {post.description}
+                      <button onClick={() => handleDeletePost(post.id)}>Delete</button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <Typography>No posts found</Typography>
+              )}
+            </Paper>
+          </Grid>
         </Grid>
       )}
     </Box>
@@ -203,3 +233,4 @@ function Home() {
 }
 
 export default Home;
+

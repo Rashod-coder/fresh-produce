@@ -33,6 +33,8 @@ function OrderForm() {
   
 
   const handleImageChange = (event) => {
+            const user = auth.currentUser; // Get the current user
+
     const selectedImage = event.target.files[0];
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -46,6 +48,8 @@ function OrderForm() {
 };
 
   const keepDatabase = async (event) => {
+    const user = auth.currentUser; // Get the current user
+
     event.preventDefault(); 
     try {
       const docRef = await addDoc(collection(db, 'store'), { 
@@ -61,7 +65,8 @@ function OrderForm() {
         state: state,
         additionalNotes: additionalNotes,
         Image: imageName,
-        payPal: payId 
+        payPal: payId,
+        sellerId: user.uid // Include the seller's ID
       });
       await uploadBytes(ref(storage, `${docRef.id}/${imageName}`), imageBlob);
 

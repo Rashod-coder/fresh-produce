@@ -3,8 +3,6 @@ import { collection, getDocs, query, addDoc, doc, updateDoc } from "firebase/fir
 import { db, storage, auth } from '../Firebase/firebase';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref } from 'firebase/storage';
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
-import CryptoJS from 'crypto-js'; // Import CryptoJS
 
 function Product() {
 
@@ -47,7 +45,6 @@ function Product() {
                                     payId: doc.data().payPal
                                 });
 
-                                // Check if the product is out of stock
                                 if (doc.data().quantity === 0) {
                                     setIsOutOfStock(true);
                                 }
@@ -91,7 +88,6 @@ function Product() {
             };
     
             const docRef = await addDoc(collection(db, 'cart'), dataToAdd);
-            console.log("Item added to cart with ID: ", docRef.id);
             alert('Item added to cart successfully!');
         } catch (error) {
             console.error("Error adding to cart:", error);
@@ -168,7 +164,7 @@ function Product() {
                                     <h3>Product Details:</h3>
                                     <p><strong>Price:</strong> ${posts[0].Price}/lb</p>
                                     <p><strong>Amount available:</strong> {posts[0].Amount} lbs</p>
-                                    <p><strong>Shipped from:</strong> {posts[0].Address}, {posts[0].State}, {posts[0].Zip}</p>
+                                    <p><strong>Shipped from:</strong> {posts[0].Address} {posts[0].State}, {posts[0].Zip}</p>
                                     <p><strong>Seller:</strong> {posts[0].Seller}</p>
                                     <p><strong>Contact:</strong> {posts[0].Contact}</p>
                                     <div className="mt-3">
@@ -186,7 +182,10 @@ function Product() {
                                     </div>
                                 </div>
                                 {isOutOfStock ? (
-                                    <button className="btn btn-dark btn-lg mt-5" disabled>Add to Cart (Out of Stock)</button>
+                                    <>
+                                        <button className="btn btn-dark btn-lg mt-5" disabled>Add to Cart (Out of Stock)</button>
+                                        <h6>Waiting for Seller to Restock...</h6>
+                                    </>
                                 ) : (
                                     <div>
                                         <button className="btn btn-dark btn-lg mt-5" onClick={addToCart}>Add to Cart</button>
