@@ -42,7 +42,8 @@ function Product() {
                                     State: doc.data().state,
                                     Zip: doc.data().zip,
                                     Sales: doc.data().sales,
-                                    payId: doc.data().payPal
+                                    payId: doc.data().payPal,
+                                    sellerId: doc.data().sellerId
                                 });
 
                                 if (doc.data().quantity === 0) {
@@ -84,7 +85,8 @@ function Product() {
                 productName: posts[0].Type,
                 Price: posts[0].Price || 0,  
                 payee: posts[0].payId,
-                Id: posts[0].id
+                Id: posts[0].id,
+                sellerId: posts[0].sellerId
             };
     
             const docRef = await addDoc(collection(db, 'cart'), dataToAdd);

@@ -25,7 +25,6 @@ import {
 import { styled } from '@mui/system';
 import { serverTimestamp } from 'firebase/firestore';
 
-
 const StyledBox = styled(Box)(({ theme }) => ({
     minHeight: '100vh',
     backgroundColor: 'white',
@@ -55,7 +54,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
 }));
 
-
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     marginBottom: theme.spacing(2), // Add some bottom margin
@@ -76,17 +74,18 @@ const TotalCostContainer = styled(Box)(({ theme }) => ({
     fontWeight: 300, // Change font weight here
 }));
 
-
 function Cart() {
     const [cartItems, setCartItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState(null);
+    const [buyerItem, setBuyerItem] = useState({ email: '', fullName: '' });
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user);
                 fetchCartItems(user.uid);
+                fetchUser(user.uid); // Fetch buyer details
             } else {
                 console.error("User is not logged in");
                 setIsLoading(false);
@@ -113,6 +112,26 @@ function Cart() {
         }
     };
 
+    const fetchUser = async (userId) => {
+        try {
+            const userRef = doc(db, "users", userId);
+            const userDoc = await getDoc(userRef);
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                const userEmail = userData.email;
+                const userName = userData.fullName; // Assuming 'name' is the field for user's name
+                setBuyerItem({ email: userEmail, fullName: userName });
+                setIsLoading(false);
+            } else {
+                console.error("User document not found");
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error("Error fetching buyer details:", error);
+            setIsLoading(false);
+        }
+    };
+
     const removeFromCart = async (itemId) => {
         try {
             await deleteDoc(doc(db, "cart", itemId));
@@ -134,42 +153,42 @@ function Cart() {
         }, 0).toFixed(2);
     };
 
-    const handlePaymentSuccess = async (itemId, quantity, cart, userId, name, price) => {
+    const handlePaymentSuccess = async (itemId, quantity, cart, userId, name, price, seller, buyerEmail, buyerName) => {
         try {
             const itemRef = doc(db, "store", itemId);
             const itemSnapshot = await getDoc(itemRef);
             const currentItem = itemSnapshot.data();
-    
+
             if (!currentItem) {
                 console.error("Item data not found");
                 return;
             }
-    
+
             // Fetch the seller's user document
             const sellerId = currentItem.sellerId; // Assuming sellerId is stored in the store item
             const sellerRef = doc(db, "users", sellerId);
             const sellerSnapshot = await getDoc(sellerRef);
             const sellerData = sellerSnapshot.data();
-    
+
             if (!sellerData) {
                 console.error("Seller data not found");
                 return;
             }
-    
-            // Calculate the total price for the sold items
-            console.log(currentItem.price)
+
+            console.log(seller)
+            console.log(currentItem.price);
             const totalPrice = (parseFloat(currentItem.price) || 0) * quantity;
-            console.log(totalPrice)
-    
+            console.log(totalPrice);
+
             // Ensure earnings field is properly handled
             const currentEarnings = parseFloat(sellerData.earnings) || 0;
-    
+
             // Update seller's sales and earnings
             await updateDoc(sellerRef, {
                 sales: (sellerData.sales || 0) + 1,
                 earnings: (currentEarnings + parseFloat(totalPrice)).toFixed(2)
             });
-    
+
             // Add the order to the "orders" collection
             const orderRef = collection(db, "orders");
             await addDoc(orderRef, {
@@ -179,30 +198,43 @@ function Cart() {
                 timestamp: serverTimestamp(),
                 productName: name
             });
-    
+
+            // Add the order to the "incoming" collection for the seller
+            const incomingRef = collection(db, "incoming");
+            await addDoc(incomingRef, {
+                sellerId: seller,
+                itemId: itemId,
+                productName: name,
+                quantity: quantity,
+                dateOrdered: serverTimestamp(),
+                userId: userId,
+                personName: buyerName,
+                personEmail: buyerEmail
+            });
+
             // Update the stock of the item
             const updatedStock = currentItem.quantity - quantity;
-    
+
             if (updatedStock <= 0) {
                 await updateDoc(itemRef, { quantity: 0, status: "Out of Stock" });
                 await deleteDoc(itemRef);
             } else {
                 await updateDoc(itemRef, { quantity: updatedStock });
             }
-    
+
             // Remove the item from the cart
             await removeFromCart(cart);
             setCartItems(cartItems.filter(cartItem => cartItem.id !== itemId));
-    
+
             alert('Transaction completed successfully!');
         } catch (error) {
             console.error("Error updating stock:", error);
         }
     };
 
-    const onPaymentApprove = (itemId, quantity, cart, userId, name, price) => (data, actions) => {
+    const onPaymentApprove = (itemId, quantity, cart, userId, name, price, seller, buyerEmail, buyerName) => (data, actions) => {
         return actions.order.capture().then(async details => {
-            await handlePaymentSuccess(itemId, quantity, cart, userId, name, price);
+            await handlePaymentSuccess(itemId, quantity, cart, userId, name, price, seller, buyerEmail, buyerName);
             actions.close();
         });
     };
@@ -256,8 +288,8 @@ function Cart() {
                                                                 });
                                                             }}
                                                             style={{ layout: 'vertical', color: 'blue', shape: 'rect', label: 'pay', height: 30 }}
-                                                            onApprove={onPaymentApprove(item.Id, parseInt(item.quantity, 10), item.id, user.uid, item.productName, item.Price)}
-                                                            />
+                                                            onApprove={onPaymentApprove(item.Id, parseInt(item.quantity, 10), item.id, user.uid, item.productName, item.Price, item.sellerId, buyerItem.email, buyerItem.fullName)}
+                                                        />
                                                     </PayPalScriptProvider>
                                                 </StyledTableCell>
                                                 <StyledTableCell>{item.Id.substring(0, 8)}</StyledTableCell>
@@ -286,4 +318,3 @@ function Cart() {
 }
 
 export default Cart;
-
