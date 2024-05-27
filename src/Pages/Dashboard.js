@@ -201,7 +201,7 @@ function Home() {
           <Grid item xs={12} sm={6} lg={12}>
             <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
               <Typography variant="h6" gutterBottom>Incoming Orders</Typography>
-              <TableContainer component={Paper}>
+              <TableContainer component={Paper} style={{ maxHeight: '350px', overflowY: 'auto' }}>
                 <Table>
                   <TableHead>
                     <TableRow>
