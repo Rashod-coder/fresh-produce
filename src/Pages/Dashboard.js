@@ -10,6 +10,14 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Button from '@mui/material/Button';
+
 
 function Home() {
   const navigate = useNavigate();
@@ -165,25 +173,37 @@ function Home() {
             </Paper>
           </Grid>
 
-          <Grid item xs={12} sm={6} md={6}>
-            <Paper sx={{ p: 3, maxHeight: '250px', overflowY: 'auto', borderRadius: 2, boxShadow: 3 }}>
+          <Grid item xs={12} sm={6} lg={12}>
+            <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
               <Typography variant="h6" gutterBottom>Incoming Orders</Typography>
-              {incomingOrders && incomingOrders.length > 0 ? (
-                <ul>
-                  {incomingOrders.map((order, index) => (
-                    <li key={index}>
-                      <Typography variant="body1"><strong>Product:</strong> {order.productName}</Typography>
-                      <Typography variant="body1"><strong>Quantity:</strong> {order.quantity} lbs</Typography>
-                      <Typography variant="body1"><strong>Buyer Name:</strong> {order.personName} </Typography>
-                      <Typography variant="body1"><strong>Buyer Contact</strong> {order.personEmail}</Typography>
-                      <Typography variant="body1"><strong>Date:</strong> {new Date(order.dateOrdered.seconds * 1000).toLocaleString()}</Typography>
-                      <Divider sx={{ my: 1 }} />
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <Typography>No incoming orders</Typography>
-              )}
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Product Name</TableCell>
+                      <TableCell>Customer Name</TableCell>
+                      <TableCell>Quantity</TableCell>
+                      <TableCell>Customer Email</TableCell>
+                      <TableCell>Time Placed</TableCell>
+                      <TableCell>Action</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {incomingOrders.map((order) => (
+                      <TableRow key={order.id}>
+                        <TableCell>{order.productName}</TableCell>
+                        <TableCell>{order.personName}</TableCell>
+                        <TableCell>{order.quantity} lbs</TableCell>
+                        <TableCell>{order.personEmail}</TableCell>
+                        <TableCell>{new Date(order.dateOrdered.seconds * 1000).toLocaleString()}</TableCell>
+                        <TableCell>
+                          <Button>Fulfil Order</Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Paper>
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
