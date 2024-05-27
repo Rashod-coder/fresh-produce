@@ -31,6 +31,10 @@ function Home() {
   const [placedOrders, setPlacedOrders] = useState([]);
   const [zipCode, setZipCode] = useState('');
   const [userPosts, setUserPosts] = useState([]);
+  const [buyerName, setBuyerName] = useState('');
+  const [buyerEmail, setBuyerEmail] = useState('');
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,7 +85,6 @@ function Home() {
             console.error("Error fetching incoming orders from Firestore:", error);
           }
 
-          // Fetch placed orders from 'orders' collection
           try {
             const ordersQuery = query(collection(db, 'orders'), where('userId', '==', user.uid));
             const ordersSnapshot = await getDocs(ordersQuery);
@@ -94,6 +97,7 @@ function Home() {
           setIsLoading(false);
         }
       });
+        
 
       const currentTime = new Date().getHours();
       if (currentTime >= 5 && currentTime < 12) {
@@ -114,15 +118,36 @@ function Home() {
     fetchData();
   }, [navigate]);
 
-  const handleDeletePost = async (postId) => {
-    try {
-      await deleteDoc(doc(collection(db, 'posts'), postId));
-      setUserPosts(userPosts.filter(post => post.id !== postId));
-      console.log("Post deleted successfully");
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const updatedIncomingOrders = await Promise.all(incomingOrders.map(async (order) => {
+        try {
+          const userDoc = await getDoc(doc(collection(db, 'users'), order.userId));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const fullName = userData.fullName;
+            const email = userData.email;
+            setBuyerName(fullName); // Update buyerName state
+            setBuyerEmail(email);   // Update buyerEmail state
+            return { ...order, buyerName: fullName, buyerEmail: email };
+          } else {
+            console.log("User document not found in Firestore");
+            return null;
+          }
+        } catch (error) {
+          console.error("Error fetching user data from Firestore:", error);
+          return null;
+        }
+      }));
+  
+      setIncomingOrders(updatedIncomingOrders.filter(Boolean));
+    };
+  
+    fetchUserData();
+  }, [incomingOrders]);
+  
+  
+  
 
   return (
     <Box sx={{ backgroundColor: '#f0f2f5', minHeight: '100vh', p: 3 }}>
