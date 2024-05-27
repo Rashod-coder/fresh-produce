@@ -78,14 +78,16 @@ function Cart() {
     const [cartItems, setCartItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState(null);
-    const [buyerItem, setBuyerItem] = useState({ email: '', fullName: '' });
+    const [buyerItem, setBuyerItem] = useState({ email: null, fullName: null });
+
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user);
                 fetchCartItems(user.uid);
-                fetchUser(user.uid); // Fetch buyer details
+                fetchUser(user.uid); 
             } else {
                 console.error("User is not logged in");
                 setIsLoading(false);
@@ -118,10 +120,12 @@ function Cart() {
             const userDoc = await getDoc(userRef);
             if (userDoc.exists()) {
                 const userData = userDoc.data();
-                const userEmail = userData.email;
-                const userName = userData.fullName; // Assuming 'name' is the field for user's name
-                setBuyerItem({ email: userEmail, fullName: userName });
+                console.log("User Data:", userData); // Log user data
+            
+                setBuyerItem({ email: userData.email, fullName: userData.fullName }); // Update buyerItem state
                 setIsLoading(false);
+                console.log( buyerItem.fullName)
+            console.log( buyerItem.email)
             } else {
                 console.error("User document not found");
                 setIsLoading(false);
@@ -131,6 +135,10 @@ function Cart() {
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        console.log("Buyer item:", buyerItem);
+    }, [buyerItem]);
 
     const removeFromCart = async (itemId) => {
         try {
@@ -153,8 +161,11 @@ function Cart() {
         }, 0).toFixed(2);
     };
 
-    const handlePaymentSuccess = async (itemId, quantity, cart, userId, name, price, seller, buyerEmail, buyerName) => {
+    const handlePaymentSuccess = async (itemId, quantity, cart, userId, name,  seller, buyerEmail, buyerName) => {
+        console.log('Buyer email:', buyerEmail);
+        console.log('Buyer name:', buyerName);
         try {
+            console.log("Buyer Item:", buyerItem); // Add this console log
             const itemRef = doc(db, "store", itemId);
             const itemSnapshot = await getDoc(itemRef);
             const currentItem = itemSnapshot.data();
@@ -196,10 +207,13 @@ function Cart() {
                 itemId: itemId,
                 quantity: quantity,
                 timestamp: serverTimestamp(),
-                productName: name
+                productName: name,
+                bName: buyerItem.fullName,
+                bEmail: buyerItem.email
             });
 
-            // Add the order to the "incoming" collection for the seller
+            console.log( buyerItem.fullName)
+            console.log( buyerItem.email)
             const incomingRef = collection(db, "incoming");
             await addDoc(incomingRef, {
                 sellerId: seller,
@@ -208,8 +222,8 @@ function Cart() {
                 quantity: quantity,
                 dateOrdered: serverTimestamp(),
                 userId: userId,
-                personName: buyerName,
-                personEmail: buyerEmail
+                personName:  buyerItem.fullName,
+                personEmail:  buyerItem.email
             });
 
             // Update the stock of the item
@@ -232,9 +246,9 @@ function Cart() {
         }
     };
 
-    const onPaymentApprove = (itemId, quantity, cart, userId, name, price, seller, buyerEmail, buyerName) => (data, actions) => {
+    const onPaymentApprove = (itemId, quantity, cart, userId, name,  seller, buyerEmail, buyerName) => (data, actions) => {
         return actions.order.capture().then(async details => {
-            await handlePaymentSuccess(itemId, quantity, cart, userId, name, price, seller, buyerEmail, buyerName);
+            await handlePaymentSuccess(itemId, quantity, cart, userId, name,  seller, buyerEmail, buyerName);
             actions.close();
         });
     };
@@ -288,11 +302,12 @@ function Cart() {
                                                                 });
                                                             }}
                                                             style={{ layout: 'vertical', color: 'blue', shape: 'rect', label: 'pay', height: 30 }}
-                                                            onApprove={onPaymentApprove(item.Id, parseInt(item.quantity, 10), item.id, user.uid, item.productName, item.Price, item.sellerId, buyerItem.email, buyerItem.fullName)}
+                                                            onApprove={onPaymentApprove(item.Id, parseInt(item.quantity, 10), item.id, user.uid, item.productName,  item.sellerId, buyerItem.email, buyerItem.fullName)}
                                                         />
                                                     </PayPalScriptProvider>
                                                 </StyledTableCell>
                                                 <StyledTableCell>{item.Id.substring(0, 8)}</StyledTableCell>
+                                    
                                                 <StyledTableCell>
                                                     <IconButton onClick={() => removeFromCart(item.id)}>
                                                         <FontAwesomeIcon icon={faTrashAlt} className="text-danger" />
