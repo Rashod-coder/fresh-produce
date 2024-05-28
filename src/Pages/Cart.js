@@ -246,12 +246,16 @@ function Cart() {
         }
     };
 
-    const onPaymentApprove = (itemId, quantity, cart, userId, name,  seller, buyerEmail, buyerName) => (data, actions) => {
-        return actions.order.capture().then(async details => {
-            await handlePaymentSuccess(itemId, quantity, cart, userId, name,  seller, buyerEmail, buyerName);
-            actions.close();
-        });
+    const onPaymentApprove = (itemId, quantity, cart, userId, name, seller, buyerEmail, buyerName) => async (data, actions) => {
+        try {
+            const details = await actions.order.capture();
+            await handlePaymentSuccess(itemId, quantity, cart, userId, name, seller, buyerEmail, buyerName);
+            alert('Transaction completed successfully!');
+        } catch (error) {
+            console.error("Error capturing the order:", error);
+        }
     };
+    
 
     return (
         <StyledBox>
