@@ -207,7 +207,7 @@ function Home() {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell className=''>Product Name</TableCell>
+                      <TableCell>Product Name</TableCell>
                       <TableCell>Customer Name</TableCell>
                       <TableCell>Quantity</TableCell>
                       <TableCell>Customer Email</TableCell>
@@ -233,37 +233,26 @@ function Home() {
               </TableContainer>
             </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} lg={12}>
-            <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
+          <Grid item xs={12} sm={6} md={6}>
+            <Paper sx={{ p: 3, maxHeight: '250px', overflowY: 'auto', borderRadius: 2, boxShadow: 3 }}>
               <Typography variant="h6" gutterBottom>Order History</Typography>
-              <TableContainer component={Paper} style={{ maxHeight: '350px', overflowY: 'auto' }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Product</TableCell>
-                      <TableCell>Quantity</TableCell>
-                      <TableCell>Date</TableCell>
-                      <TableCell>SKU</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {placedOrders.length > 0 ? (
-                      placedOrders.map((order) => (
-                        <TableRow key={order.id}>
-                          <TableCell>{order.productName}</TableCell>
-                          <TableCell>{order.quantity} lbs</TableCell>
-                          <TableCell>{new Date(order.timestamp.seconds * 1000).toLocaleString()}</TableCell>
-                          <TableCell>{order.itemId.substring(0, 8)}</TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={4}>No order history found</TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <Typography variant='subtitle1'><i>Note you may have to scroll down to view all your orders.</i></Typography>
+              {placedOrders && placedOrders.length > 0 ? (
+                <ul>
+                  {placedOrders.map((order) => (
+                    <li key={order.id}>
+                      <Typography variant="body1"><strong>Product:</strong> {order.productName}</Typography>
+                      <Typography variant="body1"><strong>Quantity:</strong> {order.quantity} lbs</Typography>
+                      <Typography variant="body1"><strong>Date:</strong> {new Date(order.timestamp.seconds * 1000).toLocaleString()}</Typography>
+                      <Typography variant="body1"><strong>SKU:</strong> {order.itemId.substring(0, 8)}</Typography>
+                      
+                      <Divider sx={{ my: 1 }} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <Typography>No orders history found</Typography>
+              )}
             </Paper>
           </Grid>
         </Grid>
