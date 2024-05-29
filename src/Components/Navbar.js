@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from '../Firebase/firebase';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { useNavigate, Link } from 'react-router-dom'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Import FontAwesomeIcon
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'; // Import the cart icon
 
 function Navbar() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(null); // Initialize as null initially
+  const [isLoggedIn, setIsLoggedIn] = useState(null); 
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {

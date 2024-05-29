@@ -207,7 +207,7 @@ function Home() {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Product Name</TableCell>
+                      <TableCell className=''>Product Name</TableCell>
                       <TableCell>Customer Name</TableCell>
                       <TableCell>Quantity</TableCell>
                       <TableCell>Customer Email</TableCell>
