@@ -175,8 +175,7 @@ function Cart() {
                 return;
             }
 
-            // Fetch the seller's user document
-            const sellerId = currentItem.sellerId; // Assuming sellerId is stored in the store item
+            const sellerId = currentItem.sellerId; 
             const sellerRef = doc(db, "users", sellerId);
             const sellerSnapshot = await getDoc(sellerRef);
             const sellerData = sellerSnapshot.data();
@@ -248,7 +247,6 @@ function Cart() {
 
     const onPaymentApprove = (itemId, quantity, cart, userId, name, seller, buyerEmail, buyerName) => async (data, actions) => {
         try {
-            const details = await actions.order.capture();
             await handlePaymentSuccess(itemId, quantity, cart, userId, name, seller, buyerEmail, buyerName);
             alert('Transaction completed successfully!');
         } catch (error) {
