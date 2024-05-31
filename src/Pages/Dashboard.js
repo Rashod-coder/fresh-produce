@@ -163,7 +163,7 @@ function Home() {
               <Divider />
               <Typography variant="body1" gutterBottom>Email: {userEmail}</Typography>
               <Divider />
-              <Typography variant="body1" gutterBottom>For development purposes as of right now please set your zip code to 94128</Typography>
+              <Typography variant="body1" gutterBottom>For development purposes as of right now please set your zip code to 94588</Typography>
             </Paper>
           </Grid>
 
@@ -233,7 +233,7 @@ function Home() {
               </TableContainer>
             </Paper>
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
+          <Grid item xs={12} sm={6} md={6} lg={12}>
             <Paper sx={{ p: 3, maxHeight: '250px', overflowY: 'auto', borderRadius: 2, boxShadow: 3 }}>
               <Typography variant="h6" gutterBottom>Order History</Typography>
               <Typography variant='subtitle1'><i>Note you may have to scroll down to view all your orders.</i></Typography>
