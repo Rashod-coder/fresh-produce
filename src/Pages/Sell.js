@@ -1,11 +1,18 @@
-import React, { useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { auth, db, storage } from '../Firebase/firebase';
-import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import Footer from '../Components/Footer'
+import Footer from '../Components/Footer';
 import { ref, uploadBytes } from 'firebase/storage';
-
-
+import {
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+  InputLabel
+} from '@mui/material';
 
 function OrderForm() {
   const navigate = useNavigate();
@@ -17,42 +24,38 @@ function OrderForm() {
   const [price, setPrice] = useState('');
   const [state, setState] = useState('');
   const [address, setAddress] = useState('');
-  const [quantity, setQuantity] = useState(''); 
-  const [zip, setZip] = useState(''); 
-  const [description, setDescription] = useState(''); 
-  const [additionalNotes, setAdditionalNotes] = useState(''); 
-  const [show, setShow] = useState(true);
-  const [image, setImage] = useState(null); 
-  const [payPal, setId] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [zip, setZip] = useState('');
+  const [description, setDescription] = useState('');
+  const [additionalNotes, setAdditionalNotes] = useState('');
+  const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
-  const uploadRef = useRef();
   const [imageBlob, setImageBlob] = useState(null);
-  const [isUploading, setIsUploading] = useState(false); 
+  const [isUploading, setIsUploading] = useState(false);
   const [payId, setPayId] = useState('');
-
-  
+  const uploadRef = useRef();
 
   const handleImageChange = (event) => {
-            const user = auth.currentUser; // Get the current user
-
     const selectedImage = event.target.files[0];
     const reader = new FileReader();
     reader.onloadend = () => {
-        setImageBlob(new Blob([reader.result], { type: selectedImage.type }));
+      setImageBlob(new Blob([reader.result], { type: selectedImage.type }));
     };
     if (selectedImage) {
-        reader.readAsArrayBuffer(selectedImage);
+      reader.readAsArrayBuffer(selectedImage);
     }
     setImageName(selectedImage.name);
     setImage(URL.createObjectURL(selectedImage));
-};
+  };
 
   const keepDatabase = async (event) => {
-    const user = auth.currentUser; // Get the current user
-
-    event.preventDefault(); 
+    event.preventDefault();
+    setIsUploading(true); // Set isUploading to true when upload begins
+  
+    const user = auth.currentUser;
+  
     try {
-      const docRef = await addDoc(collection(db, 'store'), { 
+      const docRef = await addDoc(collection(db, 'store'), {
         productName: product,
         price: price,
         quantity: quantity,
@@ -66,48 +69,47 @@ function OrderForm() {
         additionalNotes: additionalNotes,
         Image: imageName,
         payPal: payId,
-        sellerId: user.uid // Include the seller's ID
+        sellerId: user.uid,
       });
+  
       await uploadBytes(ref(storage, `${docRef.id}/${imageName}`), imageBlob);
-
-
-    setProduct('');
-    setPrice('');
-    setQuantity('');
-    setDescription('');
-    setAddress('');
-    setZip('');
-    setState('');
-    setAdditionalNotes('');
-    setImage(null);
-    setImageName("");
-    setImageBlob(null);
-      window.alert("Product added on marketplace"); // Show alert after document is successfully added
+  
+      // Reset form
+      setProduct('');
+      setPrice('');
+      setQuantity('');
+      setDescription('');
+      setAddress('');
+      setZip('');
+      setState('');
+      setAdditionalNotes('');
+      setImage(null);
+      setImageName('');
+      setImageBlob(null);
+  
+      window.alert('Product added to the marketplace');
       window.location.reload();
-      
     } catch (error) {
       console.error('Error adding document: ', error);
-      window.alert(error)
+      window.alert(error.message);
+    } finally {
+      setIsUploading(false); // Set isUploading to false when upload completes
     }
   };
 
-
-
   useEffect(() => {
     const fetchData = async () => {
-      const unsubscribe = auth.onAuthStateChanged(async user => {
+      const unsubscribe = auth.onAuthStateChanged(async (user) => {
         if (user) {
-          console.log("User:", user); 
           if (user.displayName) {
             setUserName(user.displayName);
-            setEmail(user.email)
+            setEmail(user.email);
             const userDoc = await getDoc(doc(collection(db, 'users'), user.uid));
             if (userDoc.exists()) {
-                const userData = userDoc.data()
-                setSales(userData.sales)
-                setPayId(userData.payPal)
-                setIsLoading(false);
-
+              const userData = userDoc.data();
+              setSales(userData.sales);
+              setPayId(userData.payPal);
+              setIsLoading(false);
             }
           } else {
             try {
@@ -116,181 +118,154 @@ function OrderForm() {
                 const userData = userDoc.data();
                 setUserName(userData.fullName);
                 setEmail(userData.email);
-                setSales(userData.sales)
-                setPayId(userData.payPal)
-                console.log(payId)
+                setSales(userData.sales);
+                setPayId(userData.payPal);
                 setIsLoading(false);
-                console.log("User document not found in Firestore");
               }
             } catch (error) {
-              window.alert("An error occurred please try again: ", error)
-              console.log("Error fetching user data from Firestore:", error);
+              console.error('Error fetching user data: ', error);
+              window.alert('An error occurred, please try again');
             }
           }
-        } 
-        
+        } else {
+          navigate('/login');
+        }
       });
 
       return () => unsubscribe();
-      const handleUpload = () => {
-        if (isUploading) return;
-
-        setIsUploading(true);
-
-
-        setTimeout(() => {
-            setIsUploading(false);
-        }, 3000); // 3000 milliseconds = 3 seconds
-    }
     };
 
     fetchData();
   }, [navigate]);
 
   return (
-    
-    <div className="container">
+    <Container sx={{ mb: 5 }}>
       {isLoading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
-          <div className="spinner-border" style={{ width: '3rem', height: '3rem', color: 'black' }} role="status">
-            <span className="sr-only"></span>
-          </div>
-        </div>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh' }}>
+          <CircularProgress />
+        </Box>
       ) : (
-        <div mt-5>
-          <br/>
-          <div style={{backgroundColor: 'rgba(38, 52, 87, 0.9)', borderRadius: '10px'}}className="py-5 text-center">
-            <h2 className='text-light'>Upload your produce</h2>
-            <p className="lead text-light">Feel free to upload your produce onto our platform, please follow community guidelines while uploading your product</p>
-          </div>
-
-          <div className="row mt-4">
-            <div className="col-md-4 order-md-2 mb-4">
-              <h4 className="d-flex justify-content-between align-items-center mb-1">
-                <span className="text-muted">Seller Details</span>
-                                
-              </h4>
-              <h5>These details will be listed on your listing</h5>
-              <ul className="list-group mb-3">
-                <li className="list-group-item d-flex justify-content-between lh-condensed">
-                  <div>
-                    <h6 className="my-0">Seller Name</h6>
-                    <small className="text-muted">{userName}</small>
-                  </div>
-                </li>
-                <li className="list-group-item d-flex justify-content-between lh-condensed">
-                  <div>
-                    <h6 className="my-0">Seller Email</h6>
-                    <small className="text-muted">{email}</small>
-                  </div>
-                </li>
-                <li className="list-group-item d-flex justify-content-between lh-condensed">
-                  <div>
-                    <h6 className="my-0">Sales made</h6>
-                    <small className="text-muted">{sales}</small>
-                  </div>
-                 
-                </li>
-              </ul>
-            </div>
-
-            <div style={{ borderRadius: '10px', backgroundColor: 'rgba(38, 52, 87, 0.9)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} className="col-md-8  mb-5 py-5mr-3 order-md-1">
-              <h4 className="mb-3 mt-4 fw-bold text-light">Details</h4>
-              <form className="needs-validation"  onSubmit={keepDatabase}  noValidate="">
-                <div className="mb-3">
-                  <label className='text-light' htmlFor="username">Product name</label>
-                  <div className="input-group">
-                    <input type="text" className="form-control" id="product" value={product} onChange={(e) => setProduct(e.target.value)} placeholder="Product" required />
-                    <div className="invalid-feedback" style={{ width: '100%' }}>
-                      Your product name is required
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <label className='text-light' htmlFor="firstName">Price per pound</label>
-                                <input type="text" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="e.g 7" required />
-                                <div className="invalid-feedback">
-                                    
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label className='text-light' htmlFor="firstName">Quantity in pounds</label>
-                                <input type="text" className="form-control" id="price" value={quantity} onChange={(e) => setQuantity(e.target.value)} placeholder="e.g 7" required />
-                                <div className="invalid-feedback">
-                                    
-                                </div>
-                            </div>
-                            
-                        </div>
-
-                        <div className="mb-3">
-                            <label className='text-light' htmlFor="description">Description of product</label>
-                            <div className="input-group">
-                                
-                                <input type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} id="description" placeholder="Description" required />
-                                <div className="invalid-feedback" style={{ width: '100%' }}>
-                                    Description is required
-                                </div>
-                            </div>
-                        </div>
-
-                        
-
-                        <div className="mb-3">
-                            <label className='text-light' htmlFor="address">Street Address</label>
-                            <input type="text" className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} id="address" placeholder="1234 Main St" required />
-                            <div className="invalid-feedback">
-                                
-                            </div>
-                        </div>
-
-                        <div className="row">
-                            <div className="col-md-6 mb-3">
-                                <label className='text-light' htmlFor="firstName">State</label>
-                                <input type="text" className="form-control" value={state} onChange={(e) => setState(e.target.value)} id="state" placeholder="e.g CA" required />
-                                <div className="invalid-feedback">
-                                    
-                                </div>
-                            </div>
-                            <div className="col-md-6 mb-3">
-                                <label className='text-light' htmlFor="lastName">Zipcode</label>
-                                <input type="text" className="form-control" value={zip} onChange={(e) => setZip(e.target.value)} id="zipcode" placeholder="e.g 12345" required />
-                                <div className="invalid-feedback">
-                                </div>
-                            </div>
-                        </div>
-                        <h7 className='text-light fw-bold'>Upload image of product</h7>
-                        <div className={`w-full bg-blue-950 rounded-xl hover:bg-blue-900 cursor-pointer flex flex-col justify-center items-center py-8 mb-4`}>
-                            <input
-                                type="file"
-                                ref={uploadRef}
-                                className="form-control-file hidden fixed top-0 left-0"
-                                accept="image/*"  
-                                onChange={handleImageChange} 
-                            />
-                        </div>
-                        
-                        <div className="mb-3">
-                            <label className='text-light' htmlFor="username">Additonal Notes (optional) </label>
-                            <div className="input-group">
-                                
-                                <input type="text" value={additionalNotes} onChange={(e) => setAdditionalNotes(e.target.value)} className="form-control" id="Notes" placeholder="Notes"/>
-                                
-                            </div>
-                        </div>
-                <button style={{width:'100%'}} disabled={isUploading} onSubmit={{keepDatabase}}type="submit" className="btn btn-dark btn-block mx-auto" >Upload</button>
-                <hr className="mb-4" />
-              </form>
-            </div>
-          </div>
-
-          
+        <Box
+          sx={{
+            backgroundColor: '#f0f8ff',
+            borderRadius: 2,
+            padding: 4,
+            mt: 5,
+            mb: 5, // Add margin-bottom for spacing from footer
+            boxShadow: '0px 15px 25px rgba(0, 0, 0, 0.2)', // Enhance shadow on hover
             
-        </div>
+          }}
+        >
+          <Typography variant="h4" align="center" gutterBottom>
+            Upload Your Produce
+          </Typography>
+          <Typography variant="body1" align="center" gutterBottom>
+            Please follow community guidelines while uploading your product
+          </Typography>
+
+          <Box component="form" onSubmit={keepDatabase} sx={{ mt: 4 }}>
+            <TextField
+              fullWidth
+              label="Product Name"
+              value={product}
+              onChange={(e) => setProduct(e.target.value)}
+              required
+              margin="normal"
+            />
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                fullWidth
+                label="Price per Pound"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+                margin="normal"
+              />
+              <TextField
+                fullWidth
+                label="Quantity in Pounds"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                required
+                margin="normal"
+              />
+            </Box>
+            <TextField
+              fullWidth
+              label="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              margin="normal"
+            />
+            <TextField
+              fullWidth
+              label="Street Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
+              margin="normal"
+            />
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                fullWidth
+                label="State"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                required
+                margin="normal"
+              />
+              <TextField
+                fullWidth
+                label="Zipcode"
+                value={zip}
+                onChange={(e) => setZip(e.target.value)}
+                required
+                margin="normal"
+              />
+            </Box>
+            <TextField
+              fullWidth
+              label="Additional Notes (Optional)"
+              value={additionalNotes}
+              onChange={(e) => setAdditionalNotes(e.target.value)}
+              margin="normal"
+            />
+            <Box>
+              <InputLabel htmlFor="image-upload">Upload Image</InputLabel>
+              <input
+                id="image-upload"
+                type="file"
+                ref={uploadRef}
+                className="form-control-file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={{ marginBottom: '1rem' }}
+              />
+            </Box>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              disabled={isUploading}
+              sx={{
+                mt: 2,
+                boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.08)',
+                transform: 'translateY(-2px)',
+                transition: 'all 0.2s',
+                '&:hover': {
+                  boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.15)',
+                  transform: 'translateY(-4px)',
+                },
+              }}
+            >
+              {isUploading ? <CircularProgress size={24} /> : 'Upload'}
+            </Button>
+          </Box>
+        </Box>
       )}
-      
-    </div>
+    </Container>
   );
 }
 

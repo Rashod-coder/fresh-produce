@@ -161,8 +161,6 @@ function Home() {
             <Paper sx={{ p: 3, borderRadius: 2, boxShadow: 3 }}>
               <Typography variant="h3" gutterBottom>{greeting}{userName} welcome to your dashboard</Typography>
               <Divider />
-              <Typography variant="body1" gutterBottom>Email: {userEmail}</Typography>
-              <Divider />
               <Typography variant="body1" gutterBottom>For development purposes as of right now please set your zip code to 94588</Typography>
             </Paper>
           </Grid>
