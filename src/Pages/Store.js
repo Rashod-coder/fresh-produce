@@ -13,6 +13,8 @@ function Buy() {
     const [searchPerformed, setSearchPerformed] = useState(false);
     const [user, setUser] = useState(null);
     const [showNoProduceMessage, setShowNoProduceMessage] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 12; // 5 rows * 4 columns
 
     const navigate = useNavigate();
 
@@ -87,6 +89,7 @@ function Buy() {
             setFilteredPosts(posts);
             setIsSearchLoading(false);
             setSearchPerformed(false);
+            setCurrentPage(1);
         }, 500);
     };
 
@@ -104,6 +107,7 @@ function Buy() {
             );
             setFilteredPosts(filtered);
             setIsSearchLoading(false);
+            setCurrentPage(1);  // Reset to the first page after search
         }, 1000);
     };
 
@@ -130,6 +134,27 @@ function Buy() {
         }
         return description;
     };
+
+    const handleNextPage = () => {
+        setCurrentPage((prevPage) => {
+            const nextPage = prevPage + 1;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return nextPage;
+        });
+    };
+
+    const handlePrevPage = () => {
+        setCurrentPage((prevPage) => {
+            const prev = Math.max(prevPage - 1, 1);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return prev;
+        });
+    };
+
+    // Calculate the index of the first and last posts for the current page
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
 
     return (
         <div style={{ background: '#fbfef9', minHeight: '100vh', padding: '2rem' }}>
@@ -201,12 +226,12 @@ function Buy() {
                                             <h6 className="text-dark">To know more details of a specific product, click on "View More".</h6>
                                         </div>
                                     </div>
-                                    {filteredPosts.length > 0 && (
-                                        <div className="row justify-content-center">
-                                            {filteredPosts.map(post => (
-                                                <div key={post.id} className="col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center mb-4">
-                                                    <div className="card shadow mb-4" style={{ width: '22rem' }}>
-                                                        <img src={post.Image} className="card-img-top" style={{ height: '200px', objectFit: 'fit' }} alt={post.Type} />
+                                    {currentPosts.length > 0 && (
+                                        <div className="row">
+                                            {currentPosts.map(post => (
+                                                <div key={post.id} className="col-12 col-sm-6 col-md-3 d-flex justify-content-center mb-4">
+                                                    <div className="card shadow mb-4" style={{ width: '18rem' }}>
+                                                        <img src={post.Image} className="card-img-top" style={{ height: '200px', objectFit: 'cover' }} alt={post.Type} />
                                                         <div className="card-body bg-dark">
                                                             <h2 className="card-title text-light fw-bold" style={{ fontSize: '1.5rem' }}>{post.Type}</h2>
                                                             <h4 className="text-light">Price: ${post.Price}/lb</h4>
@@ -222,6 +247,24 @@ function Buy() {
                                             ))}
                                         </div>
                                     )}
+                                    <div className="row justify-content-center mt-4">
+                                        <div className="col-12 d-flex justify-content-between">
+                                            <button
+                                                className="btn btn-secondary"
+                                                onClick={handlePrevPage}
+                                                disabled={currentPage === 1}
+                                            >
+                                                Previous
+                                            </button>
+                                            <button
+                                                className="btn btn-secondary"
+                                                onClick={handleNextPage}
+                                                disabled={currentPage * postsPerPage >= filteredPosts.length}
+                                            >
+                                                Next
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         )}
