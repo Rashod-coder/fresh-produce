@@ -13,6 +13,7 @@ import Sell from './Pages/Sell';
 import Footer from './Components/Footer';
 import Product from './Pages/Product';
 import Cart from './Pages/Cart';
+import Privacy from './Pages/Privacy'
 
 
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/Cart" element={<Cart />} />
           <Route path="/Store/:id" element={<Product/>} />
+          <Route path="/Privacy" element={<Privacy/>} />
 
         </Routes>
         <Footer/>
