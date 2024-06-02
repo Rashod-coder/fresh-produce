@@ -247,6 +247,8 @@ function Cart() {
 
     const onPaymentApprove = (itemId, quantity, cart, userId, name, seller, buyerEmail, buyerName) => async (data, actions) => {
         try {
+            const details = await actions.order.capture();
+            console.log('Payment details:', details);
             await handlePaymentSuccess(itemId, quantity, cart, userId, name, seller, buyerEmail, buyerName);
             alert('Transaction completed successfully!');
         } catch (error) {

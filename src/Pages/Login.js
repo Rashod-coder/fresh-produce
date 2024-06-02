@@ -23,9 +23,7 @@ function Login() {
   const [msg, setMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
+
 
 
 

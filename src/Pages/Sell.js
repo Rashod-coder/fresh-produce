@@ -162,8 +162,11 @@ function OrderForm() {
           <Typography variant="body1" align="center" gutterBottom>
             Please follow community guidelines while uploading your product
           </Typography>
+          <Typography variant="body1" align="center" gutterBottom>
+            <i>Please note that your name and email will visible to other people</i>
+          </Typography>
 
-          <Box component="form" onSubmit={keepDatabase} sx={{ mt: 4 }}>
+          <Box component="form" onSubmit={keepDatabase} sx={{ mt: 2 }}>
             <TextField
               fullWidth
               label="Product Name"
