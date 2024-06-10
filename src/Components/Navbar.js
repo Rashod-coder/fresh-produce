@@ -16,6 +16,7 @@ function Navbar() {
         setIsLoggedIn(false);
       }
     });
+    console.log("Ready")
 
     return unsubscribe;
   }, []);

@@ -36,8 +36,7 @@ function App() {
 
   return (
     <div className="Go Green">
-      <Router>
-        <Navbar/>
+      <Navbar/>
         <Routes>
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
@@ -53,7 +52,6 @@ function App() {
 
         </Routes>
         <Footer/>
-      </Router>
     </div>
   );
 }
