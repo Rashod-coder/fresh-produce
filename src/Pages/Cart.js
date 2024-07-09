@@ -165,7 +165,7 @@ function Cart() {
         console.log('Buyer email:', buyerEmail);
         console.log('Buyer name:', buyerName);
         try {
-            console.log("Buyer Item:", buyerItem); // Add this console log
+            console.log("Buyer Item:", buyerItem); 
             const itemRef = doc(db, "store", itemId);
             const itemSnapshot = await getDoc(itemRef);
             const currentItem = itemSnapshot.data();
