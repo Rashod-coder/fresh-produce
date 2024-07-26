@@ -28,7 +28,7 @@ function Home() {
   const [placedOrders, setPlacedOrders] = useState([]);
   const [zipCode, setZipCode] = useState('');
   const [userPosts, setUserPosts] = useState([]);
-  const [currentView, setCurrentView] = useState('seller'); // New state variable to track the current view
+  const [currentView, setCurrentView] = useState('seller'); 
 
   useEffect(() => {
     const fetchData = async () => {
